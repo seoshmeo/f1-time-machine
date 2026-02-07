@@ -99,14 +99,14 @@ const DriversPage = () => {
               e.currentTarget.style.transform = 'translateY(0)';
             }}
             >
-              {driver.permanent_number && (
+              {driver.number && (
                 <div style={{
                   fontSize: '48px',
                   fontWeight: 700,
                   color: '#2A2A3E',
                   lineHeight: 1,
                 }}>
-                  {driver.permanent_number}
+                  {driver.number}
                 </div>
               )}
 
@@ -116,14 +116,18 @@ const DriversPage = () => {
                 fontWeight: 700,
                 margin: 0,
               }}>
-                {driver.given_name} {driver.family_name}
+                {driver.first_name} {driver.last_name}
               </h3>
 
-              <TeamBadge
-                constructorRef={driver.constructor_ref}
-                constructorName={driver.constructor_name}
-                size="medium"
-              />
+              {driver.code && (
+                <div style={{
+                  color: '#B0B0B0',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                }}>
+                  {driver.code}
+                </div>
+              )}
 
               <CountryFlag country={driver.nationality} />
             </div>

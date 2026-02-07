@@ -9,8 +9,13 @@ export async function getDriverDetail(
   driverRef: string,
   year?: number
 ): Promise<DriverDetail> {
-  const endpoint = year
-    ? `/seasons/${year}/drivers/${driverRef}`
-    : `/drivers/${driverRef}`;
-  return apiGet<DriverDetail>(endpoint);
+  const params = year ? { season: year } : undefined;
+  return apiGet<DriverDetail>(`/drivers/${driverRef}`, params);
 }
+
+// API object for pages that expect this pattern
+// Note: getDriverDetails takes (year, driverRef) to match page calling convention
+export const driversApi = {
+  getSeasonDrivers: getDrivers,
+  getDriverDetails: (year: number, driverRef: string) => getDriverDetail(driverRef, year),
+};

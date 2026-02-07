@@ -18,5 +18,5 @@ export async function getConstructorStandings(
 }
 
 export async function getDriverProgression(year: number): Promise<StandingsProgressionOut[]> {
-  return apiGet<StandingsProgressionOut[]>(`/seasons/${year}/standings/progression/drivers`);
+  return apiGet<StandingsProgressionOut[]>(`/seasons/${year}/standings/drivers/progression`);
 }

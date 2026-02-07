@@ -35,12 +35,17 @@ export interface QualifyingResultOut {
   q3?: string;
 }
 
-export interface SessionResultSummary {
-  session_type: string;
-  winner_name?: string;
-  winner_time?: string;
-  fastest_lap_driver?: string;
-  fastest_lap_time?: string;
-  pole_position_driver?: string;
-  pole_position_time?: string;
-}
+// Remove duplicate SessionResultSummary (it's already defined in day.ts)
+// export interface SessionResultSummary {
+//   session_type: string;
+//   winner_name?: string;
+//   winner_time?: string;
+//   fastest_lap_driver?: string;
+//   fastest_lap_time?: string;
+//   pole_position_driver?: string;
+//   pole_position_time?: string;
+// }
+
+// Aliases for components that expect different names
+export type RaceResult = ResultOut;
+export type QualifyingResult = QualifyingResultOut;

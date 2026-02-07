@@ -66,3 +66,7 @@ export function formatTime(timeString?: string): string {
 export function getTodayDate(): string {
   return format(new Date(), 'yyyy-MM-dd');
 }
+
+// Aliases for components that expect different names
+export const formatDateShort = (dateString: string) => formatDate(dateString, 'MMM d');
+export const formatDateLong = (dateString: string) => formatDate(dateString, 'MMMM d, yyyy');

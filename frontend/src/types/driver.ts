@@ -1,13 +1,13 @@
 export interface DriverBrief {
-  driver_id: number;
+  id: number;
   driver_ref: string;
   number?: number;
   code?: string;
-  forename: string;
-  surname: string;
-  dob?: string;
+  first_name: string;
+  last_name: string;
   nationality?: string;
   url?: string;
+  photo_url?: string;
 }
 
 export interface DriverSeasonStats {

@@ -58,7 +58,7 @@ const RaceCard = ({ race, year }: RaceCardProps) => {
               fontWeight: 700,
               margin: '0 0 8px 0',
             }}>
-              {race.race_name}
+              {race.name}
             </h3>
             <p style={{
               color: '#B0B0B0',
@@ -72,12 +72,12 @@ const RaceCard = ({ race, year }: RaceCardProps) => {
               fontSize: '13px',
               margin: 0,
             }}>
-              {race.country} • {formatDateShort(race.date)}
+              {race.circuit_country} • {formatDateShort(race.date)}
             </p>
           </div>
         </div>
 
-        {race.winner && (
+        {race.winner_name && (
           <div style={{
             marginTop: '12px',
             paddingTop: '12px',
@@ -95,7 +95,7 @@ const RaceCard = ({ race, year }: RaceCardProps) => {
               fontSize: '14px',
               fontWeight: 600,
             }}>
-              {race.winner}
+              {race.winner_name}
             </span>
           </div>
         )}

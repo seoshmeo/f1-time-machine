@@ -1,9 +1,9 @@
-export type DayType = 'race' | 'qualifying' | 'practice' | 'testing' | 'off_season' | 'announcement';
+export type DayType = 'race_day' | 'qualifying' | 'practice' | 'testing' | 'off_season' | 'announcement';
 
 export interface EventOut {
-  event_id: number;
-  date: string;
-  event_type: string;
+  event_id?: number;
+  date?: string;
+  event_type?: string;
   importance: 'high' | 'medium' | 'low';
   title: string;
   summary: string;
@@ -13,6 +13,7 @@ export interface EventOut {
   related_race_round?: number;
   source?: string;
   source_url?: string;
+  session_type?: string;
 }
 
 export interface SessionResultSummary {
@@ -28,11 +29,10 @@ export interface SessionResultSummary {
 export interface DayBrief {
   date: string;
   day_type: DayType;
+  description?: string;
+  has_content: boolean;
   race_weekend?: string;
   race_round?: number;
-  has_sessions: boolean;
-  event_count: number;
-  main_headline?: string;
 }
 
 export interface DayDetail {
@@ -62,6 +62,10 @@ export interface DayNavigation {
 
 export interface TodayResponse {
   today: string;
+  historical_date: string;
   years_ago: number;
-  day_detail: DayDetail;
+  day: DayDetail | null;
 }
+
+// Aliases for components that expect different names
+export type DayEvent = EventOut;

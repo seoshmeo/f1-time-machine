@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useDay } from '../hooks/useDay';
+import { useDay, useDayNavigation } from '../hooks/useDay';
 import { useKeyboardNav } from '../hooks/useKeyboardNav';
 import { useStandings } from '../hooks/useStandings';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -19,24 +19,25 @@ const DayPage = () => {
   const currentDate = date || '';
 
   const { data: dayData, isLoading, error } = useDay(seasonYear, currentDate);
+  const { data: navData } = useDayNavigation(seasonYear, currentDate);
   const { data: standingsData } = useStandings(seasonYear, 19);
 
   const handlePrevDay = () => {
-    if (dayData?.prev_date) {
-      navigate(`/season/${seasonYear}/day/${dayData.prev_date}`);
+    if (navData?.prev_date) {
+      navigate(`/season/${seasonYear}/day/${navData.prev_date}`);
     }
   };
 
   const handleNextDay = () => {
-    if (dayData?.next_date) {
-      navigate(`/season/${seasonYear}/day/${dayData.next_date}`);
+    if (navData?.next_date) {
+      navigate(`/season/${seasonYear}/day/${navData.next_date}`);
     }
   };
 
   useKeyboardNav({
     onPrevious: handlePrevDay,
     onNext: handleNextDay,
-    enabled: !isLoading && !!dayData,
+    enabled: !isLoading && !!dayData && !!navData,
   });
 
   if (isLoading) {
@@ -74,17 +75,19 @@ const DayPage = () => {
       margin: '0 auto',
       padding: '48px 24px',
     }}>
-      <DayTimeline
-        currentDay={dayData.day_number || 1}
-        totalDays={365}
-      />
+      {dayData.season_progress && (
+        <DayTimeline
+          currentDay={dayData.season_progress.days_elapsed || 1}
+          totalDays={dayData.season_progress.total_days || 365}
+        />
+      )}
 
       <DayNavigation
         currentDate={currentDate}
         onPrevDay={handlePrevDay}
         onNextDay={handleNextDay}
-        canGoPrev={!!dayData.prev_date}
-        canGoNext={!!dayData.next_date}
+        canGoPrev={!!navData?.prev_date}
+        canGoNext={!!navData?.next_date}
       />
 
       <div style={{

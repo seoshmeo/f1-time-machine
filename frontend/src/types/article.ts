@@ -25,3 +25,7 @@ export interface ArticleDetail extends ArticleBrief {
   related_drivers?: string[];
   related_constructors?: string[];
 }
+
+// Aliases for components that expect different names
+export type Article = ArticleBrief;
+export type Quote = QuoteOut;

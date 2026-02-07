@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date as Date
 
 from pydantic import BaseModel
 
@@ -8,7 +8,7 @@ from app.schemas.quote import QuoteOut
 
 
 class DayBrief(BaseModel):
-    date: date
+    date: Date
     day_type: str
     description: str | None = None
     has_content: bool
@@ -18,7 +18,7 @@ class DayBrief(BaseModel):
 
 
 class DayDetail(BaseModel):
-    date: date
+    date: Date
     day_type: str
     description: str | None = None
     race_name: str | None = None
@@ -32,15 +32,15 @@ class DayDetail(BaseModel):
 
 
 class DayNavigation(BaseModel):
-    current_date: date
-    previous_date: date | None = None
-    next_date: date | None = None
+    current_date: Date
+    previous_date: Date | None = None
+    next_date: Date | None = None
     has_previous: bool
     has_next: bool
 
 
 class TodayResponse(BaseModel):
-    today: date
-    historical_date: date
+    today: Date
+    historical_date: Date
     years_ago: int
     day: DayDetail | None = None

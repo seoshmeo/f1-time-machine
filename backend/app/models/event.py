@@ -60,12 +60,11 @@ class Event(Base):
 class EventTag(Base):
     __tablename__ = "event_tags"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     event_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("events.id"), nullable=False, index=True
+        Integer, ForeignKey("events.id"), primary_key=True
     )
     tag_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("tags.id"), nullable=False, index=True
+        Integer, ForeignKey("tags.id"), primary_key=True
     )
 
     event: Mapped["Event"] = relationship("Event", back_populates="tags")

@@ -37,8 +37,8 @@ const MonthGrid = ({ monthName, year, days }: MonthGridProps) => {
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(7, 1fr)',
-        gap: '8px',
-        marginBottom: '8px',
+        gap: '4px',
+        marginBottom: '4px',
       }}>
         {dayNames.map((day) => (
           <div
@@ -59,7 +59,7 @@ const MonthGrid = ({ monthName, year, days }: MonthGridProps) => {
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(7, 1fr)',
-        gap: '8px',
+        gap: '4px',
       }}>
         {days.map((day, index) => (
           <CalendarDay

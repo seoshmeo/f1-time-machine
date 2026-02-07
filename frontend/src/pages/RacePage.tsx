@@ -122,7 +122,7 @@ const RacePage = () => {
             fontWeight: 700,
             margin: 0,
           }}>
-            {raceData.race_name}
+            {raceData.name}
           </h1>
         </div>
 
@@ -143,7 +143,7 @@ const RacePage = () => {
             fontSize: '14px',
             margin: 0,
           }}>
-            {raceData.country} • {formatDateLong(raceData.date)}
+            {raceData.circuit_country} • {formatDateLong(raceData.date)}
           </p>
         </div>
       </div>

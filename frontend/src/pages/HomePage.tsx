@@ -9,10 +9,12 @@ const HomePage = () => {
   const seasonYear = 2010;
   const today = new Date().toISOString().split('T')[0];
 
-  const { data: dayData, isLoading } = useQuery({
+  const { data: todayResponse, isLoading } = useQuery({
     queryKey: ['today', seasonYear, today],
     queryFn: () => daysApi.getToday(seasonYear),
   });
+
+  const dayData = todayResponse?.day;
 
   return (
     <div style={{
@@ -72,7 +74,7 @@ const HomePage = () => {
 
       {isLoading ? (
         <LoadingSpinner />
-      ) : dayData && dayData.events.length > 0 ? (
+      ) : dayData && dayData.events && dayData.events.length > 0 ? (
         <div style={{
           backgroundColor: '#1A1A2E',
           border: '1px solid #2A2A3E',

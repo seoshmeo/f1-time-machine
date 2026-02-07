@@ -82,3 +82,9 @@ export function formatDuration(seconds: number): string {
 
   return `${secs}s`;
 }
+
+// Simple formatTime for qualifying/race times (like "1:24.123")
+export function formatTime(timeString?: string): string {
+  if (!timeString) return '-';
+  return timeString;
+}

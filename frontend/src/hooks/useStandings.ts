@@ -24,3 +24,20 @@ export function useDriverProgression(year: number) {
     staleTime: Infinity,
   });
 }
+
+// Combined hook for pages that need both driver and constructor standings
+export function useStandings(year: number, afterRound?: number) {
+  const driverStandings = useDriverStandings(year, afterRound);
+  const constructorStandings = useConstructorStandings(year, afterRound);
+  const driverProgression = useDriverProgression(year);
+
+  return {
+    data: {
+      driver_standings: driverStandings.data,
+      constructor_standings: constructorStandings.data,
+      points_progression: driverProgression.data,
+    },
+    isLoading: driverStandings.isLoading || constructorStandings.isLoading || driverProgression.isLoading,
+    error: driverStandings.error || constructorStandings.error || driverProgression.error,
+  };
+}

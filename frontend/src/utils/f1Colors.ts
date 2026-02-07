@@ -65,3 +65,6 @@ export function getTeamPrimaryColor(constructorRef: string): string {
 export function getTeamSecondaryColor(constructorRef: string): string {
   return getTeamColor(constructorRef).secondary;
 }
+
+// Alias for components that expect different name
+export const getConstructorColor = getTeamPrimaryColor;

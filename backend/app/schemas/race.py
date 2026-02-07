@@ -1,4 +1,4 @@
-from datetime import date, time
+from datetime import date as Date, time as Time
 
 from pydantic import BaseModel
 
@@ -24,8 +24,8 @@ class RaceBrief(BaseModel):
     id: int
     round: int
     name: str
-    date: date
-    time: time | None = None
+    date: Date
+    time: Time | None = None
     circuit_name: str
     circuit_country: str
 
@@ -38,8 +38,8 @@ class RaceDetail(BaseModel):
     round: int
     name: str
     official_name: str | None = None
-    date: date
-    time: time | None = None
+    date: Date
+    time: Time | None = None
     url: str | None = None
     circuit: CircuitOut
     sessions: list[SessionBrief] = []

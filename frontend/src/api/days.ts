@@ -25,3 +25,11 @@ export async function getDays(
 ): Promise<PaginatedResponse<DayBrief>> {
   return apiGet<PaginatedResponse<DayBrief>>(`/seasons/${year}/days`, params);
 }
+
+// API object for pages that expect this pattern
+export const daysApi = {
+  getToday: getToday,
+  getDayDetail: getDayDetail,
+  getDayNavigation: getDayNavigation,
+  getDays: getDays,
+};

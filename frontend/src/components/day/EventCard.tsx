@@ -1,17 +1,26 @@
 interface EventCardProps {
   title: string;
   summary: string;
-  importance: number;
+  importance: 'high' | 'medium' | 'low' | number;
   sessionType?: string;
 }
 
 const EventCard = ({ title, summary, importance, sessionType }: EventCardProps) => {
-  const getImportanceColor = (level: number) => {
-    switch (level) {
-      case 1: return '#E10600'; // Red
-      case 2: return '#FF8C00'; // Orange
-      case 3: return '#4A90E2'; // Blue
-      default: return '#666'; // Gray
+  const getImportanceColor = (level: 'high' | 'medium' | 'low' | number) => {
+    if (typeof level === 'string') {
+      switch (level) {
+        case 'high': return '#E10600'; // Red
+        case 'medium': return '#FF8C00'; // Orange
+        case 'low': return '#4A90E2'; // Blue
+        default: return '#666'; // Gray
+      }
+    } else {
+      switch (level) {
+        case 1: return '#E10600'; // Red
+        case 2: return '#FF8C00'; // Orange
+        case 3: return '#4A90E2'; // Blue
+        default: return '#666'; // Gray
+      }
     }
   };
 

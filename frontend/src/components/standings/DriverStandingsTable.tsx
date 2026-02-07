@@ -111,14 +111,14 @@ const DriverStandingsTable = ({ standings }: DriverStandingsTableProps) => {
                   fontSize: '14px',
                   fontWeight: 600,
                 }}>
-                  {standing.driver_name}
+                  {standing.driver.first_name} {standing.driver.last_name}
                 </span>
               </td>
               <td style={{
                 padding: '16px 8px',
               }}>
                 <TeamBadge
-                  constructorRef={standing.constructor_ref}
+                  constructorRef={standing.driver.driver_ref}
                   constructorName={standing.constructor_name}
                 />
               </td>

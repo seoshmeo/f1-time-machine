@@ -99,8 +99,8 @@ const ConstructorStandingsTable = ({ standings }: ConstructorStandingsTableProps
                 padding: '16px 8px',
               }}>
                 <TeamBadge
-                  constructorRef={standing.constructor_ref}
-                  constructorName={standing.constructor_name}
+                  constructorRef={standing.constructor.constructor_ref}
+                  constructorName={standing.constructor.name}
                   size="medium"
                 />
               </td>

@@ -18,6 +18,16 @@ class DriverBrief(BaseModel):
         from_attributes = True
 
 
+class SeasonStatsOut(BaseModel):
+    races: int = 0
+    wins: int = 0
+    podiums: int = 0
+    poles: int = 0
+    points: float = 0
+    final_position: int | None = None
+    constructor_name: str | None = None
+
+
 class DriverDetail(BaseModel):
     id: int
     driver_ref: str
@@ -29,6 +39,7 @@ class DriverDetail(BaseModel):
     nationality: str
     url: str | None = None
     photo_url: str | None = None
+    season_stats: SeasonStatsOut | None = None
 
     class Config:
         from_attributes = True

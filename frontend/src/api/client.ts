@@ -1,6 +1,6 @@
 import type { ApiError } from '@/types/common';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
 
 export class ApiClientError extends Error {
   constructor(

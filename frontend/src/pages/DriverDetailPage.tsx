@@ -92,14 +92,14 @@ const DriverDetailPage = () => {
           gap: '32px',
           flexWrap: 'wrap',
         }}>
-          {driver.permanent_number && (
+          {driver.number && (
             <div style={{
               fontSize: '120px',
               fontWeight: 700,
               color: '#2A2A3E',
               lineHeight: 1,
             }}>
-              {driver.permanent_number}
+              {driver.number}
             </div>
           )}
 
@@ -113,7 +113,7 @@ const DriverDetailPage = () => {
               fontWeight: 700,
               margin: '0 0 16px 0',
             }}>
-              {driver.given_name} {driver.family_name}
+              {driver.first_name} {driver.last_name}
             </h1>
 
             <div style={{
@@ -122,11 +122,15 @@ const DriverDetailPage = () => {
               gap: '12px',
               marginBottom: '24px',
             }}>
-              <TeamBadge
-                constructorRef={driver.constructor_ref}
-                constructorName={driver.constructor_name}
-                size="medium"
-              />
+              {driver.code && (
+                <div style={{
+                  color: '#E10600',
+                  fontSize: '18px',
+                  fontWeight: 700,
+                }}>
+                  {driver.code}
+                </div>
+              )}
 
               <div style={{
                 display: 'flex',
@@ -136,19 +140,6 @@ const DriverDetailPage = () => {
                 <span style={{ color: '#666', fontSize: '14px' }}>Nationality:</span>
                 <CountryFlag country={driver.nationality} />
               </div>
-
-              {driver.date_of_birth && (
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}>
-                  <span style={{ color: '#666', fontSize: '14px' }}>Born:</span>
-                  <span style={{ color: '#B0B0B0', fontSize: '14px' }}>
-                    {new Date(driver.date_of_birth).toLocaleDateString()}
-                  </span>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -268,7 +259,7 @@ const DriverDetailPage = () => {
             fontWeight: 700,
             marginBottom: '8px',
           }}>
-            {driver.season_stats?.championship_position || '-'}
+            {driver.season_stats?.final_position || '-'}
           </div>
           <div style={{
             color: '#B0B0B0',

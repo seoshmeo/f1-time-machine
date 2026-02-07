@@ -157,16 +157,39 @@ const StandingsPage = () => {
         )}
       </div>
 
-      {activeTab === 'drivers' && standingsData.points_progression && (
-        <StandingsChart
-          data={standingsData.points_progression}
-          drivers={standingsData.driver_standings.slice(0, 10).map((s) => ({
-            driverRef: s.driver_ref,
-            driverName: s.driver_name,
-            constructorRef: s.constructor_ref,
-          }))}
-        />
-      )}
+      {activeTab === 'drivers' && standingsData.points_progression && standingsData.driver_standings && (() => {
+        // Map constructor_name to constructor_ref for colors
+        const nameToRef: Record<string, string> = {
+          'Red Bull': 'red_bull', 'Ferrari': 'ferrari', 'McLaren': 'mclaren',
+          'Mercedes': 'mercedes', 'Renault': 'renault', 'Williams': 'williams',
+          'Force India': 'force_india', 'BMW Sauber': 'sauber', 'Sauber': 'sauber',
+          'Toro Rosso': 'toro_rosso', 'Lotus': 'lotus', 'Virgin': 'virgin',
+          'HRT': 'hispania', 'Hispania': 'hispania',
+        };
+
+        // Top 10 driver refs from standings
+        const top10 = standingsData.driver_standings.slice(0, 10);
+        const top10Refs = new Set(top10.map(s => s.driver.driver_ref));
+
+        // Transform per-driver progression to per-round format for recharts
+        const roundsMap: Record<number, Record<string, number>> = {};
+        for (const entry of standingsData.points_progression) {
+          if (!top10Refs.has(entry.driver.driver_ref)) continue;
+          for (const p of entry.progression) {
+            if (!roundsMap[p.round]) roundsMap[p.round] = { round: p.round };
+            roundsMap[p.round][entry.driver.driver_ref] = p.points;
+          }
+        }
+        const chartData = Object.values(roundsMap).sort((a, b) => a.round - b.round);
+
+        const drivers = top10.map(s => ({
+          driverRef: s.driver.driver_ref,
+          driverName: `${s.driver.first_name} ${s.driver.last_name}`,
+          constructorRef: nameToRef[s.constructor_name] || 'unknown',
+        }));
+
+        return <StandingsChart data={chartData} drivers={drivers} />;
+      })()}
     </div>
   );
 };
