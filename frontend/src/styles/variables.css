@@ -1,0 +1,112 @@
+:root {
+  /* Colors */
+  --color-bg: #0F0F0F;
+  --color-bg-secondary: #1A1A2E;
+  --color-card: #1A1A2E;
+  --color-card-hover: #252540;
+  --color-accent: #E10600;
+  --color-accent-hover: #B00500;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #B0B0B0;
+  --color-text-muted: #707070;
+  --color-border: #2A2A3E;
+  --color-border-light: #3A3A4E;
+
+  /* Status colors */
+  --color-success: #00D26A;
+  --color-warning: #FF9500;
+  --color-error: #FF3B30;
+  --color-info: #0A84FF;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* Font sizes */
+  --font-xs: 0.75rem;
+  --font-sm: 0.875rem;
+  --font-base: 1rem;
+  --font-lg: 1.125rem;
+  --font-xl: 1.25rem;
+  --font-2xl: 1.5rem;
+  --font-3xl: 1.875rem;
+  --font-4xl: 2.25rem;
+  --font-5xl: 3rem;
+
+  /* Font weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+
+  /* Z-index layers */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+
+  /* 2010 Team Colors */
+  --team-red-bull: #1E41FF;
+  --team-red-bull-secondary: #FFD700;
+
+  --team-ferrari: #DC0000;
+  --team-ferrari-secondary: #FFF200;
+
+  --team-mclaren: #FF8700;
+  --team-mclaren-secondary: #C0C0C0;
+
+  --team-mercedes: #00D2BE;
+  --team-mercedes-secondary: #000000;
+
+  --team-renault: #FFF500;
+  --team-renault-secondary: #000000;
+
+  --team-williams: #0082FA;
+  --team-williams-secondary: #FFFFFF;
+
+  --team-force-india: #FF80C7;
+  --team-force-india-secondary: #000000;
+
+  --team-sauber: #006EFF;
+  --team-sauber-secondary: #FFFFFF;
+
+  --team-toro-rosso: #0033CC;
+  --team-toro-rosso-secondary: #DC0000;
+
+  --team-lotus: #00622B;
+  --team-lotus-secondary: #FFD700;
+
+  --team-virgin: #C80000;
+  --team-virgin-secondary: #FFFFFF;
+
+  --team-hispania: #E2001A;
+  --team-hispania-secondary: #FFFFFF;
+
+  /* Day type colors */
+  --day-race: var(--color-accent);
+  --day-qualifying: var(--color-warning);
+  --day-practice: #FFD60A;
+  --day-testing: var(--color-info);
+  --day-off: var(--color-text-muted);
+  --day-announcement: #BF5AF2;
+}
