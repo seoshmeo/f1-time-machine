@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useRace } from '../hooks/useRace';
+import { useRace, useRaceResults, useQualifyingResults, useFastestLaps } from '../hooks/useRace';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import SessionTabs from '../components/race/SessionTabs';
 import ResultsTable from '../components/race/ResultsTable';
 import QualifyingTable from '../components/race/QualifyingTable';
+import TeamBadge from '../components/common/TeamBadge';
 import { formatDateLong } from '../utils/dateUtils';
 
 const RacePage = () => {
@@ -14,7 +15,13 @@ const RacePage = () => {
 
   const [activeSession, setActiveSession] = useState('R');
 
-  const { data: raceData, isLoading, error } = useRace(seasonYear, raceRound);
+  const { data: raceData, isLoading: isLoadingRace, error: raceError } = useRace(seasonYear, raceRound);
+  const { data: raceResults, isLoading: isLoadingResults } = useRaceResults(seasonYear, raceRound);
+  const { data: qualifyingResults, isLoading: isLoadingQualifying } = useQualifyingResults(seasonYear, raceRound);
+  const { data: fastestLaps, isLoading: isLoadingFastestLaps } = useFastestLaps(seasonYear, raceRound);
+
+  const isLoading = isLoadingRace || isLoadingResults || isLoadingQualifying || isLoadingFastestLaps;
+  const error = raceError;
 
   if (isLoading) {
     return (
@@ -45,32 +52,172 @@ const RacePage = () => {
     );
   }
 
+  // Transform race results to flat format
+  const transformedRaceResults = raceResults?.map((r: any) => ({
+    position: r.position,
+    driver_name: `${r.driver.first_name} ${r.driver.last_name}`,
+    constructor_ref: r.constructor.constructor_ref,
+    constructor_name: r.constructor.name,
+    time: r.finish_time,
+    points: r.points,
+    status: r.status,
+    grid: r.grid_position,
+    laps: r.laps_completed,
+    fastest_lap_time: r.fastest_lap_time,
+    fastest_lap_speed: r.fastest_lap_speed,
+  })) || [];
+
+  // Transform qualifying results to flat format
+  const transformedQualifyingResults = qualifyingResults?.map((r: any) => ({
+    position: r.position,
+    driver_name: `${r.driver.first_name} ${r.driver.last_name}`,
+    constructor_ref: r.constructor.constructor_ref,
+    constructor_name: r.constructor.name,
+    q1: r.q1_time,
+    q2: r.q2_time,
+    q3: r.q3_time,
+  })) || [];
+
   const availableSessions = [];
-  if (raceData.practice_sessions?.length > 0) {
-    raceData.practice_sessions.forEach((_, idx) => {
-      availableSessions.push(`FP${idx + 1}`);
-    });
-  }
-  if (raceData.qualifying_results?.length > 0) {
+  if (transformedQualifyingResults.length > 0) {
     availableSessions.push('Q');
   }
-  if (raceData.race_results?.length > 0) {
+  if (transformedRaceResults.length > 0) {
     availableSessions.push('R');
+  }
+  if (fastestLaps && fastestLaps.length > 0) {
+    availableSessions.push('FL');
   }
 
   const renderSessionResults = () => {
-    if (activeSession === 'Q' && raceData.qualifying_results) {
-      return <QualifyingTable results={raceData.qualifying_results} />;
+    if (activeSession === 'Q' && transformedQualifyingResults.length > 0) {
+      return <QualifyingTable results={transformedQualifyingResults} />;
     }
-    if (activeSession === 'R' && raceData.race_results) {
-      return <ResultsTable results={raceData.race_results} />;
+    if (activeSession === 'R' && transformedRaceResults.length > 0) {
+      return <ResultsTable results={transformedRaceResults} />;
     }
-    if (activeSession.startsWith('FP') && raceData.practice_sessions) {
-      const sessionIndex = parseInt(activeSession.replace('FP', '')) - 1;
-      const practiceResults = raceData.practice_sessions[sessionIndex];
-      if (practiceResults) {
-        return <ResultsTable results={practiceResults} />;
-      }
+    if (activeSession === 'FL' && fastestLaps && fastestLaps.length > 0) {
+      return (
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ borderBottom: '2px solid #2A2A3E' }}>
+                <th style={{
+                  color: '#666',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  textAlign: 'left',
+                  padding: '12px 8px',
+                  textTransform: 'uppercase',
+                }}>Rank</th>
+                <th style={{
+                  color: '#666',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  textAlign: 'left',
+                  padding: '12px 8px',
+                  textTransform: 'uppercase',
+                }}>Driver</th>
+                <th style={{
+                  color: '#666',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  textAlign: 'left',
+                  padding: '12px 8px',
+                  textTransform: 'uppercase',
+                }}>Team</th>
+                <th style={{
+                  color: '#666',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  textAlign: 'center',
+                  padding: '12px 8px',
+                  textTransform: 'uppercase',
+                }}>Lap</th>
+                <th style={{
+                  color: '#666',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  textAlign: 'right',
+                  padding: '12px 8px',
+                  textTransform: 'uppercase',
+                }}>Time</th>
+                <th style={{
+                  color: '#666',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  textAlign: 'right',
+                  padding: '12px 8px',
+                  textTransform: 'uppercase',
+                }}>Speed (km/h)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fastestLaps.map((lap: any, idx: number) => (
+                <tr
+                  key={idx}
+                  style={{
+                    borderBottom: '1px solid #2A2A3E',
+                    backgroundColor: lap.rank === 1 ? '#E1060010' : 'transparent',
+                  }}
+                >
+                  <td style={{ padding: '16px 8px' }}>
+                    <span style={{
+                      color: lap.rank === 1 ? '#E10600' : '#FFFFFF',
+                      fontSize: '16px',
+                      fontWeight: lap.rank === 1 ? 700 : 600,
+                    }}>
+                      {lap.rank || idx + 1}
+                    </span>
+                  </td>
+                  <td style={{ padding: '16px 8px' }}>
+                    <span style={{
+                      color: '#FFFFFF',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                    }}>
+                      {`${lap.driver.first_name} ${lap.driver.last_name}`}
+                    </span>
+                  </td>
+                  <td style={{ padding: '16px 8px' }}>
+                    <TeamBadge
+                      constructorRef={lap.constructor.constructor_ref}
+                      constructorName={lap.constructor.name}
+                    />
+                  </td>
+                  <td style={{ padding: '16px 8px', textAlign: 'center' }}>
+                    <span style={{
+                      color: '#B0B0B0',
+                      fontSize: '14px',
+                    }}>
+                      {lap.lap || '-'}
+                    </span>
+                  </td>
+                  <td style={{ padding: '16px 8px', textAlign: 'right' }}>
+                    <span style={{
+                      color: lap.rank === 1 ? '#E10600' : '#B0B0B0',
+                      fontSize: '14px',
+                      fontFamily: 'monospace',
+                      fontWeight: lap.rank === 1 ? 600 : 400,
+                    }}>
+                      {lap.time || '-'}
+                    </span>
+                  </td>
+                  <td style={{ padding: '16px 8px', textAlign: 'right' }}>
+                    <span style={{
+                      color: '#B0B0B0',
+                      fontSize: '14px',
+                      fontFamily: 'monospace',
+                    }}>
+                      {lap.speed ? lap.speed.toFixed(2) : '-'}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
     }
     return (
       <div style={{
@@ -136,14 +283,14 @@ const RacePage = () => {
             fontSize: '16px',
             margin: 0,
           }}>
-            {raceData.circuit_name}
+            {raceData.circuit?.name || raceData.circuit_name}
           </p>
           <p style={{
             color: '#666',
             fontSize: '14px',
             margin: 0,
           }}>
-            {raceData.circuit_country} • {formatDateLong(raceData.date)}
+            {raceData.circuit?.country || raceData.circuit_country} • {formatDateLong(raceData.date)}
           </p>
         </div>
       </div>

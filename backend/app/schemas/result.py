@@ -56,3 +56,15 @@ class QualifyingResultOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class FastestLapOut(BaseModel):
+    rank: int | None = None
+    driver: DriverSimple
+    constructor: ConstructorSimple
+    lap: int | None = None
+    time: str | None = None
+    speed: float | None = None
+
+    class Config:
+        from_attributes = True

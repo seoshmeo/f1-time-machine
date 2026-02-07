@@ -8,6 +8,7 @@ from app.models import Status
 from app.schemas.result import (
     ConstructorSimple,
     DriverSimple,
+    FastestLapOut,
     QualifyingResultOut,
     ResultOut,
 )
@@ -29,7 +30,7 @@ def get_race_results(year: int, round: int, db: Session = Depends(get_db)):
 
     race_session = (
         db.query(SessionModel)
-        .filter(SessionModel.race_id == race.id, SessionModel.type == "race")
+        .filter(SessionModel.race_id == race.id, SessionModel.type == "R")
         .first()
     )
     if not race_session:
@@ -82,7 +83,7 @@ def get_qualifying_results(year: int, round: int, db: Session = Depends(get_db))
 
     qualifying_session = (
         db.query(SessionModel)
-        .filter(SessionModel.race_id == race.id, SessionModel.type == "qualifying")
+        .filter(SessionModel.race_id == race.id, SessionModel.type == "Q")
         .first()
     )
     if not qualifying_session:
@@ -106,6 +107,53 @@ def get_qualifying_results(year: int, round: int, db: Session = Depends(get_db))
             q1_time=result.q1_time,
             q2_time=result.q2_time,
             q3_time=result.q3_time,
+        )
+        for result in results
+    ]
+
+
+@router.get("/seasons/{year}/races/{round}/fastest-laps", response_model=list[FastestLapOut])
+def get_fastest_laps(year: int, round: int, db: Session = Depends(get_db)):
+    season = db.query(Season).filter(Season.year == year).first()
+    if not season:
+        raise HTTPException(status_code=404, detail=f"Season {year} not found")
+
+    race = (
+        db.query(Race).filter(Race.season_id == season.id, Race.round == round).first()
+    )
+    if not race:
+        raise HTTPException(status_code=404, detail=f"Race round {round} not found in {year}")
+
+    race_session = (
+        db.query(SessionModel)
+        .filter(SessionModel.race_id == race.id, SessionModel.type == "R")
+        .first()
+    )
+    if not race_session:
+        return []
+
+    results = (
+        db.query(Result)
+        .options(
+            joinedload(Result.driver),
+            joinedload(Result.constructor),
+        )
+        .filter(
+            Result.session_id == race_session.id,
+            Result.fastest_lap_time.isnot(None),
+        )
+        .order_by(Result.fastest_lap_rank)
+        .all()
+    )
+
+    return [
+        FastestLapOut(
+            rank=result.fastest_lap_rank,
+            driver=DriverSimple.model_validate(result.driver),
+            constructor=ConstructorSimple.model_validate(result.constructor),
+            lap=result.fastest_lap,
+            time=result.fastest_lap_time,
+            speed=result.fastest_lap_speed,
         )
         for result in results
     ]

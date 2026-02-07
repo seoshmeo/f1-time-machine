@@ -12,6 +12,7 @@ const SessionTabs = ({ sessions, activeSession, onSessionChange }: SessionTabsPr
       'FP3': 'FP3',
       'Q': 'Qualifying',
       'R': 'Race',
+      'FL': 'Fastest Laps',
     };
     return labels[session] || session;
   };

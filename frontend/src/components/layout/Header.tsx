@@ -75,6 +75,9 @@ const Header = () => {
           <Link to={`/season/${seasonYear}/drivers`} style={navLinkStyle('/drivers')}>
             Drivers
           </Link>
+          <Link to={`/season/${seasonYear}/constructors`} style={navLinkStyle('/constructors')}>
+            Constructors
+          </Link>
         </nav>
       </div>
     </header>

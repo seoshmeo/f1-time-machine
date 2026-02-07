@@ -3,9 +3,9 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Constructor, Driver, DriverStanding, Race, Result, Season, SeasonEntry
+from app.models import Circuit, Constructor, Driver, DriverStanding, Race, Result, Season, SeasonEntry, Status
 from app.models import Session as SessionModel
-from app.schemas.driver import DriverBrief, DriverDetail, SeasonStatsOut
+from app.schemas.driver import DriverBrief, DriverDetail, DriverRaceResultOut, SeasonStatsOut
 
 router = APIRouter()
 
@@ -122,3 +122,88 @@ def get_driver(
             )
 
     return result
+
+
+@router.get("/drivers/{driver_ref}/race-results", response_model=list[DriverRaceResultOut])
+def get_driver_race_results(
+    driver_ref: str,
+    season: int = Query(..., description="Season year"),
+    db: Session = Depends(get_db),
+):
+    driver = db.query(Driver).filter(Driver.driver_ref == driver_ref).first()
+    if not driver:
+        raise HTTPException(status_code=404, detail=f"Driver {driver_ref} not found")
+
+    season_obj = db.query(Season).filter(Season.year == season).first()
+    if not season_obj:
+        raise HTTPException(status_code=404, detail=f"Season {season} not found")
+
+    races = (
+        db.query(Race)
+        .filter(Race.season_id == season_obj.id)
+        .order_by(Race.round)
+        .all()
+    )
+
+    results = []
+    for race in races:
+        circuit = db.query(Circuit).filter(Circuit.id == race.circuit_id).first()
+
+        # Race result
+        race_session = (
+            db.query(SessionModel)
+            .filter(SessionModel.race_id == race.id, SessionModel.type == "R")
+            .first()
+        )
+        race_result = None
+        if race_session:
+            race_result = (
+                db.query(Result)
+                .filter(Result.session_id == race_session.id, Result.driver_id == driver.id)
+                .first()
+            )
+
+        # Qualifying result
+        quali_session = (
+            db.query(SessionModel)
+            .filter(SessionModel.race_id == race.id, SessionModel.type == "Q")
+            .first()
+        )
+        quali_position = None
+        if quali_session:
+            quali_result = (
+                db.query(Result)
+                .filter(Result.session_id == quali_session.id, Result.driver_id == driver.id)
+                .first()
+            )
+            if quali_result:
+                quali_position = quali_result.position
+
+        # Status text
+        status_text = None
+        if race_result and race_result.status_id:
+            status = db.query(Status).filter(Status.id == race_result.status_id).first()
+            if status:
+                status_text = status.status
+
+        results.append(
+            DriverRaceResultOut(
+                round=race.round,
+                race_name=race.name,
+                circuit_name=circuit.name if circuit else "Unknown",
+                date=race.date,
+                grid_position=race_result.grid_position if race_result else None,
+                position=race_result.position if race_result else None,
+                position_text=race_result.position_text if race_result else None,
+                points=race_result.points if race_result else 0,
+                laps_completed=race_result.laps_completed if race_result else None,
+                finish_time=race_result.finish_time if race_result else None,
+                fastest_lap_time=race_result.fastest_lap_time if race_result else None,
+                fastest_lap_speed=race_result.fastest_lap_speed if race_result else None,
+                fastest_lap_rank=race_result.fastest_lap_rank if race_result else None,
+                status=status_text,
+                qualifying_position=quali_position,
+            )
+        )
+
+    return results

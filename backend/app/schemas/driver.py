@@ -45,6 +45,24 @@ class DriverDetail(BaseModel):
         from_attributes = True
 
 
+class DriverRaceResultOut(BaseModel):
+    round: int
+    race_name: str
+    circuit_name: str
+    date: date
+    grid_position: int | None = None
+    position: int | None = None
+    position_text: str | None = None
+    points: float = 0
+    laps_completed: int | None = None
+    finish_time: str | None = None
+    fastest_lap_time: str | None = None
+    fastest_lap_speed: float | None = None
+    fastest_lap_rank: int | None = None
+    status: str | None = None
+    qualifying_position: int | None = None
+
+
 class DriverSeasonStats(BaseModel):
     driver: DriverBrief
     constructor_name: str

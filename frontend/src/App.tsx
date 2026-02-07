@@ -8,6 +8,8 @@ import RacePage from './pages/RacePage';
 import StandingsPage from './pages/StandingsPage';
 import DriversPage from './pages/DriversPage';
 import DriverDetailPage from './pages/DriverDetailPage';
+import ConstructorsPage from './pages/ConstructorsPage';
+import ConstructorDetailPage from './pages/ConstructorDetailPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
           <Route path="/season/:year/standings" element={<StandingsPage />} />
           <Route path="/season/:year/drivers" element={<DriversPage />} />
           <Route path="/season/:year/drivers/:driverRef" element={<DriverDetailPage />} />
+          <Route path="/season/:year/constructors" element={<ConstructorsPage />} />
+          <Route path="/season/:year/constructors/:constructorRef" element={<ConstructorDetailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
