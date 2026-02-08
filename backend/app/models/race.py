@@ -40,3 +40,4 @@ class Race(Base):
     calendar_days: Mapped[list["CalendarDay"]] = relationship(
         "CalendarDay", back_populates="race"
     )
+    penalties: Mapped[list["Penalty"]] = relationship("Penalty", back_populates="race")

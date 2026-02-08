@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useRace, useRaceResults, useQualifyingResults, useFastestLaps } from '../hooks/useRace';
+import { useRace, useRaceResults, useQualifyingResults, useFastestLaps, useRacePenalties } from '../hooks/useRace';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import SessionTabs from '../components/race/SessionTabs';
 import ResultsTable from '../components/race/ResultsTable';
 import QualifyingTable from '../components/race/QualifyingTable';
+import PenaltiesTable from '../components/race/PenaltiesTable';
 import TeamBadge from '../components/common/TeamBadge';
 import { formatDateLong } from '../utils/dateUtils';
 
@@ -19,8 +20,9 @@ const RacePage = () => {
   const { data: raceResults, isLoading: isLoadingResults } = useRaceResults(seasonYear, raceRound);
   const { data: qualifyingResults, isLoading: isLoadingQualifying } = useQualifyingResults(seasonYear, raceRound);
   const { data: fastestLaps, isLoading: isLoadingFastestLaps } = useFastestLaps(seasonYear, raceRound);
+  const { data: penalties, isLoading: isLoadingPenalties } = useRacePenalties(seasonYear, raceRound);
 
-  const isLoading = isLoadingRace || isLoadingResults || isLoadingQualifying || isLoadingFastestLaps;
+  const isLoading = isLoadingRace || isLoadingResults || isLoadingQualifying || isLoadingFastestLaps || isLoadingPenalties;
   const error = raceError;
 
   if (isLoading) {
@@ -87,6 +89,9 @@ const RacePage = () => {
   }
   if (fastestLaps && fastestLaps.length > 0) {
     availableSessions.push('FL');
+  }
+  if (penalties && penalties.length > 0) {
+    availableSessions.push('P');
   }
 
   const renderSessionResults = () => {
@@ -218,6 +223,9 @@ const RacePage = () => {
           </table>
         </div>
       );
+    }
+    if (activeSession === 'P' && penalties && penalties.length > 0) {
+      return <PenaltiesTable penalties={penalties} />;
     }
     return (
       <div style={{

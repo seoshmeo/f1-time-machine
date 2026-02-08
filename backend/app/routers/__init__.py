@@ -5,6 +5,7 @@ from app.routers import (
     days,
     drivers,
     events,
+    penalties,
     quotes,
     races,
     results,
@@ -23,5 +24,6 @@ __all__ = [
     "articles",
     "quotes",
     "events",
+    "penalties",
     "admin",
 ]

@@ -28,3 +28,4 @@ class Constructor(Base):
     season_entries: Mapped[list["SeasonEntry"]] = relationship(
         "SeasonEntry", back_populates="constructor"
     )
+    penalties: Mapped[list["Penalty"]] = relationship("Penalty", back_populates="constructor")

@@ -34,3 +34,4 @@ class Session(Base):
     circuit: Mapped["Circuit | None"] = relationship("Circuit", back_populates="sessions")
     results: Mapped[list["Result"]] = relationship("Result", back_populates="session")
     events: Mapped[list["Event"]] = relationship("Event", back_populates="session")
+    penalties: Mapped[list["Penalty"]] = relationship("Penalty", back_populates="session")

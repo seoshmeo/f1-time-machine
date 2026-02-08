@@ -29,3 +29,4 @@ class Driver(Base):
         "SeasonEntry", back_populates="driver"
     )
     quotes: Mapped[list["Quote"]] = relationship("Quote", back_populates="driver")
+    penalties: Mapped[list["Penalty"]] = relationship("Penalty", back_populates="driver")

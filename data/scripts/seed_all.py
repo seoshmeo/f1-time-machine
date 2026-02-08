@@ -13,6 +13,7 @@ import fetch_standings
 import generate_days
 import generate_events
 import import_articles
+import import_penalties
 import import_quotes
 import validate_data
 
@@ -34,7 +35,7 @@ def seed_all(year: int, reset: bool = False) -> None:
         year: Season year (e.g., 2010)
         reset: If True, drop and recreate database schema
     """
-    total_steps = 13
+    total_steps = 14
     errors = []
 
     print("\n" + "#" * 70)
@@ -152,12 +153,21 @@ def seed_all(year: int, reset: bool = False) -> None:
         print(f"ERROR: {error_msg}")
         errors.append(error_msg)
 
-    # Step 13: Validate data
-    print_step(13, total_steps, "Validate Data")
+    # Step 13: Import penalties
+    print_step(13, total_steps, "Import Penalties")
+    try:
+        import_penalties.import_penalties(year)
+    except Exception as e:
+        error_msg = f"Step 13 failed: {e}"
+        print(f"ERROR: {error_msg}")
+        errors.append(error_msg)
+
+    # Step 14: Validate data
+    print_step(14, total_steps, "Validate Data")
     try:
         validate_data.validate(year)
     except Exception as e:
-        error_msg = f"Step 13 failed: {e}"
+        error_msg = f"Step 14 failed: {e}"
         print(f"ERROR: {error_msg}")
         errors.append(error_msg)
 

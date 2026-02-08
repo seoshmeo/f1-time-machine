@@ -6,6 +6,7 @@ import sqlite3
 
 SCHEMA_SQL = """
 -- Drop existing tables (for reset mode)
+DROP TABLE IF EXISTS penalties;
 DROP TABLE IF EXISTS event_tags;
 DROP TABLE IF EXISTS tags;
 DROP TABLE IF EXISTS event_drivers;
@@ -367,6 +368,25 @@ CREATE TABLE bot_subscribers (
 
 CREATE INDEX idx_bot_subscribers_telegram ON bot_subscribers(telegram_id);
 CREATE INDEX idx_bot_subscribers_active ON bot_subscribers(is_active);
+
+-- Penalties
+CREATE TABLE penalties (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    race_id INTEGER NOT NULL REFERENCES races(id),
+    session_id INTEGER REFERENCES sessions(id),
+    driver_id INTEGER REFERENCES drivers(id),
+    constructor_id INTEGER REFERENCES constructors(id),
+    round INTEGER NOT NULL,
+    penalty_type TEXT NOT NULL,
+    timing TEXT NOT NULL,
+    penalty_value TEXT,
+    reason TEXT NOT NULL,
+    description TEXT,
+    incident_time TEXT,
+    created_at TEXT DEFAULT (datetime('now'))
+);
+
+CREATE INDEX idx_penalties_race ON penalties(race_id);
 """
 
 

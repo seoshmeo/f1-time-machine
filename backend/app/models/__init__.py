@@ -5,6 +5,7 @@ from app.models.constructor import Constructor
 from app.models.day import CalendarDay
 from app.models.driver import Driver
 from app.models.event import Event, EventTag, event_drivers
+from app.models.penalty import Penalty
 from app.models.quote import Quote
 from app.models.race import Race
 from app.models.result import Result
@@ -33,6 +34,7 @@ __all__ = [
     "event_drivers",
     "Article",
     "Quote",
+    "Penalty",
     "BotSubscriber",
     "Tag",
 ]

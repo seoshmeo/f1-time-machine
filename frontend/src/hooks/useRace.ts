@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getRaces, getRaceDetail } from '@/api/races';
 import { getRaceResults, getQualifying } from '@/api/results';
+import { getRacePenalties } from '@/api/penalties';
 import { apiGet } from '@/api/client';
 
 export function useRaces(year: number) {
@@ -39,6 +40,14 @@ export function useFastestLaps(year: number, round: number) {
   return useQuery({
     queryKey: ['fastestLaps', year, round],
     queryFn: () => apiGet(`/seasons/${year}/races/${round}/fastest-laps`),
+    staleTime: Infinity,
+  });
+}
+
+export function useRacePenalties(year: number, round: number) {
+  return useQuery({
+    queryKey: ['penalties', year, round],
+    queryFn: () => getRacePenalties(year, round),
     staleTime: Infinity,
   });
 }
