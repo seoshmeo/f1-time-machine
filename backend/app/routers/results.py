@@ -267,23 +267,39 @@ def get_lap_positions(year: int, round: int, db: Session = Depends(get_db)):
             "abbreviation": r.driver.code or r.driver.last_name[:3].upper(),
         }
 
-    # Fetch lap data from Ergast/Jolpica API
-    url = f"https://api.jolpi.ca/ergast/f1/{year}/{round}/laps.json?limit=2000"
-    try:
-        resp = httpx.get(url, timeout=30)
-        resp.raise_for_status()
-        data = resp.json()
-    except Exception:
-        return {"drivers": list(driver_map.values()), "laps": []}
+    # Fetch lap data from Ergast/Jolpica API (paginated, max 100 per page)
+    all_laps: list[dict] = []
+    offset = 0
+    limit = 100
+    while True:
+        url = (
+            f"https://api.jolpi.ca/ergast/f1/{year}/{round}"
+            f"/laps.json?limit={limit}&offset={offset}"
+        )
+        try:
+            resp = httpx.get(url, timeout=30)
+            resp.raise_for_status()
+            data = resp.json()
+        except Exception:
+            break
 
-    races = data.get("MRData", {}).get("RaceTable", {}).get("Races", [])
-    if not races:
-        return {"drivers": list(driver_map.values()), "laps": []}
+        races = data.get("MRData", {}).get("RaceTable", {}).get("Races", [])
+        if not races:
+            break
 
-    laps_data = races[0].get("Laps", [])
+        laps_data = races[0].get("Laps", [])
+        if not laps_data:
+            break
+
+        all_laps.extend(laps_data)
+
+        total = int(data.get("MRData", {}).get("total", 0))
+        offset += limit
+        if offset >= total:
+            break
 
     lap_rows = []
-    for lap in laps_data:
+    for lap in all_laps:
         row: dict = {"lap": int(lap["number"])}
         for timing in lap.get("Timings", []):
             driver_id = timing["driverId"]
