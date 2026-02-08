@@ -11,8 +11,8 @@ interface EventCardProps {
 }
 
 const EventCard = ({ title, summary, importance, sessionType, sessionId, eventType }: EventCardProps) => {
-  const [expanded, setExpanded] = useState(false);
   const hasResults = !!sessionId;
+  const [expanded, setExpanded] = useState(hasResults);
 
   const getImportanceColor = (level: 'high' | 'medium' | 'low' | number) => {
     if (typeof level === 'string') {

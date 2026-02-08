@@ -1,3 +1,4 @@
+import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, joinedload
 
@@ -221,3 +222,72 @@ def get_session_results(session_id: int, db: Session = Depends(get_db)):
         }
         for result in results
     ]
+
+
+@router.get("/seasons/{year}/races/{round}/lap-positions")
+def get_lap_positions(year: int, round: int, db: Session = Depends(get_db)):
+    """Fetch lap-by-lap position data from Ergast API for a race."""
+    season = db.query(Season).filter(Season.year == year).first()
+    if not season:
+        raise HTTPException(status_code=404, detail=f"Season {year} not found")
+
+    race = (
+        db.query(Race)
+        .filter(Race.season_id == season.id, Race.round == round)
+        .first()
+    )
+    if not race:
+        raise HTTPException(
+            status_code=404, detail=f"Race round {round} not found in {year}"
+        )
+
+    race_session = (
+        db.query(SessionModel)
+        .filter(SessionModel.race_id == race.id, SessionModel.type == "R")
+        .first()
+    )
+    if not race_session:
+        return {"drivers": [], "laps": []}
+
+    # Get driver/constructor info from DB
+    results = (
+        db.query(Result)
+        .options(joinedload(Result.driver), joinedload(Result.constructor))
+        .filter(Result.session_id == race_session.id)
+        .all()
+    )
+
+    driver_map = {}
+    for r in results:
+        ref = r.driver.driver_ref
+        driver_map[ref] = {
+            "driver_id": ref,
+            "name": f"{r.driver.first_name} {r.driver.last_name}",
+            "constructor_ref": r.constructor.constructor_ref,
+            "abbreviation": r.driver.code or r.driver.last_name[:3].upper(),
+        }
+
+    # Fetch lap data from Ergast/Jolpica API
+    url = f"https://api.jolpi.ca/ergast/f1/{year}/{round}/laps.json?limit=2000"
+    try:
+        resp = httpx.get(url, timeout=30)
+        resp.raise_for_status()
+        data = resp.json()
+    except Exception:
+        return {"drivers": list(driver_map.values()), "laps": []}
+
+    races = data.get("MRData", {}).get("RaceTable", {}).get("Races", [])
+    if not races:
+        return {"drivers": list(driver_map.values()), "laps": []}
+
+    laps_data = races[0].get("Laps", [])
+
+    lap_rows = []
+    for lap in laps_data:
+        row: dict = {"lap": int(lap["number"])}
+        for timing in lap.get("Timings", []):
+            driver_id = timing["driverId"]
+            row[driver_id] = int(timing["position"])
+        lap_rows.append(row)
+
+    return {"drivers": list(driver_map.values()), "laps": lap_rows}

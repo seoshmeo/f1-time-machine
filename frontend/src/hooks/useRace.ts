@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getRaces, getRaceDetail } from '@/api/races';
-import { getRaceResults, getQualifying } from '@/api/results';
+import { getRaceResults, getQualifying, getLapPositions } from '@/api/results';
 import { getRacePenalties } from '@/api/penalties';
 import { apiGet } from '@/api/client';
 
@@ -48,6 +48,14 @@ export function useRacePenalties(year: number, round: number) {
   return useQuery({
     queryKey: ['penalties', year, round],
     queryFn: () => getRacePenalties(year, round),
+    staleTime: Infinity,
+  });
+}
+
+export function useLapPositions(year: number, round: number) {
+  return useQuery({
+    queryKey: ['lapPositions', year, round],
+    queryFn: () => getLapPositions(year, round),
     staleTime: Infinity,
   });
 }

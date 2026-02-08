@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useRace, useRaceResults, useQualifyingResults, useFastestLaps, useRacePenalties } from '../hooks/useRace';
+import { useRace, useRaceResults, useQualifyingResults, useFastestLaps, useRacePenalties, useLapPositions } from '../hooks/useRace';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import SessionTabs from '../components/race/SessionTabs';
 import ResultsTable from '../components/race/ResultsTable';
 import QualifyingTable from '../components/race/QualifyingTable';
 import PenaltiesTable from '../components/race/PenaltiesTable';
+import LapPositionChart from '../components/race/LapPositionChart';
 import TeamBadge from '../components/common/TeamBadge';
 import { formatDateLong } from '../utils/dateUtils';
 
@@ -21,6 +22,7 @@ const RacePage = () => {
   const { data: qualifyingResults, isLoading: isLoadingQualifying } = useQualifyingResults(seasonYear, raceRound);
   const { data: fastestLaps, isLoading: isLoadingFastestLaps } = useFastestLaps(seasonYear, raceRound);
   const { data: penalties, isLoading: isLoadingPenalties } = useRacePenalties(seasonYear, raceRound);
+  const { data: lapData, isLoading: isLoadingLaps } = useLapPositions(seasonYear, raceRound);
 
   const isLoading = isLoadingRace || isLoadingResults || isLoadingQualifying || isLoadingFastestLaps || isLoadingPenalties;
   const error = raceError;
@@ -89,6 +91,9 @@ const RacePage = () => {
   }
   if (fastestLaps && fastestLaps.length > 0) {
     availableSessions.push('FL');
+  }
+  if (lapData && lapData.laps && lapData.laps.length > 0) {
+    availableSessions.push('LC');
   }
   if (penalties && penalties.length > 0) {
     availableSessions.push('P');
@@ -223,6 +228,9 @@ const RacePage = () => {
           </table>
         </div>
       );
+    }
+    if (activeSession === 'LC' && lapData && lapData.laps && lapData.laps.length > 0) {
+      return <LapPositionChart drivers={lapData.drivers} laps={lapData.laps} />;
     }
     if (activeSession === 'P' && penalties && penalties.length > 0) {
       return <PenaltiesTable penalties={penalties} />;
