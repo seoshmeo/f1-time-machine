@@ -37,7 +37,7 @@
   },
   {
     "round": 6,
-    "driver_ref": "schumacher",
+    "driver_ref": "michael_schumacher",
     "constructor_ref": "mercedes",
     "session_type": "R",
     "penalty_type": "time_penalty",
@@ -61,7 +61,7 @@
   },
   {
     "round": 9,
-    "driver_ref": "schumacher",
+    "driver_ref": "michael_schumacher",
     "constructor_ref": "mercedes",
     "session_type": "R",
     "penalty_type": "drive_through",
@@ -145,7 +145,7 @@
   },
   {
     "round": 15,
-    "driver_ref": "schumacher",
+    "driver_ref": "michael_schumacher",
     "constructor_ref": "mercedes",
     "session_type": "R",
     "penalty_type": "grid_penalty",
@@ -157,7 +157,7 @@
   },
   {
     "round": 16,
-    "driver_ref": "schumacher",
+    "driver_ref": "michael_schumacher",
     "constructor_ref": "mercedes",
     "session_type": "R",
     "penalty_type": "grid_penalty",
@@ -181,7 +181,7 @@
   },
   {
     "round": 19,
-    "driver_ref": "schumacher",
+    "driver_ref": "michael_schumacher",
     "constructor_ref": "mercedes",
     "session_type": "R",
     "penalty_type": "time_penalty",
