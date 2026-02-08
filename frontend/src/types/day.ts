@@ -1,12 +1,15 @@
 export type DayType = 'race_day' | 'qualifying' | 'practice' | 'testing' | 'off_season' | 'announcement';
 
 export interface EventOut {
+  id?: number;
   event_id?: number;
   date?: string;
+  type?: string;
   event_type?: string;
   importance: 'high' | 'medium' | 'low';
   title: string;
   summary: string;
+  detail?: string;
   details?: string;
   related_driver_ref?: string;
   related_constructor_ref?: string;
@@ -14,6 +17,9 @@ export interface EventOut {
   source?: string;
   source_url?: string;
   session_type?: string;
+  session_id?: number | null;
+  driver_ids?: number[];
+  tag_names?: string[];
 }
 
 export interface SessionResultSummary {

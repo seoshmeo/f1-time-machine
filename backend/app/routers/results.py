@@ -157,3 +157,67 @@ def get_fastest_laps(year: int, round: int, db: Session = Depends(get_db)):
         )
         for result in results
     ]
+
+
+@router.get("/sessions/{session_id}/results")
+def get_session_results(session_id: int, db: Session = Depends(get_db)):
+    session = db.query(SessionModel).filter(SessionModel.id == session_id).first()
+    if not session:
+        raise HTTPException(status_code=404, detail=f"Session {session_id} not found")
+
+    results = (
+        db.query(Result)
+        .options(
+            joinedload(Result.driver),
+            joinedload(Result.constructor),
+            joinedload(Result.status),
+        )
+        .filter(Result.session_id == session_id)
+        .order_by(Result.position_order)
+        .all()
+    )
+
+    # For qualifying sessions, return qualifying format
+    if session.type == "Q":
+        return [
+            {
+                "position": result.position,
+                "driver_name": f"{result.driver.first_name} {result.driver.last_name}",
+                "constructor_name": result.constructor.name,
+                "constructor_ref": result.constructor.constructor_ref,
+                "q1_time": result.q1_time,
+                "q2_time": result.q2_time,
+                "q3_time": result.q3_time,
+            }
+            for result in results
+        ]
+
+    # For race sessions, return race format
+    if session.type == "R":
+        return [
+            {
+                "position": result.position,
+                "driver_name": f"{result.driver.first_name} {result.driver.last_name}",
+                "constructor_name": result.constructor.name,
+                "constructor_ref": result.constructor.constructor_ref,
+                "time": result.finish_time,
+                "points": result.points,
+                "status": result.status.status if result.status else None,
+                "grid": result.grid_position,
+                "laps": result.laps_completed,
+            }
+            for result in results
+        ]
+
+    # For practice sessions (FP1, FP2, FP3), return practice format
+    return [
+        {
+            "position": result.position,
+            "driver_name": f"{result.driver.first_name} {result.driver.last_name}",
+            "constructor_name": result.constructor.name,
+            "constructor_ref": result.constructor.constructor_ref,
+            "time": result.fastest_lap_time or result.finish_time,
+            "laps": result.laps_completed,
+        }
+        for result in results
+    ]

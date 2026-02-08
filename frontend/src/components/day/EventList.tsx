@@ -39,6 +39,8 @@ const EventList = ({ events }: EventListProps) => {
           summary={event.summary}
           importance={event.importance}
           sessionType={event.session_type}
+          sessionId={event.session_id}
+          eventType={event.type || event.event_type}
         />
       ))}
     </div>
