@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { driversApi } from '../api/drivers';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import TeamBadge from '../components/common/TeamBadge';
@@ -20,6 +21,14 @@ const DriverDetailPage = () => {
     queryFn: () => driversApi.getDriverRaceResults(driverRef!, seasonYear),
     enabled: !!driverRef,
   });
+
+  useEffect(() => {
+    if (driver) {
+      document.title = `${driver.first_name} ${driver.last_name} — ${seasonYear} F1 Season | F1 Time Machine`;
+    } else {
+      document.title = `Driver Profile — ${seasonYear} F1 Season | F1 Time Machine`;
+    }
+  }, [driver, seasonYear]);
 
   const isLoading = isLoadingDriver || isLoadingResults;
 

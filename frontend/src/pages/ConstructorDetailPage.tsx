@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { getConstructorDetail } from '../api/constructors';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import CountryFlag from '../components/common/CountryFlag';
@@ -14,6 +15,14 @@ const ConstructorDetailPage = () => {
     queryFn: () => getConstructorDetail(constructorRef!, seasonYear),
     enabled: !!constructorRef,
   });
+
+  useEffect(() => {
+    if (constructor) {
+      document.title = `${constructor.name} — ${seasonYear} F1 Season | F1 Time Machine`;
+    } else {
+      document.title = `Constructor Profile — ${seasonYear} F1 Season | F1 Time Machine`;
+    }
+  }, [constructor, seasonYear]);
 
   if (isLoading) {
     return (

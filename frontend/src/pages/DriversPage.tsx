@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { driversApi } from '../api/drivers';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import TeamBadge from '../components/common/TeamBadge';
@@ -8,6 +9,10 @@ import CountryFlag from '../components/common/CountryFlag';
 const DriversPage = () => {
   const { year } = useParams<{ year: string }>();
   const seasonYear = parseInt(year || '2010');
+
+  useEffect(() => {
+    document.title = `${seasonYear} F1 Season Drivers | F1 Time Machine`;
+  }, [seasonYear]);
 
   const { data: drivers, isLoading, error } = useQuery({
     queryKey: ['drivers', seasonYear],

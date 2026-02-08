@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from common import get_db_connection, get_season_id, CURATED_DIR
+from common import get_db_connection, get_season_id, CURATED_DIR, slugify
 
 
 def generate_session_events(year: int) -> None:
@@ -292,6 +292,61 @@ def import_custom_events(year: int) -> None:
 
             if cursor.rowcount > 0:
                 events_count += 1
+                event_id = cursor.lastrowid
+            else:
+                # Event already existed, get the event_id
+                cursor.execute(
+                    "SELECT id FROM events WHERE day_id = ? AND season_id = ? AND title = ?",
+                    (day_id, season_id, title)
+                )
+                event_row = cursor.fetchone()
+                if event_row:
+                    event_id = event_row[0]
+                else:
+                    event_id = None
+
+            # Process driver_refs if event_id is available
+            if event_id:
+                driver_refs = event_data.get('driver_refs', [])
+                for driver_ref in driver_refs:
+                    # Look up driver by driver_ref
+                    cursor.execute(
+                        "SELECT id FROM drivers WHERE driver_ref = ?",
+                        (driver_ref,)
+                    )
+                    driver_row = cursor.fetchone()
+                    if driver_row:
+                        driver_id = driver_row[0]
+                        # Insert into event_drivers table
+                        cursor.execute(
+                            "INSERT OR IGNORE INTO event_drivers (event_id, driver_id) VALUES (?, ?)",
+                            (event_id, driver_id)
+                        )
+                    else:
+                        print(f"  Warning: Driver ref '{driver_ref}' not found, skipping")
+
+                # Process tags
+                tags = event_data.get('tags', [])
+                for tag_name in tags:
+                    tag_slug = slugify(tag_name)
+                    # Create or get tag
+                    cursor.execute(
+                        "INSERT OR IGNORE INTO tags (name, slug) VALUES (?, ?)",
+                        (tag_name, tag_slug)
+                    )
+                    # Get tag id
+                    cursor.execute(
+                        "SELECT id FROM tags WHERE slug = ?",
+                        (tag_slug,)
+                    )
+                    tag_row = cursor.fetchone()
+                    if tag_row:
+                        tag_id = tag_row[0]
+                        # Insert into event_tags table
+                        cursor.execute(
+                            "INSERT OR IGNORE INTO event_tags (event_id, tag_id) VALUES (?, ?)",
+                            (event_id, tag_id)
+                        )
 
             # Update has_content flag
             cursor.execute(

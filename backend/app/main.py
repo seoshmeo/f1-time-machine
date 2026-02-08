@@ -11,6 +11,7 @@ from app.routers import (
     constructors,
     days,
     drivers,
+    events,
     quotes,
     races,
     results,
@@ -51,6 +52,7 @@ app.include_router(standings.router, prefix="/api/v1", tags=["Standings"])
 app.include_router(days.router, prefix="/api/v1", tags=["Days"])
 app.include_router(articles.router, prefix="/api/v1", tags=["Articles"])
 app.include_router(quotes.router, prefix="/api/v1", tags=["Quotes"])
+app.include_router(events.router, prefix="/api/v1", tags=["Events"])
 app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"])
 
 

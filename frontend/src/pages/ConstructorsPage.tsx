@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { getConstructors } from '../api/constructors';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import CountryFlag from '../components/common/CountryFlag';
@@ -8,6 +9,10 @@ import { getConstructorColor } from '../utils/f1Colors';
 const ConstructorsPage = () => {
   const { year } = useParams<{ year: string }>();
   const seasonYear = parseInt(year || '2010');
+
+  useEffect(() => {
+    document.title = `${seasonYear} F1 Constructors | F1 Time Machine`;
+  }, [seasonYear]);
 
   const { data: constructors, isLoading, error } = useQuery({
     queryKey: ['constructors', seasonYear],
