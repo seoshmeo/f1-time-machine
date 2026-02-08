@@ -14,7 +14,7 @@ const RegulationsList = ({ events }: RegulationsListProps) => {
   if (events.length === 0) {
     return (
       <div style={{ color: '#666', fontSize: '14px', fontStyle: 'italic', padding: '16px 0' }}>
-        Нет данных о регламентах
+        No regulation data available
       </div>
     );
   }

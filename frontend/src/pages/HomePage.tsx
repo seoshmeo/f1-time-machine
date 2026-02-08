@@ -274,7 +274,7 @@ const HomePage = () => {
             fontWeight: 700,
             margin: '0 0 24px 0',
           }}>
-            Превью сезона 2010
+            2010 Season Preview
           </h2>
           <div style={{
             display: 'grid',
@@ -295,7 +295,7 @@ const HomePage = () => {
                   fontWeight: 700,
                   margin: '0 0 16px 0',
                 }}>
-                  Новые правила
+                  New Rules
                 </h3>
                 <RegulationsList events={regulations} />
               </div>
@@ -315,7 +315,7 @@ const HomePage = () => {
                   fontWeight: 700,
                   margin: '0 0 16px 0',
                 }}>
-                  Трансферы пилотов
+                  Driver Market
                 </h3>
                 <TransfersList events={transfers} />
               </div>
@@ -339,7 +339,7 @@ const HomePage = () => {
             fontWeight: 700,
             margin: '0 0 24px 0',
           }}>
-            Изменения в пелотоне
+            Grid Changes
           </h2>
           <GridChanges
             newTeams={newTeams || []}
@@ -348,149 +348,7 @@ const HomePage = () => {
         </div>
       ) : null}
 
-      {/* Season Schedule */}
-      <div style={{
-        backgroundColor: '#1A1A2E',
-        border: '1px solid #2A2A3E',
-        borderRadius: '8px',
-        padding: '32px',
-        marginBottom: '48px',
-      }}>
-        <h2 style={{
-          color: '#FFFFFF',
-          fontSize: '24px',
-          fontWeight: 700,
-          margin: '0 0 8px 0',
-        }}>
-          {seasonYear} Season Schedule
-        </h2>
-        <p style={{ color: '#B0B0B0', fontSize: '14px', margin: '0 0 32px 0' }}>
-          19 races from March to November — click any day to explore
-        </p>
-
-        {isLoadingSchedule ? (
-          <LoadingSpinner />
-        ) : raceWeekends.length > 0 ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-            {raceWeekends.map((weekend, idx) => (
-              <div key={weekend.round} style={{ position: 'relative' }}>
-                {/* Timeline connector */}
-                {idx < raceWeekends.length - 1 && (
-                  <div style={{
-                    position: 'absolute',
-                    left: '19px',
-                    top: '40px',
-                    bottom: '-8px',
-                    width: '2px',
-                    backgroundColor: '#2A2A3E',
-                  }} />
-                )}
-
-                <div style={{
-                  display: 'flex',
-                  gap: '24px',
-                  padding: '16px 0',
-                  alignItems: 'flex-start',
-                }}>
-                  {/* Round badge */}
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    backgroundColor: '#E10600',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                    zIndex: 1,
-                  }}>
-                    <span style={{ color: '#FFFFFF', fontSize: '14px', fontWeight: 700 }}>
-                      {weekend.round}
-                    </span>
-                  </div>
-
-                  {/* Content */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      marginBottom: '8px',
-                      flexWrap: 'wrap',
-                    }}>
-                      <Link
-                        to={`/season/${seasonYear}/race/${weekend.round}`}
-                        style={{
-                          color: '#FFFFFF',
-                          fontSize: '16px',
-                          fontWeight: 700,
-                          textDecoration: 'none',
-                        }}
-                        onMouseEnter={(e) => { e.currentTarget.style.color = '#E10600'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#FFFFFF'; }}
-                      >
-                        {weekend.raceName}
-                      </Link>
-                      <span style={{ color: '#666', fontSize: '13px' }}>
-                        {weekend.country}
-                      </span>
-                    </div>
-
-                    {/* Day chips */}
-                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                      {weekend.days.map((day) => (
-                        <Link
-                          key={day.date}
-                          to={`/season/${seasonYear}/day/${day.date}`}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            backgroundColor: '#0F0F0F',
-                            border: `1px solid ${dayTypeColors[day.day_type] || '#2A2A3E'}`,
-                            borderRadius: '20px',
-                            padding: '4px 12px',
-                            textDecoration: 'none',
-                            transition: 'all 0.2s',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = (dayTypeColors[day.day_type] || '#2A2A3E') + '20';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = '#0F0F0F';
-                          }}
-                        >
-                          <span style={{
-                            width: '6px',
-                            height: '6px',
-                            borderRadius: '50%',
-                            backgroundColor: dayTypeColors[day.day_type] || '#666',
-                          }} />
-                          <span style={{
-                            color: dayTypeColors[day.day_type] || '#B0B0B0',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                          }}>
-                            {dayTypeLabels[day.day_type] || day.day_type}
-                          </span>
-                          <span style={{
-                            color: '#666',
-                            fontSize: '12px',
-                          }}>
-                            {formatScheduleDate(day.date)}
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p style={{ color: '#666', textAlign: 'center' }}>No schedule data available</p>
-        )}
-      </div>
+      {/* Season Schedule — hidden */}
 
       {/* Quick Links */}
       <div style={{

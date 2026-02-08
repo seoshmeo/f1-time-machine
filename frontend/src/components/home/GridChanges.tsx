@@ -9,7 +9,7 @@ const GridChanges = ({ newTeams, departedTeams }: GridChangesProps) => {
   if (newTeams.length === 0 && departedTeams.length === 0) {
     return (
       <div style={{ color: '#666', fontSize: '14px', fontStyle: 'italic', padding: '16px 0' }}>
-        Нет изменений в составе команд
+        No grid changes
       </div>
     );
   }
@@ -33,7 +33,7 @@ const GridChanges = ({ newTeams, departedTeams }: GridChangesProps) => {
               marginTop: 0,
             }}
           >
-            Новые команды
+            New Teams
           </h3>
           {newTeams.map((team) => (
             <div
@@ -83,7 +83,7 @@ const GridChanges = ({ newTeams, departedTeams }: GridChangesProps) => {
               marginTop: 0,
             }}
           >
-            Покинувшие команды
+            Departed Teams
           </h3>
           {departedTeams.map((team) => (
             <div

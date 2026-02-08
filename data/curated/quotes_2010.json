@@ -3,110 +3,110 @@
     "date": "2010-03-14",
     "driver_ref": null,
     "author_name": "Martin Brundle",
-    "author_role": "Комментатор Sky Sports",
-    "text": "Это будет самый конкурентный сезон в истории Формулы-1",
-    "context": "Предсезонный прогноз, 2010",
+    "author_role": "Sky Sports Commentator",
+    "text": "This is going to be the most competitive season in Formula 1 history",
+    "context": "Pre-season prediction, 2010",
     "source": "Pre-season prediction, Sky Sports",
     "source_url": null,
-    "language": "ru"
+    "language": "en"
   },
   {
     "date": "2010-03-14",
     "driver_ref": "michael_schumacher",
     "author_name": "Michael Schumacher",
-    "author_role": "Пилот Mercedes GP",
-    "text": "Я вернулся не для того, чтобы просто участвовать. Я вернулся, чтобы побеждать",
-    "context": "О возвращении в Формулу-1",
+    "author_role": "Mercedes GP Driver",
+    "text": "I didn't come back just to take part. I came back to win",
+    "context": "On his Formula 1 comeback",
     "source": "Press conference, Mercedes GP launch",
     "source_url": null,
-    "language": "ru"
+    "language": "en"
   },
   {
     "date": "2010-03-14",
     "driver_ref": "button",
     "author_name": "Jenson Button",
-    "author_role": "Пилот McLaren",
-    "text": "McLaren — это команда, за которую мечтает выступать каждый гонщик. Я готов к новому вызову",
-    "context": "О переходе в McLaren",
+    "author_role": "McLaren Driver",
+    "text": "McLaren is the team every driver dreams of racing for. I'm ready for the new challenge",
+    "context": "On joining McLaren",
     "source": "McLaren press conference",
     "source_url": null,
-    "language": "ru"
+    "language": "en"
   },
   {
     "date": "2010-03-14",
     "driver_ref": "alonso",
     "author_name": "Fernando Alonso",
-    "author_role": "Пилот Ferrari",
-    "text": "Выступать за Ferrari — мечта каждого гонщика. Для меня это исполнение детской мечты",
-    "context": "О подписании контракта с Ferrari",
+    "author_role": "Ferrari Driver",
+    "text": "Racing for Ferrari is every driver's dream. For me, this is a childhood dream come true",
+    "context": "On signing with Ferrari",
     "source": "Ferrari announcement",
     "source_url": null,
-    "language": "ru"
+    "language": "en"
   },
   {
     "date": "2010-03-14",
     "driver_ref": "vettel",
     "author_name": "Sebastian Vettel",
-    "author_role": "Пилот Red Bull Racing",
-    "text": "Мы построили потрясающую машину. RB6 — это произведение инженерного искусства",
-    "context": "О Red Bull RB6 перед стартом сезона",
+    "author_role": "Red Bull Racing Driver",
+    "text": "We've built an amazing car. The RB6 is a work of engineering art",
+    "context": "On the Red Bull RB6 ahead of the season start",
     "source": "Red Bull Racing pre-season launch",
     "source_url": null,
-    "language": "ru"
+    "language": "en"
   },
   {
     "date": "2010-03-14",
     "driver_ref": "webber",
     "author_name": "Mark Webber",
-    "author_role": "Пилот Red Bull Racing",
-    "text": "Не плохо для второго номера, а?",
-    "context": "После победы на Гран-при Великобритании, Сильверстоун",
+    "author_role": "Red Bull Racing Driver",
+    "text": "Not bad for a number two driver, eh?",
+    "context": "After winning the British Grand Prix at Silverstone",
     "source": "Post-race interview, British GP",
     "source_url": null,
-    "language": "ru"
+    "language": "en"
   },
   {
     "date": "2010-03-14",
     "driver_ref": "hamilton",
     "author_name": "Lewis Hamilton",
-    "author_role": "Пилот McLaren",
-    "text": "В этом году борьба за титул будет невероятно напряжённой. Пять команд могут побеждать в гонках",
-    "context": "О конкурентности сезона 2010",
+    "author_role": "McLaren Driver",
+    "text": "This year the championship battle is going to be incredibly tight. Five teams can win races",
+    "context": "On the competitiveness of the 2010 season",
     "source": "Pre-season interview",
     "source_url": null,
-    "language": "ru"
+    "language": "en"
   },
   {
     "date": "2010-03-14",
     "driver_ref": "massa",
     "author_name": "Felipe Massa",
-    "author_role": "Пилот Ferrari",
-    "text": "Каждый день, когда я сажусь в машину, я благодарен за второй шанс",
-    "context": "О возвращении после аварии в Венгрии 2009",
+    "author_role": "Ferrari Driver",
+    "text": "Every day when I get in the car, I'm grateful for a second chance",
+    "context": "On his comeback after the Hungary 2009 accident",
     "source": "Pre-season interview, Ferrari",
     "source_url": null,
-    "language": "ru"
+    "language": "en"
   },
   {
     "date": "2010-03-14",
     "driver_ref": "petrov",
     "author_name": "Vitaly Petrov",
-    "author_role": "Пилот Renault",
-    "text": "Я горжусь тем, что стал первым российским пилотом в Формуле-1. Это большая ответственность",
-    "context": "О дебюте в Формуле-1",
+    "author_role": "Renault Driver",
+    "text": "I'm proud to be the first Russian driver in Formula 1. It's a huge responsibility",
+    "context": "On his Formula 1 debut",
     "source": "Renault F1 announcement",
     "source_url": null,
-    "language": "ru"
+    "language": "en"
   },
   {
     "date": "2010-03-14",
     "driver_ref": null,
     "author_name": "Adrian Newey",
-    "author_role": "Технический директор Red Bull Racing",
-    "text": "RB6 — это эволюция наших идей. Мы уделили особое внимание аэродинамике с учётом запрета дозаправок",
-    "context": "О создании Red Bull RB6",
+    "author_role": "Red Bull Racing Chief Technical Officer",
+    "text": "The RB6 is an evolution of our ideas. We paid special attention to the aerodynamics given the refueling ban",
+    "context": "On designing the Red Bull RB6",
     "source": "Technical briefing, Red Bull Racing",
     "source_url": null,
-    "language": "ru"
+    "language": "en"
   }
 ]
