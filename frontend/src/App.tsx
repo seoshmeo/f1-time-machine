@@ -11,6 +11,7 @@ import DriversPage from './pages/DriversPage';
 import DriverDetailPage from './pages/DriverDetailPage';
 import ConstructorsPage from './pages/ConstructorsPage';
 import ConstructorDetailPage from './pages/ConstructorDetailPage';
+import HeadToHeadPage from './pages/HeadToHeadPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ErrorBoundary from './components/common/ErrorBoundary';
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/season/:year/races" element={<RacesPage />} />
           <Route path="/season/:year/race/:round" element={<RacePage />} />
           <Route path="/season/:year/standings" element={<StandingsPage />} />
+          <Route path="/season/:year/head-to-head" element={<HeadToHeadPage />} />
           <Route path="/season/:year/drivers" element={<DriversPage />} />
           <Route path="/season/:year/drivers/:driverRef" element={<DriverDetailPage />} />
           <Route path="/season/:year/constructors" element={<ConstructorsPage />} />

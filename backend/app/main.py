@@ -12,6 +12,7 @@ from app.routers import (
     days,
     drivers,
     events,
+    head_to_head,
     penalties,
     quotes,
     races,
@@ -50,6 +51,7 @@ app.include_router(results.router, prefix="/api/v1", tags=["Results"])
 app.include_router(drivers.router, prefix="/api/v1", tags=["Drivers"])
 app.include_router(constructors.router, prefix="/api/v1", tags=["Constructors"])
 app.include_router(standings.router, prefix="/api/v1", tags=["Standings"])
+app.include_router(head_to_head.router, prefix="/api/v1", tags=["Head to Head"])
 app.include_router(days.router, prefix="/api/v1", tags=["Days"])
 app.include_router(articles.router, prefix="/api/v1", tags=["Articles"])
 app.include_router(quotes.router, prefix="/api/v1", tags=["Quotes"])
