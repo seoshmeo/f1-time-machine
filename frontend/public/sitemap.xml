@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://timemachinegp.com/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://timemachinegp.com/season/2010/calendar</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://timemachinegp.com/season/2010/races</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://timemachinegp.com/season/2010/standings</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://timemachinegp.com/season/2010/drivers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://timemachinegp.com/season/2010/constructors</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Races -->
+  <url><loc>https://timemachinegp.com/season/2010/race/1</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/2</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/3</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/4</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/5</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/6</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/7</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/8</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/9</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/10</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/11</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/12</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/13</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/14</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/15</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/16</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/17</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/18</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/race/19</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Drivers -->
+  <url><loc>https://timemachinegp.com/season/2010/drivers/alguersuari</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/alonso</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/barrichello</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/buemi</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/button</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/chandhok</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/glock</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/hamilton</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/heidfeld</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/hulkenberg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/klien</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/kobayashi</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/kovalainen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/kubica</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/liuzzi</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/massa</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/petrov</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/rosberg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/michael_schumacher</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/bruno_senna</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/sutil</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/trulli</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/vettel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/webber</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/yamamoto</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/rosa</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/drivers/grassi</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Constructors -->
+  <url><loc>https://timemachinegp.com/season/2010/constructors/ferrari</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/constructors/force_india</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/constructors/hrt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/constructors/lotus_racing</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/constructors/mclaren</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/constructors/mercedes</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/constructors/red_bull</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/constructors/renault</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/constructors/sauber</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/constructors/toro_rosso</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/constructors/virgin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://timemachinegp.com/season/2010/constructors/williams</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+</urlset>
