@@ -27,6 +27,22 @@ const RacePage = () => {
   const isLoading = isLoadingRace || isLoadingResults || isLoadingQualifying || isLoadingFastestLaps || isLoadingPenalties;
   const error = raceError;
 
+  // SEO: set page title and meta description
+  useEffect(() => {
+    if (raceData) {
+      document.title = `${raceData.name} ${seasonYear} - Race Results, Qualifying, Fastest Laps | F1 Time Machine`;
+      const meta = document.querySelector('meta[name="description"]');
+      if (meta) {
+        meta.setAttribute('content',
+          `${raceData.name} ${seasonYear} Grand Prix - race results, qualifying, fastest laps, lap chart and penalties. ${raceData.circuit?.name || raceData.circuit_name}, ${raceData.circuit?.country || raceData.circuit_country}.`
+        );
+      }
+    }
+    return () => {
+      document.title = 'F1 Time Machine - 2010 Season';
+    };
+  }, [raceData, seasonYear]);
+
   if (isLoading) {
     return (
       <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '48px 24px' }}>
@@ -55,22 +71,6 @@ const RacePage = () => {
       </div>
     );
   }
-
-  // SEO: set page title and meta description
-  useEffect(() => {
-    if (raceData) {
-      document.title = `${raceData.name} ${seasonYear} - Race Results, Qualifying, Fastest Laps | F1 Time Machine`;
-      const meta = document.querySelector('meta[name="description"]');
-      if (meta) {
-        meta.setAttribute('content',
-          `${raceData.name} ${seasonYear} Grand Prix - race results, qualifying, fastest laps, lap chart and penalties. ${raceData.circuit?.name || raceData.circuit_name}, ${raceData.circuit?.country || raceData.circuit_country}.`
-        );
-      }
-    }
-    return () => {
-      document.title = 'F1 Time Machine - 2010 Season';
-    };
-  }, [raceData, seasonYear]);
 
   // Transform race results to flat format
   const transformedRaceResults = raceResults?.map((r: any) => ({

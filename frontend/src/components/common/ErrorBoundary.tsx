@@ -7,19 +7,21 @@ interface Props {
 interface State {
   hasError: boolean;
   error: Error | null;
+  errorInfo: ErrorInfo | null;
 }
 
 class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError: false, error: null, errorInfo: null };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error: Error): Partial<State> {
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    this.setState({ errorInfo });
     console.error('ErrorBoundary caught an error:', error, errorInfo);
   }
 
@@ -39,7 +41,7 @@ class ErrorBoundary extends Component<Props, State> {
             border: '1px solid #2A2A3E',
             borderRadius: '8px',
             padding: '32px',
-            maxWidth: '600px',
+            maxWidth: '800px',
             textAlign: 'center',
           }}>
             <h2 style={{
@@ -53,10 +55,18 @@ class ErrorBoundary extends Component<Props, State> {
             <p style={{
               color: '#B0B0B0',
               fontSize: '14px',
-              marginBottom: '24px',
+              marginBottom: '16px',
             }}>
               {this.state.error?.message || 'An unexpected error occurred'}
             </p>
+            {this.state.errorInfo && (
+              <details style={{ color: '#666', fontSize: '12px', textAlign: 'left', marginBottom: '16px' }}>
+                <summary style={{ cursor: 'pointer', marginBottom: '8px' }}>Component Stack</summary>
+                <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
+                  {this.state.errorInfo.componentStack}
+                </pre>
+              </details>
+            )}
             <button
               onClick={() => window.location.reload()}
               style={{

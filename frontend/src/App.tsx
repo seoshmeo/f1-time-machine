@@ -12,6 +12,7 @@ import DriverDetailPage from './pages/DriverDetailPage';
 import ConstructorsPage from './pages/ConstructorsPage';
 import ConstructorDetailPage from './pages/ConstructorDetailPage';
 import NotFoundPage from './pages/NotFoundPage';
+import ErrorBoundary from './components/common/ErrorBoundary';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
     }}>
       <Header />
       <main style={{ flex: 1 }}>
+        <ErrorBoundary>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/season/:year/day/:date" element={<DayPage />} />
@@ -36,6 +38,7 @@ function App() {
           <Route path="/season/:year/constructors/:constructorRef" element={<ConstructorDetailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        </ErrorBoundary>
       </main>
       <Footer />
     </div>
