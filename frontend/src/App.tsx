@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import DayPage from './pages/DayPage';
 import CalendarPage from './pages/CalendarPage';
 import RacePage from './pages/RacePage';
+import RacesPage from './pages/RacesPage';
 import StandingsPage from './pages/StandingsPage';
 import DriversPage from './pages/DriversPage';
 import DriverDetailPage from './pages/DriverDetailPage';
@@ -26,6 +27,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/season/:year/day/:date" element={<DayPage />} />
           <Route path="/season/:year/calendar" element={<CalendarPage />} />
+          <Route path="/season/:year/races" element={<RacesPage />} />
           <Route path="/season/:year/race/:round" element={<RacePage />} />
           <Route path="/season/:year/standings" element={<StandingsPage />} />
           <Route path="/season/:year/drivers" element={<DriversPage />} />

@@ -69,6 +69,9 @@ const Header = () => {
           <Link to={`/season/${seasonYear}/calendar`} style={navLinkStyle('/calendar')}>
             Calendar
           </Link>
+          <Link to={`/season/${seasonYear}/races`} style={navLinkStyle('/races')}>
+            Races
+          </Link>
           <Link to={`/season/${seasonYear}/standings`} style={navLinkStyle('/standings')}>
             Standings
           </Link>

@@ -28,6 +28,8 @@ class RaceBrief(BaseModel):
     time: Time | None = None
     circuit_name: str
     circuit_country: str
+    winner_name: str | None = None
+    pole_name: str | None = None
 
     class Config:
         from_attributes = True
