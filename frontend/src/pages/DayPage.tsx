@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDay, useDayNavigation } from '../hooks/useDay';
 import { useKeyboardNav } from '../hooks/useKeyboardNav';
@@ -21,6 +22,13 @@ const DayPage = () => {
   const { data: dayData, isLoading, error } = useDay(seasonYear, currentDate);
   const { data: navData } = useDayNavigation(seasonYear, currentDate);
   const { data: standingsData } = useStandings(seasonYear, 19);
+
+  useEffect(() => {
+    if (currentDate) {
+      const formatted = new Date(currentDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      document.title = `${formatted} - ${seasonYear} F1 Season Day by Day | F1 Time Machine`;
+    }
+  }, [currentDate, seasonYear]);
 
   const handlePrevDay = () => {
     if (navData?.prev_date) {

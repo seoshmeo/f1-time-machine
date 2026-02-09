@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useStandings } from '../hooks/useStandings';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -9,6 +9,10 @@ import StandingsChart from '../components/standings/StandingsChart';
 const StandingsPage = () => {
   const { year } = useParams<{ year: string }>();
   const seasonYear = parseInt(year || '2010');
+
+  useEffect(() => {
+    document.title = `${seasonYear} F1 Championship Standings - Drivers & Constructors | F1 Time Machine`;
+  }, [seasonYear]);
 
   const [activeTab, setActiveTab] = useState<'drivers' | 'constructors'>('drivers');
   const [selectedRound, setSelectedRound] = useState(19);

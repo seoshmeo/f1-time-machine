@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSeasonCalendar } from '../hooks/useSeasonCalendar';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -6,6 +7,10 @@ import SeasonCalendar from '../components/calendar/SeasonCalendar';
 const CalendarPage = () => {
   const { year } = useParams<{ year: string }>();
   const seasonYear = parseInt(year || '2010');
+
+  useEffect(() => {
+    document.title = `${seasonYear} F1 Season Calendar - Day by Day | F1 Time Machine`;
+  }, [seasonYear]);
 
   const { data: calendarData, isLoading, error } = useSeasonCalendar(seasonYear);
 

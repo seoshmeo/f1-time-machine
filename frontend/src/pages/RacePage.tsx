@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRace, useRaceResults, useQualifyingResults, useFastestLaps, useRacePenalties, useLapPositions } from '../hooks/useRace';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -55,6 +55,22 @@ const RacePage = () => {
       </div>
     );
   }
+
+  // SEO: set page title and meta description
+  useEffect(() => {
+    if (raceData) {
+      document.title = `${raceData.name} ${seasonYear} - Race Results, Qualifying, Fastest Laps | F1 Time Machine`;
+      const meta = document.querySelector('meta[name="description"]');
+      if (meta) {
+        meta.setAttribute('content',
+          `${raceData.name} ${seasonYear} Grand Prix - race results, qualifying, fastest laps, lap chart and penalties. ${raceData.circuit?.name || raceData.circuit_name}, ${raceData.circuit?.country || raceData.circuit_country}.`
+        );
+      }
+    }
+    return () => {
+      document.title = 'F1 Time Machine - 2010 Season';
+    };
+  }, [raceData, seasonYear]);
 
   // Transform race results to flat format
   const transformedRaceResults = raceResults?.map((r: any) => ({
