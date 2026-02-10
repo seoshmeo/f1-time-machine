@@ -58,7 +58,33 @@ const SeasonPreviewPage = () => {
   const seasonYear = parseInt(year || '2026');
 
   useEffect(() => {
-    document.title = `${seasonYear} Season Preview — F1 Time Machine`;
+    document.title = `Formula 1 ${seasonYear} Season — F1 Calendar, Teams, Drivers & Regulations | F1 Time Machine`;
+
+    const setMeta = (name: string, content: string) => {
+      let el = document.querySelector(`meta[name="${name}"]`) || document.querySelector(`meta[property="${name}"]`);
+      if (!el) {
+        el = document.createElement('meta');
+        if (name.startsWith('og:')) {
+          el.setAttribute('property', name);
+        } else {
+          el.setAttribute('name', name);
+        }
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
+
+    const desc = `${seasonYear} Formula 1 Season Preview — ${seasonYear} race calendar, all 11 teams & 22 drivers, new regulations including active aerodynamics, power unit changes, Cadillac & Audi entries, driver transfers.`;
+    setMeta('description', desc);
+    setMeta('og:title', `Formula 1 ${seasonYear} Season — Teams, Drivers, Calendar & New Regulations`);
+    setMeta('og:description', desc);
+    setMeta('og:type', 'website');
+    setMeta('og:url', `https://timemachinegp.com/${seasonYear}`);
+    setMeta('og:site_name', 'F1 Time Machine');
+
+    return () => {
+      document.title = 'F1 Time Machine';
+    };
   }, [seasonYear]);
 
   const { data: regulations, isLoading: isLoadingRegs } = useQuery({
