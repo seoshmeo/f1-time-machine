@@ -7,7 +7,7 @@ import { formatDateLong } from '../utils/dateUtils';
 
 const RacesPage = () => {
   const { year } = useParams<{ year: string }>();
-  const seasonYear = parseInt(year || '2010');
+  const seasonYear = parseInt(year || '2026');
 
   useEffect(() => {
     document.title = `${seasonYear} F1 Season Races | F1 Time Machine`;

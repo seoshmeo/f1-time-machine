@@ -338,7 +338,7 @@ const TeamCard = ({ teamData }: TeamCardProps) => {
 
 const HeadToHeadPage = () => {
   const { year } = useParams<{ year: string }>();
-  const seasonYear = parseInt(year || '2010');
+  const seasonYear = parseInt(year || '2026');
 
   useEffect(() => {
     document.title = `${seasonYear} Head-to-Head Teammate Battles | F1 Time Machine`;

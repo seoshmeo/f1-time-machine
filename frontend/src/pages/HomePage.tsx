@@ -12,6 +12,13 @@ import RegulationsList from '../components/home/RegulationsList';
 import TransfersList from '../components/home/TransfersList';
 import GridChanges from '../components/home/GridChanges';
 
+interface SeasonBrief {
+  year: number;
+  name: string;
+  start_date: string | null;
+  end_date: string | null;
+}
+
 interface DayFromApi {
   date: string;
   day_type: string;
@@ -28,132 +35,78 @@ interface RaceFromApi {
   circuit_country: string;
 }
 
-const dayTypeColors: Record<string, string> = {
-  race_day: '#E10600',
-  quali_day: '#FF8C00',
-  practice_day: '#FFD700',
-  test_day: '#4A90E2',
-};
-
-const dayTypeLabels: Record<string, string> = {
-  race_day: 'Race',
-  quali_day: 'Qualifying',
-  practice_day: 'Practice',
-  test_day: 'Testing',
-};
-
-function formatScheduleDate(dateStr: string): string {
-  const [y, m, d] = dateStr.split('-').map(Number);
-  const date = new Date(y, m - 1, d);
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  return `${days[date.getDay()]}, ${d} ${months[m - 1]}`;
-}
-
 const HomePage = () => {
-  const seasonYear = 2010;
   const today = new Date().toISOString().split('T')[0];
 
-  const { data: todayResponse, isLoading: isLoadingToday } = useQuery({
-    queryKey: ['today', seasonYear, today],
-    queryFn: () => daysApi.getToday(seasonYear),
+  const { data: seasons, isLoading: isLoadingSeasons } = useQuery({
+    queryKey: ['seasons'],
+    queryFn: () => apiGet<SeasonBrief[]>('/seasons'),
+    staleTime: Infinity,
   });
 
-  const { data: scheduleDays, isLoading: isLoadingSchedule } = useQuery({
-    queryKey: ['scheduleDays', seasonYear],
-    queryFn: () => apiGet<DayFromApi[]>(`/seasons/${seasonYear}/days`, { has_content: true }),
-    staleTime: Infinity,
+  // Pick the first historical season (start_date in the past) for "On This Day"
+  const historicalSeason = useMemo(() => {
+    if (!seasons) return null;
+    return seasons.find(s => s.start_date && s.start_date <= today) || null;
+  }, [seasons, today]);
+
+  // Use first available season for Season Preview section
+  const previewSeason = useMemo(() => {
+    if (!seasons || seasons.length === 0) return null;
+    return seasons[0];
+  }, [seasons]);
+
+  const seasonYear = previewSeason?.year || 2026;
+
+  const { data: todayResponse, isLoading: isLoadingToday } = useQuery({
+    queryKey: ['today', historicalSeason?.year, today],
+    queryFn: () => daysApi.getToday(historicalSeason!.year),
+    enabled: !!historicalSeason,
   });
 
   const { data: races } = useQuery({
     queryKey: ['races', seasonYear],
     queryFn: () => getRaces(seasonYear),
     staleTime: Infinity,
+    enabled: !!previewSeason,
   });
 
   const { data: regulations } = useQuery({
     queryKey: ['events', seasonYear, 'regulation', 'pre-season'],
     queryFn: () => getSeasonEvents(seasonYear, { type: 'regulation', tag: 'pre-season' }),
     staleTime: Infinity,
+    enabled: !!previewSeason,
   });
 
   const { data: transfers } = useQuery({
     queryKey: ['events', seasonYear, 'transfer'],
     queryFn: () => getSeasonEvents(seasonYear, { type: 'transfer' }),
     staleTime: Infinity,
+    enabled: !!previewSeason,
   });
 
   const { data: newTeams } = useQuery({
     queryKey: ['events', seasonYear, 'team_entry'],
     queryFn: () => getSeasonEvents(seasonYear, { type: 'team_entry' }),
     staleTime: Infinity,
+    enabled: !!previewSeason,
   });
 
   const { data: departedTeams } = useQuery({
     queryKey: ['events', seasonYear, 'team_departure'],
     queryFn: () => getSeasonEvents(seasonYear, { type: 'team_departure' }),
     staleTime: Infinity,
+    enabled: !!previewSeason,
   });
 
   const { data: quotes } = useQuery({
     queryKey: ['quotes', seasonYear],
     queryFn: () => apiGet<Array<{ id: number; text: string; author_name: string; context: string | null }>>(`/seasons/${seasonYear}/quotes`),
     staleTime: Infinity,
+    enabled: !!previewSeason,
   });
 
   const dayData = todayResponse?.day;
-
-  // Group schedule days by race weekend
-  const raceWeekends: Array<{
-    raceName: string;
-    round: number;
-    country: string;
-    days: DayFromApi[];
-  }> = [];
-
-  if (scheduleDays && races) {
-    // Build a map: date -> race info
-    const raceByDate: Record<string, RaceFromApi> = {};
-    const raceByRound: Record<number, RaceFromApi> = {};
-    for (const race of races as RaceFromApi[]) {
-      raceByDate[race.date] = race;
-      raceByRound[race.round] = race;
-    }
-
-    let currentWeekend: typeof raceWeekends[0] | null = null;
-
-    for (const day of scheduleDays) {
-      // Find which race this day belongs to by checking description
-      const desc = day.description || '';
-      let matchedRace: RaceFromApi | undefined;
-
-      // Try to match by race name in description
-      for (const race of races as RaceFromApi[]) {
-        if (desc.includes(race.name.replace(' Grand Prix', ''))) {
-          matchedRace = race;
-          break;
-        }
-      }
-
-      // Also check if it's a race day by date
-      if (!matchedRace && raceByDate[day.date]) {
-        matchedRace = raceByDate[day.date];
-      }
-
-      if (matchedRace) {
-        if (!currentWeekend || currentWeekend.round !== matchedRace.round) {
-          currentWeekend = {
-            raceName: matchedRace.name,
-            round: matchedRace.round,
-            country: matchedRace.circuit_country,
-            days: [],
-          };
-          raceWeekends.push(currentWeekend);
-        }
-        currentWeekend.days.push(day);
-      }
-    }
-  }
 
   const randomQuote = useMemo(() => {
     if (!quotes || quotes.length === 0) return null;
@@ -161,7 +114,7 @@ const HomePage = () => {
   }, [quotes]);
 
   useEffect(() => {
-    document.title = 'F1 Time Machine — 2010 Formula 1 Season';
+    document.title = 'F1 Time Machine — Formula 1 Season by Season';
   }, []);
 
   return (
@@ -183,22 +136,67 @@ const HomePage = () => {
         }}>
           F1 Time Machine
         </h1>
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '12px',
-          backgroundColor: '#1A1A2E',
-          border: '2px solid #E10600',
-          borderRadius: '8px',
-          padding: '16px 32px',
-        }}>
-          <span style={{ color: '#B0B0B0', fontSize: '20px' }}>Relive the</span>
-          <span style={{ color: '#E10600', fontSize: '32px', fontWeight: 700 }}>{seasonYear}</span>
-          <span style={{ color: '#B0B0B0', fontSize: '20px' }}>Season</span>
-        </div>
-        <p style={{ color: '#666', fontSize: '16px', marginTop: '24px' }}>
-          Experience the 2010 Formula 1 season day by day
+        <p style={{ color: '#B0B0B0', fontSize: '20px', marginTop: '8px', marginBottom: '32px' }}>
+          Relive Formula 1 seasons, day by day
         </p>
+
+        {/* Season Cards */}
+        {isLoadingSeasons ? (
+          <LoadingSpinner />
+        ) : seasons && seasons.length > 0 ? (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '24px',
+            maxWidth: '800px',
+            margin: '0 auto',
+          }}>
+            {seasons.map((s) => (
+              <Link
+                key={s.year}
+                to={`/season/${s.year}/calendar`}
+                style={{ textDecoration: 'none' }}
+              >
+                <div
+                  style={{
+                    backgroundColor: '#1A1A2E',
+                    border: '2px solid #2A2A3E',
+                    borderRadius: '8px',
+                    padding: '32px',
+                    textAlign: 'center',
+                    transition: 'all 0.2s',
+                    cursor: 'pointer',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#E10600';
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#2A2A3E';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  <div style={{
+                    color: '#E10600',
+                    fontSize: '48px',
+                    fontWeight: 700,
+                    marginBottom: '8px',
+                  }}>
+                    {s.year}
+                  </div>
+                  <div style={{ color: '#FFFFFF', fontSize: '16px', fontWeight: 600, marginBottom: '8px' }}>
+                    {s.name}
+                  </div>
+                  {s.start_date && s.end_date && (
+                    <div style={{ color: '#666', fontSize: '13px' }}>
+                      {s.start_date} — {s.end_date}
+                    </div>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       {/* On This Day */}
@@ -244,26 +242,28 @@ const HomePage = () => {
               />
             ))}
           </div>
-          <Link
-            to={`/season/${seasonYear}/day/${dayData.date}`}
-            style={{
-              display: 'inline-block',
-              marginTop: '24px',
-              backgroundColor: '#E10600',
-              color: '#FFFFFF',
-              textDecoration: 'none',
-              padding: '12px 24px',
-              borderRadius: '4px',
-              fontSize: '14px',
-              fontWeight: 600,
-            }}
-          >
-            View Full Day
-          </Link>
+          {historicalSeason && (
+            <Link
+              to={`/season/${historicalSeason.year}/day/${dayData.date}`}
+              style={{
+                display: 'inline-block',
+                marginTop: '24px',
+                backgroundColor: '#E10600',
+                color: '#FFFFFF',
+                textDecoration: 'none',
+                padding: '12px 24px',
+                borderRadius: '4px',
+                fontSize: '14px',
+                fontWeight: 600,
+              }}
+            >
+              View Full Day
+            </Link>
+          )}
         </div>
       ) : null}
 
-      {/* Season Preview 2010 */}
+      {/* Season Preview */}
       {(regulations && regulations.length > 0) || (transfers && transfers.length > 0) ? (
         <div style={{
           marginBottom: '48px',
@@ -274,7 +274,7 @@ const HomePage = () => {
             fontWeight: 700,
             margin: '0 0 24px 0',
           }}>
-            2010 Season Preview
+            {seasonYear} Season Preview
           </h2>
           <div style={{
             display: 'grid',
@@ -348,8 +348,6 @@ const HomePage = () => {
         </div>
       ) : null}
 
-      {/* Season Schedule — hidden */}
-
       {/* Quick Links */}
       <div style={{
         display: 'grid',
@@ -358,10 +356,10 @@ const HomePage = () => {
         marginBottom: '48px',
       }}>
         {[
-          { to: `/season/${seasonYear}/calendar`, label: 'Calendar', desc: 'View the complete 2010 season calendar' },
+          { to: `/season/${seasonYear}/calendar`, label: 'Calendar', desc: `View the complete ${seasonYear} season calendar` },
           { to: `/season/${seasonYear}/standings`, label: 'Standings', desc: 'Check driver and constructor standings' },
-          { to: `/season/${seasonYear}/drivers`, label: 'Drivers', desc: 'Explore the 2010 driver lineup' },
-          { to: `/season/${seasonYear}/constructors`, label: 'Constructors', desc: 'Browse all 12 teams' },
+          { to: `/season/${seasonYear}/drivers`, label: 'Drivers', desc: `Explore the ${seasonYear} driver lineup` },
+          { to: `/season/${seasonYear}/constructors`, label: 'Constructors', desc: 'Browse all teams' },
         ].map((link) => (
           <Link key={link.to} to={link.to} style={{ textDecoration: 'none' }}>
             <div

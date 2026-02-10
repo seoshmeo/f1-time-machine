@@ -12,7 +12,7 @@ import { formatDateLong } from '../utils/dateUtils';
 
 const RacePage = () => {
   const { year, round } = useParams<{ year: string; round: string }>();
-  const seasonYear = parseInt(year || '2010');
+  const seasonYear = parseInt(year || '2026');
   const raceRound = parseInt(round || '1');
 
   const [activeSession, setActiveSession] = useState('R');
@@ -39,7 +39,7 @@ const RacePage = () => {
       }
     }
     return () => {
-      document.title = 'F1 Time Machine - 2010 Season';
+      document.title = `F1 Time Machine - ${seasonYear} Season`;
     };
   }, [raceData, seasonYear]);
 

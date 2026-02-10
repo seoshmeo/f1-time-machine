@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { apiGet } from '../api/client';
 import { useStandings } from '../hooks/useStandings';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import DriverStandingsTable from '../components/standings/DriverStandingsTable';
@@ -8,16 +10,31 @@ import StandingsChart from '../components/standings/StandingsChart';
 
 const StandingsPage = () => {
   const { year } = useParams<{ year: string }>();
-  const seasonYear = parseInt(year || '2010');
+  const seasonYear = parseInt(year || '2026');
 
   useEffect(() => {
     document.title = `${seasonYear} F1 Championship Standings - Drivers & Constructors | F1 Time Machine`;
   }, [seasonYear]);
 
-  const [activeTab, setActiveTab] = useState<'drivers' | 'constructors'>('drivers');
-  const [selectedRound, setSelectedRound] = useState(19);
+  const { data: seasonData } = useQuery({
+    queryKey: ['season', seasonYear],
+    queryFn: () => apiGet<{ total_races: number }>(`/seasons/${seasonYear}`),
+    staleTime: Infinity,
+  });
 
-  const { data: standingsData, isLoading, error } = useStandings(seasonYear, selectedRound);
+  const [activeTab, setActiveTab] = useState<'drivers' | 'constructors'>('drivers');
+  const [selectedRound, setSelectedRound] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (seasonData?.total_races && selectedRound === null) {
+      setSelectedRound(seasonData.total_races);
+    }
+  }, [seasonData, selectedRound]);
+
+  const totalRaces = seasonData?.total_races || 1;
+  const currentRound = selectedRound || totalRaces;
+
+  const { data: standingsData, isLoading, error } = useStandings(seasonYear, currentRound);
 
   if (isLoading) {
     return (
@@ -48,7 +65,7 @@ const StandingsPage = () => {
     );
   }
 
-  const rounds = Array.from({ length: 19 }, (_, i) => i + 1);
+  const rounds = Array.from({ length: totalRaces }, (_, i) => i + 1);
 
   return (
     <div style={{
@@ -82,7 +99,7 @@ const StandingsPage = () => {
             After Round:
           </label>
           <select
-            value={selectedRound}
+            value={currentRound}
             onChange={(e) => setSelectedRound(parseInt(e.target.value))}
             style={{
               backgroundColor: '#1A1A2E',
@@ -162,14 +179,13 @@ const StandingsPage = () => {
       </div>
 
       {activeTab === 'drivers' && standingsData.points_progression && standingsData.driver_standings && (() => {
-        // Map constructor_name to constructor_ref for colors
-        const nameToRef: Record<string, string> = {
-          'Red Bull': 'red_bull', 'Ferrari': 'ferrari', 'McLaren': 'mclaren',
-          'Mercedes': 'mercedes', 'Renault': 'renault', 'Williams': 'williams',
-          'Force India': 'force_india', 'BMW Sauber': 'sauber', 'Sauber': 'sauber',
-          'Toro Rosso': 'toro_rosso', 'Lotus': 'lotus', 'Virgin': 'virgin',
-          'HRT': 'hispania', 'Hispania': 'hispania',
-        };
+        // Build nameToRef dynamically from standings data
+        const nameToRef: Record<string, string> = {};
+        for (const s of standingsData.driver_standings) {
+          if (s.constructor_name) {
+            nameToRef[s.constructor_name] = s.constructor_ref || s.constructor_name.toLowerCase().replace(/\s+/g, '_');
+          }
+        }
 
         // Top 10 driver refs from standings
         const top10 = standingsData.driver_standings.slice(0, 10);

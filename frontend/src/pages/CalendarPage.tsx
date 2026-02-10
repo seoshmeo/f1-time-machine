@@ -6,7 +6,7 @@ import SeasonCalendar from '../components/calendar/SeasonCalendar';
 
 const CalendarPage = () => {
   const { year } = useParams<{ year: string }>();
-  const seasonYear = parseInt(year || '2010');
+  const seasonYear = parseInt(year || '2026');
 
   useEffect(() => {
     document.title = `${seasonYear} F1 Season Calendar - Day by Day | F1 Time Machine`;

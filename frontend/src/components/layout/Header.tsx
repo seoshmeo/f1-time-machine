@@ -1,8 +1,26 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { apiGet } from '../../api/client';
+
+interface SeasonBrief {
+  year: number;
+  name: string;
+  start_date: string | null;
+  end_date: string | null;
+}
 
 const Header = () => {
   const location = useLocation();
-  const seasonYear = 2010;
+  const navigate = useNavigate();
+
+  const pathMatch = location.pathname.match(/\/season\/(\d{4})/);
+  const seasonYear = pathMatch ? parseInt(pathMatch[1]) : 2026;
+
+  const { data: seasons } = useQuery({
+    queryKey: ['seasons'],
+    queryFn: () => apiGet<SeasonBrief[]>('/seasons'),
+    staleTime: Infinity,
+  });
 
   const isActive = (path: string) => {
     return location.pathname.includes(path);
@@ -17,6 +35,7 @@ const Header = () => {
     fontSize: '14px',
     fontWeight: 500,
   });
+
 
   return (
     <header style={{
@@ -36,31 +55,53 @@ const Header = () => {
         justifyContent: 'space-between',
         gap: '32px',
       }}>
-        <Link to="/" style={{
-          textDecoration: 'none',
+        <div style={{
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
         }}>
-          <h1 style={{
-            color: '#FFFFFF',
-            fontSize: '20px',
-            fontWeight: 700,
-            margin: 0,
+          <Link to="/" style={{
+            textDecoration: 'none',
           }}>
-            F1 Time Machine
-          </h1>
-          <span style={{
-            backgroundColor: '#E10600',
-            color: '#FFFFFF',
-            padding: '4px 12px',
-            borderRadius: '4px',
-            fontSize: '14px',
-            fontWeight: 600,
-          }}>
-            {seasonYear}
-          </span>
-        </Link>
+            <h1 style={{
+              color: '#FFFFFF',
+              fontSize: '20px',
+              fontWeight: 700,
+              margin: 0,
+            }}>
+              F1 Time Machine
+            </h1>
+          </Link>
+          {seasons && seasons.length > 0 && (
+            <div style={{ display: 'flex', gap: '4px' }}>
+              {seasons.map((s) => (
+                <button
+                  key={s.year}
+                  onClick={() => {
+                    if (pathMatch) {
+                      navigate(location.pathname.replace(/\/season\/\d{4}/, `/season/${s.year}`));
+                    } else {
+                      navigate(`/season/${s.year}/calendar`);
+                    }
+                  }}
+                  style={{
+                    backgroundColor: s.year === seasonYear ? '#E10600' : 'transparent',
+                    color: '#FFFFFF',
+                    padding: '6px 14px',
+                    borderRadius: '4px',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    border: s.year === seasonYear ? 'none' : '1px solid #555',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  {s.year}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         <nav style={{
           display: 'flex',

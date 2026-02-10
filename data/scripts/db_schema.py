@@ -113,7 +113,7 @@ CREATE TABLE sessions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     race_id INTEGER,
     season_id INTEGER NOT NULL,
-    type TEXT NOT NULL CHECK(type IN ('FP1', 'FP2', 'FP3', 'Q', 'R', 'TEST', 'SPRINT')),
+    type TEXT NOT NULL CHECK(type IN ('FP1', 'FP2', 'FP3', 'Q', 'SQ', 'R', 'TEST', 'SPRINT')),
     name TEXT NOT NULL,
     date TEXT NOT NULL,
     time TEXT,

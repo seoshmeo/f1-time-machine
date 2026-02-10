@@ -8,7 +8,7 @@ import { getConstructorColor } from '../utils/f1Colors';
 
 const ConstructorDetailPage = () => {
   const { year, constructorRef } = useParams<{ year: string; constructorRef: string }>();
-  const seasonYear = parseInt(year || '2010');
+  const seasonYear = parseInt(year || '2026');
 
   const { data: constructor, isLoading, error } = useQuery({
     queryKey: ['constructor', constructorRef, seasonYear],

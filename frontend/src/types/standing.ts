@@ -4,6 +4,7 @@ export interface DriverStandingOut {
   position: number;
   driver: DriverBrief;
   constructor_name: string;
+  constructor_ref: string;
   points: number;
   wins: number;
 }

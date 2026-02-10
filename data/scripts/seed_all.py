@@ -17,7 +17,7 @@ import import_penalties
 import import_quotes
 import validate_data
 
-from common import DB_PATH
+from common import DB_PATH, get_db_connection
 
 
 def print_step(step_num: int, total_steps: int, description: str) -> None:
@@ -45,6 +45,22 @@ def seed_all(year: int, reset: bool = False) -> None:
     # Step 1: Create schema (only if reset)
     if reset:
         print_step(1, total_steps, "Create Database Schema")
+        # Safety warning: check for existing seasons
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT year FROM seasons ORDER BY year")
+            existing = [row[0] for row in cursor.fetchall()]
+            conn.close()
+            if existing:
+                print(f"\n  WARNING: Database contains seasons: {existing}")
+                print(f"  --reset will DELETE ALL data for ALL seasons!")
+                confirm = input("  Type 'yes' to continue: ")
+                if confirm.strip().lower() != 'yes':
+                    print("  Aborted.")
+                    return
+        except Exception:
+            pass  # DB may not exist yet, that's fine
         try:
             db_schema.create_schema(DB_PATH, reset=True)
         except Exception as e:

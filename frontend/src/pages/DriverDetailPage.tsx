@@ -8,7 +8,7 @@ import CountryFlag from '../components/common/CountryFlag';
 
 const DriverDetailPage = () => {
   const { year, driverRef } = useParams<{ year: string; driverRef: string }>();
-  const seasonYear = parseInt(year || '2010');
+  const seasonYear = parseInt(year || '2026');
 
   const { data: driver, isLoading: isLoadingDriver, error } = useQuery({
     queryKey: ['driver', seasonYear, driverRef],

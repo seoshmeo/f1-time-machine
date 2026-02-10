@@ -8,7 +8,7 @@ import CountryFlag from '../components/common/CountryFlag';
 
 const DriversPage = () => {
   const { year } = useParams<{ year: string }>();
-  const seasonYear = parseInt(year || '2010');
+  const seasonYear = parseInt(year || '2026');
 
   useEffect(() => {
     document.title = `${seasonYear} F1 Season Drivers | F1 Time Machine`;

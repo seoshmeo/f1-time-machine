@@ -1,10 +1,11 @@
 """
 Fetch drivers and constructors for a season from Jolpica F1 API.
 """
+import json
 from typing import Dict
 
 from common import (
-    BASE_API_URL, fetch_with_cache, get_db_connection,
+    BASE_API_URL, CURATED_DIR, fetch_with_cache, get_db_connection,
     ensure_driver, ensure_constructor, get_season_id
 )
 
@@ -25,6 +26,26 @@ TEAM_COLORS_2010 = {
     'marussia_virgin': ('#C80815', '#000000'),
     'hispania': ('#6B7D85', '#C0A23D'),
     'hrt': ('#6B7D85', '#C0A23D'),
+}
+
+# Team colors for 2026 season
+TEAM_COLORS_2026 = {
+    'red_bull': ('#1E41FF', '#FFD700'),
+    'ferrari': ('#DC0000', '#FFF200'),
+    'mclaren': ('#FF8700', '#C0C0C0'),
+    'mercedes': ('#00D2BE', '#000000'),
+    'aston_martin': ('#006F62', '#CEDC00'),
+    'alpine': ('#0090FF', '#FF87BC'),
+    'williams': ('#0082FA', '#FFFFFF'),
+    'rb': ('#6692FF', '#163473'),
+    'audi': ('#52E252', '#000000'),
+    'haas': ('#B6BABD', '#E6002D'),
+    'cadillac': ('#FFD700', '#000000'),
+}
+
+TEAM_COLORS = {
+    2010: TEAM_COLORS_2010,
+    2026: TEAM_COLORS_2026,
 }
 
 
@@ -72,7 +93,7 @@ def fetch_season_drivers(year: int) -> None:
             constructor_ref = constructor_data.get('constructorId')
 
             # Get colors for this team
-            colors = TEAM_COLORS_2010.get(constructor_ref, ('#000000', '#FFFFFF'))
+            colors = TEAM_COLORS.get(year, {}).get(constructor_ref, ('#000000', '#FFFFFF'))
 
             # Check if exists
             cursor.execute(
@@ -116,6 +137,16 @@ def fetch_season_drivers(year: int) -> None:
                     constructor_ref = constructor['constructorId']
                     car_number = standing['Driver'].get('permanentNumber')
                     pairings.append((driver_ref, constructor_ref, car_number))
+
+        # Fallback: load from curated file when standings are empty (e.g. pre-season)
+        if not pairings:
+            entries_file = CURATED_DIR / f"season_entries_{year}.json"
+            if entries_file.exists():
+                with open(entries_file, 'r', encoding='utf-8') as f:
+                    manual_entries = json.load(f)
+                for entry in manual_entries:
+                    pairings.append((entry['driver_ref'], entry['constructor_ref'], entry.get('car_number')))
+                print(f"  Loaded {len(pairings)} entries from curated file")
 
         # Remove duplicates
         pairings = list(set(pairings))

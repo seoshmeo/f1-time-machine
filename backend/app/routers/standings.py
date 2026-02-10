@@ -68,12 +68,14 @@ def get_driver_standings(
         )
 
         constructor_name = entry.constructor.name if entry else "Unknown"
+        constructor_ref = entry.constructor.constructor_ref if entry else ""
 
         result.append(
             DriverStandingOut(
                 position=standing.position,
                 driver=DriverBrief.model_validate(standing.driver),
                 constructor_name=constructor_name,
+                constructor_ref=constructor_ref,
                 points=standing.points,
                 wins=standing.wins,
             )

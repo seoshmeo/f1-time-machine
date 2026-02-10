@@ -1,0 +1,158 @@
+[
+  {
+    "date": "2026-03-08",
+    "title": "2026 Power Unit Regulations Take Effect",
+    "summary": "Revolutionary new power unit regulations come into force with a 50/50 split between ICE and electric power. The MGU-H is removed, sustainable fuel is mandatory, and the MGU-K is significantly more powerful.",
+    "type": "regulation",
+    "importance": 5,
+    "tags": ["regulation", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Active Aerodynamics Replace DRS",
+    "summary": "DRS is replaced by active aerodynamics. Cars feature X-Mode (low-drag configuration for straights) and Z-Mode (high-downforce configuration for corners), fundamentally changing how overtaking works.",
+    "type": "regulation",
+    "importance": 5,
+    "tags": ["regulation", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "New Aerodynamic Regulations",
+    "summary": "Simplified bodywork with active aerodynamic elements designed to improve overtaking and reduce the performance gap between teams. Cars are lighter and more agile than the ground-effect era machines.",
+    "type": "regulation",
+    "importance": 4,
+    "tags": ["regulation", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Cadillac Enters Formula 1 as 11th Team",
+    "summary": "General Motors' Cadillac brand becomes the 11th team on the grid, expanding from 20 to 22 cars. This is the first new constructor entry since Haas in 2016, with Ferrari supplying power units.",
+    "type": "team_entry",
+    "importance": 4,
+    "tags": ["new-team", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Sauber Becomes Audi",
+    "summary": "Audi officially takes over the Sauber team, entering Formula 1 as a full works constructor and power unit manufacturer. The Hinwil-based team races under the Audi name for the first time.",
+    "type": "team_entry",
+    "importance": 4,
+    "tags": ["new-team", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Renault Exits as Engine Manufacturer",
+    "summary": "Renault ceases production of Formula 1 power units. Alpine switches to Mercedes customer engines, ending Renault's decades-long involvement as an engine supplier in the sport.",
+    "type": "team_departure",
+    "importance": 3,
+    "tags": ["team-departure", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Honda Returns to Power Aston Martin",
+    "summary": "Honda returns to Formula 1 as a power unit manufacturer, supplying engines to Aston Martin. This marks Honda's latest chapter after previously powering Red Bull to multiple championships.",
+    "type": "regulation",
+    "importance": 3,
+    "tags": ["pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Lewis Hamilton Joins Ferrari",
+    "summary": "Seven-time world champion Lewis Hamilton fulfills a lifelong dream by joining Ferrari, partnering Charles Leclerc. Hamilton leaves Mercedes after 12 seasons and six titles with the Silver Arrows.",
+    "detail": "Hamilton's shock move to Ferrari was announced in February 2024, giving the sport over a year to absorb the news. The British driver joins the most storied team in F1 history in pursuit of a record-breaking eighth world title.",
+    "type": "transfer",
+    "importance": 5,
+    "driver_refs": ["hamilton"],
+    "tags": ["transfer", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Kimi Antonelli Promoted to Mercedes",
+    "summary": "18-year-old Italian prodigy Kimi Antonelli is promoted to a full-time Mercedes race seat alongside George Russell, replacing Lewis Hamilton. He becomes one of the youngest drivers in F1 history.",
+    "type": "transfer",
+    "importance": 4,
+    "driver_refs": ["antonelli"],
+    "tags": ["transfer", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Carlos Sainz Moves to Williams",
+    "summary": "Carlos Sainz leaves Ferrari after being displaced by Lewis Hamilton and joins Williams, tasked with leading the team's return to competitiveness as they continue their long-term rebuild.",
+    "type": "transfer",
+    "importance": 3,
+    "driver_refs": ["sainz"],
+    "tags": ["transfer", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Isack Hadjar Joins Red Bull Racing",
+    "summary": "French-Algerian rookie Isack Hadjar earns promotion to Red Bull Racing, replacing Sergio Perez alongside Max Verstappen after an impressive junior career.",
+    "type": "transfer",
+    "importance": 3,
+    "driver_refs": ["hadjar"],
+    "tags": ["transfer", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Nico Hulkenberg Moves to Audi",
+    "summary": "Experienced German driver Nico Hulkenberg leaves Haas to become Audi's lead driver, tasked with guiding the new manufacturer through its debut Formula 1 season.",
+    "type": "transfer",
+    "importance": 3,
+    "driver_refs": ["hulkenberg"],
+    "tags": ["transfer", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Gabriel Bortoleto Joins Audi",
+    "summary": "2024 Formula 2 champion Gabriel Bortoleto joins Audi as a rookie alongside Hulkenberg, bringing Brazilian representation back to the F1 grid.",
+    "type": "transfer",
+    "importance": 3,
+    "driver_refs": ["bortoleto"],
+    "tags": ["transfer", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Esteban Ocon Joins Haas",
+    "summary": "Esteban Ocon leaves Alpine and joins Haas, partnering Oliver Bearman as the American team continues to build with experienced drivers.",
+    "type": "transfer",
+    "importance": 3,
+    "driver_refs": ["ocon"],
+    "tags": ["transfer", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Oliver Bearman Gets Full-Time Haas Seat",
+    "summary": "British youngster Oliver Bearman secures a full-time Formula 1 seat with Haas after impressive substitute appearances in 2024 for Ferrari and Haas.",
+    "type": "transfer",
+    "importance": 3,
+    "driver_refs": ["bearman"],
+    "tags": ["transfer", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Franco Colapinto Joins Alpine",
+    "summary": "Argentine driver Franco Colapinto moves to Alpine after his impressive mid-season debut with Williams in 2024, bringing a new generation of talent to the French team.",
+    "type": "transfer",
+    "importance": 3,
+    "driver_refs": ["colapinto"],
+    "tags": ["transfer", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Arvid Lindblad Debuts with Racing Bulls",
+    "summary": "British teenager Arvid Lindblad earns a seat with Racing Bulls (RB), becoming one of the youngest rookies on the 2026 grid as part of Red Bull's junior programme.",
+    "type": "transfer",
+    "importance": 3,
+    "driver_refs": ["lindblad"],
+    "tags": ["transfer", "pre-season"]
+  },
+  {
+    "date": "2026-03-08",
+    "title": "Sergio Perez and Valtteri Bottas Join Cadillac",
+    "summary": "Experienced campaigners Sergio Perez and Valtteri Bottas are signed by the new Cadillac team, bringing a wealth of F1 knowledge to the 11th constructor's inaugural season.",
+    "type": "transfer",
+    "importance": 3,
+    "driver_refs": ["perez", "bottas"],
+    "tags": ["transfer", "pre-season"]
+  }
+]

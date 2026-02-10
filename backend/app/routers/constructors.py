@@ -15,19 +15,34 @@ from app.schemas.constructor import (
 
 router = APIRouter()
 
-CONSTRUCTOR_TECH_2010 = {
-    "red_bull": {"chassis": "RB6", "engine": "Renault RS27"},
-    "mclaren": {"chassis": "MP4-25", "engine": "Mercedes FO 108X"},
-    "ferrari": {"chassis": "F10", "engine": "Ferrari 056"},
-    "mercedes": {"chassis": "MGP W01", "engine": "Mercedes FO 108X"},
-    "renault": {"chassis": "R30", "engine": "Renault RS27"},
-    "williams": {"chassis": "FW32", "engine": "Cosworth CA2010"},
-    "force_india": {"chassis": "VJM03", "engine": "Mercedes FO 108X"},
-    "sauber": {"chassis": "C29", "engine": "Ferrari 056"},
-    "toro_rosso": {"chassis": "STR5", "engine": "Ferrari 056"},
-    "lotus_racing": {"chassis": "T127", "engine": "Cosworth CA2010"},
-    "hrt": {"chassis": "F110", "engine": "Cosworth CA2010"},
-    "virgin": {"chassis": "VR-01", "engine": "Cosworth CA2010"},
+CONSTRUCTOR_TECH = {
+    2010: {
+        "red_bull": {"chassis": "RB6", "engine": "Renault RS27"},
+        "mclaren": {"chassis": "MP4-25", "engine": "Mercedes FO 108X"},
+        "ferrari": {"chassis": "F10", "engine": "Ferrari 056"},
+        "mercedes": {"chassis": "MGP W01", "engine": "Mercedes FO 108X"},
+        "renault": {"chassis": "R30", "engine": "Renault RS27"},
+        "williams": {"chassis": "FW32", "engine": "Cosworth CA2010"},
+        "force_india": {"chassis": "VJM03", "engine": "Mercedes FO 108X"},
+        "sauber": {"chassis": "C29", "engine": "Ferrari 056"},
+        "toro_rosso": {"chassis": "STR5", "engine": "Ferrari 056"},
+        "lotus_racing": {"chassis": "T127", "engine": "Cosworth CA2010"},
+        "hrt": {"chassis": "F110", "engine": "Cosworth CA2010"},
+        "virgin": {"chassis": "VR-01", "engine": "Cosworth CA2010"},
+    },
+    2026: {
+        "red_bull": {"chassis": "RB22", "engine": "Honda RBPT"},
+        "ferrari": {"chassis": "SF-26", "engine": "Ferrari"},
+        "mclaren": {"chassis": "MCL-26", "engine": "Mercedes"},
+        "mercedes": {"chassis": "W17", "engine": "Mercedes"},
+        "aston_martin": {"chassis": "AMR26", "engine": "Honda RBPT"},
+        "alpine": {"chassis": "A526", "engine": "Mercedes"},
+        "williams": {"chassis": "FW47", "engine": "Mercedes"},
+        "rb": {"chassis": "VCARB02", "engine": "Honda RBPT"},
+        "kick_sauber": {"chassis": "C45", "engine": "Ferrari"},
+        "haas": {"chassis": "VF-26", "engine": "Ferrari"},
+        "cadillac": {"chassis": "F1-001", "engine": "Ferrari"},
+    },
 }
 
 
@@ -179,7 +194,7 @@ def get_constructor(
                     })
 
             # Technical data
-            tech_data = CONSTRUCTOR_TECH_2010.get(constructor_ref, {})
+            tech_data = CONSTRUCTOR_TECH.get(season, {}).get(constructor_ref, {})
 
             result.season_stats = ConstructorSeasonStatsOut(
                 races=races,

@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { apiGet } from '../api/client';
 import { useDay, useDayNavigation } from '../hooks/useDay';
 import { useKeyboardNav } from '../hooks/useKeyboardNav';
 import { useStandings } from '../hooks/useStandings';
@@ -16,12 +18,18 @@ import DriverStandingsTable from '../components/standings/DriverStandingsTable';
 const DayPage = () => {
   const { year, date } = useParams<{ year: string; date: string }>();
   const navigate = useNavigate();
-  const seasonYear = parseInt(year || '2010');
+  const seasonYear = parseInt(year || '2026');
   const currentDate = date || '';
+
+  const { data: seasonData } = useQuery({
+    queryKey: ['season', seasonYear],
+    queryFn: () => apiGet<{ total_races: number }>(`/seasons/${seasonYear}`),
+    staleTime: Infinity,
+  });
 
   const { data: dayData, isLoading, error } = useDay(seasonYear, currentDate);
   const { data: navData } = useDayNavigation(seasonYear, currentDate);
-  const { data: standingsData } = useStandings(seasonYear, 19);
+  const { data: standingsData } = useStandings(seasonYear, seasonData?.total_races || 1);
 
   useEffect(() => {
     if (currentDate) {

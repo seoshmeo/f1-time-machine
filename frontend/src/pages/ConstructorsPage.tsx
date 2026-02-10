@@ -8,7 +8,7 @@ import { getConstructorColor } from '../utils/f1Colors';
 
 const ConstructorsPage = () => {
   const { year } = useParams<{ year: string }>();
-  const seasonYear = parseInt(year || '2010');
+  const seasonYear = parseInt(year || '2026');
 
   useEffect(() => {
     document.title = `${seasonYear} F1 Constructors | F1 Time Machine`;

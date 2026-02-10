@@ -8,6 +8,7 @@ class DriverStandingOut(BaseModel):
     position: int
     driver: DriverBrief
     constructor_name: str
+    constructor_ref: str = ""
     points: float
     wins: int
 
