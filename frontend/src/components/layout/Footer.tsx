@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Footer = () => {
   return (
     <footer style={{
@@ -15,10 +17,18 @@ const Footer = () => {
         <p style={{
           color: '#666',
           fontSize: '14px',
-          margin: 0,
+          margin: '0 0 8px 0',
         }}>
           F1 Time Machine — Historical F1 Seasons © {new Date().getFullYear()}
         </p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+          <Link to="/privacy-policy" style={{ color: '#555', fontSize: '13px', textDecoration: 'none' }}>
+            Privacy Policy
+          </Link>
+          <Link to="/cookie-policy" style={{ color: '#555', fontSize: '13px', textDecoration: 'none' }}>
+            Cookie Policy
+          </Link>
+        </div>
       </div>
     </footer>
   );
