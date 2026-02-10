@@ -12,6 +12,7 @@ import DriverDetailPage from './pages/DriverDetailPage';
 import ConstructorsPage from './pages/ConstructorsPage';
 import ConstructorDetailPage from './pages/ConstructorDetailPage';
 import HeadToHeadPage from './pages/HeadToHeadPage';
+import SeasonPreviewPage from './pages/SeasonPreviewPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ErrorBoundary from './components/common/ErrorBoundary';
 
@@ -28,6 +29,7 @@ function App() {
         <ErrorBoundary>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/:year" element={<SeasonPreviewPage />} />
           <Route path="/season/:year/day/:date" element={<DayPage />} />
           <Route path="/season/:year/calendar" element={<CalendarPage />} />
           <Route path="/season/:year/races" element={<RacesPage />} />
