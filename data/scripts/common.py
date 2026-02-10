@@ -9,9 +9,12 @@ from typing import Any, Dict, Optional
 
 import httpx
 
-DB_PATH = Path("/Users/ruslanstepyko/f1-time-machine/db/f1_time_machine.db")
-RAW_DIR = Path("/Users/ruslanstepyko/f1-time-machine/data/raw")
-CURATED_DIR = Path("/Users/ruslanstepyko/f1-time-machine/data/curated")
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+_PROJECT_ROOT = _SCRIPTS_DIR.parent.parent
+
+DB_PATH = _PROJECT_ROOT / "db" / "f1_time_machine.db"
+RAW_DIR = _PROJECT_ROOT / "data" / "raw"
+CURATED_DIR = _PROJECT_ROOT / "data" / "curated"
 BASE_API_URL = "https://api.jolpi.ca/ergast/f1"
 RATE_LIMIT_SECONDS = 2.0
 
