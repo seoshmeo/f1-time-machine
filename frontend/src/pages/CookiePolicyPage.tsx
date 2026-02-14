@@ -76,10 +76,15 @@ const CookiePolicyPage = () => {
         <div style={sectionStyle}>
           <h2 style={headingStyle}>Local Storage & Session Storage</h2>
           <p style={textStyle}>
-            We also do not use the browser's Local Storage or Session Storage APIs. The only
-            client-side data storage is React Query's in-memory cache, which holds API responses
-            temporarily in your browser's RAM to avoid redundant network requests. This data is
-            never written to disk and disappears completely when you close the tab.
+            We use Local Storage only to remember that you dismissed the cookie consent banner.
+            This stores a single value (cookie_consent_dismissed) so we don't show you the banner
+            on every visit.
+          </p>
+          <p style={textStyle}>
+            Beyond this, the only client-side data storage is React Query's in-memory cache,
+            which holds API responses temporarily in your browser's RAM to avoid redundant
+            network requests. This data is never written to disk and disappears completely when
+            you close the tab.
           </p>
         </div>
 

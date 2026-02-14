@@ -17,6 +17,7 @@ import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import CookiePolicyPage from './pages/CookiePolicyPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ErrorBoundary from './components/common/ErrorBoundary';
+import CookieBanner from './components/common/CookieBanner';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
         </ErrorBoundary>
       </main>
       <Footer />
+      <CookieBanner />
     </div>
   );
 }
