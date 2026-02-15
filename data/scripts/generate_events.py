@@ -198,6 +198,61 @@ def generate_session_events(year: int) -> None:
                 (day_id,)
             )
 
+        # Generate Test session events (importance=2)
+        cursor.execute("""
+            SELECT
+                s.id as session_id,
+                s.date,
+                s.name,
+                d.first_name,
+                d.last_name
+            FROM sessions s
+            JOIN results res ON res.session_id = s.id AND res.position = 1
+            JOIN drivers d ON res.driver_id = d.id
+            WHERE s.season_id = ?
+                AND s.type = 'TEST'
+            ORDER BY s.date
+        """, (season_id,))
+
+        test_sessions = cursor.fetchall()
+
+        for session_id, session_date, session_name, first_name, last_name in test_sessions:
+            # Find corresponding calendar_day
+            cursor.execute(
+                "SELECT id FROM calendar_days WHERE season_id = ? AND date = ?",
+                (season_id, session_date)
+            )
+            day_row = cursor.fetchone()
+            if not day_row:
+                continue
+            day_id = day_row[0]
+
+            # Create event
+            title = f"{session_name} — {first_name} {last_name} fastest"
+            cursor.execute("""
+                INSERT OR IGNORE INTO events (
+                    day_id, season_id, session_id, type, title,
+                    importance, sort_order
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (
+                day_id,
+                season_id,
+                session_id,
+                'testing',
+                title,
+                2,
+                2
+            ))
+
+            if cursor.rowcount > 0:
+                events_count += 1
+
+            # Update has_content flag
+            cursor.execute(
+                "UPDATE calendar_days SET has_content = 1 WHERE id = ?",
+                (day_id,)
+            )
+
         conn.commit()
         print(f"  Generated {events_count} session events")
 

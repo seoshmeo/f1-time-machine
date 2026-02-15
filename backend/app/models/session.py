@@ -10,8 +10,7 @@ class Session(Base):
     __tablename__ = "sessions"
     __table_args__ = (
         CheckConstraint(
-            "type IN ('race', 'qualifying', 'sprint', 'sprint_qualifying', "
-            "'practice_1', 'practice_2', 'practice_3', 'pre_qualifying', 'warmup')",
+            "type IN ('FP1', 'FP2', 'FP3', 'Q', 'SQ', 'R', 'TEST', 'SPRINT')",
             name="check_session_type",
         ),
     )

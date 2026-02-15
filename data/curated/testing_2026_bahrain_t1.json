@@ -1,0 +1,82 @@
+{
+  "event_name": "Bahrain Pre-Season Test 1",
+  "circuit_ref": "bahrain",
+  "circuit_name": "Bahrain International Circuit",
+  "location": "Sakhir, Bahrain",
+  "start_date": "2026-02-11",
+  "end_date": "2026-02-13",
+  "days": [
+    {
+      "date": "2026-02-11",
+      "day_number": 1,
+      "notes": "Two red flags. Colapinto stopped during morning session, Hulkenberg had issue in afternoon. Verstappen set morning pace at 1:35.433 before Norris went faster in afternoon.",
+      "results": [
+        { "position": 1, "driver_ref": "norris", "constructor_ref": "mclaren", "fastest_lap_time": "1:34.669", "laps_completed": 58 },
+        { "position": 2, "driver_ref": "max_verstappen", "constructor_ref": "red_bull", "fastest_lap_time": "1:34.798", "laps_completed": 136 },
+        { "position": 3, "driver_ref": "leclerc", "constructor_ref": "ferrari", "fastest_lap_time": "1:35.190", "laps_completed": 28 },
+        { "position": 4, "driver_ref": "ocon", "constructor_ref": "haas", "fastest_lap_time": "1:35.578", "laps_completed": 115 },
+        { "position": 5, "driver_ref": "piastri", "constructor_ref": "mclaren", "fastest_lap_time": "1:35.602", "laps_completed": 54 },
+        { "position": 6, "driver_ref": "russell", "constructor_ref": "mercedes", "fastest_lap_time": "1:36.108", "laps_completed": 56 },
+        { "position": 7, "driver_ref": "hamilton", "constructor_ref": "ferrari", "fastest_lap_time": "1:36.433", "laps_completed": 52 },
+        { "position": 8, "driver_ref": "gasly", "constructor_ref": "alpine", "fastest_lap_time": "1:36.765", "laps_completed": 49 },
+        { "position": 9, "driver_ref": "hulkenberg", "constructor_ref": "audi", "fastest_lap_time": "1:36.861", "laps_completed": 73 },
+        { "position": 10, "driver_ref": "albon", "constructor_ref": "williams", "fastest_lap_time": "1:37.437", "laps_completed": 68 },
+        { "position": 11, "driver_ref": "antonelli", "constructor_ref": "mercedes", "fastest_lap_time": "1:37.629", "laps_completed": 30 },
+        { "position": 12, "driver_ref": "lindblad", "constructor_ref": "rb", "fastest_lap_time": "1:37.954", "laps_completed": 75 },
+        { "position": 13, "driver_ref": "sainz", "constructor_ref": "williams", "fastest_lap_time": "1:38.221", "laps_completed": 77 },
+        { "position": 14, "driver_ref": "perez", "constructor_ref": "cadillac", "fastest_lap_time": "1:38.828", "laps_completed": 58 },
+        { "position": 15, "driver_ref": "bortoleto", "constructor_ref": "audi", "fastest_lap_time": "1:38.871", "laps_completed": 49 },
+        { "position": 16, "driver_ref": "bottas", "constructor_ref": "cadillac", "fastest_lap_time": "1:39.150", "laps_completed": 49 },
+        { "position": 17, "driver_ref": "stroll", "constructor_ref": "aston_martin", "fastest_lap_time": "1:39.883", "laps_completed": 36 },
+        { "position": 18, "driver_ref": "colapinto", "constructor_ref": "alpine", "fastest_lap_time": "1:40.330", "laps_completed": 28 }
+      ]
+    },
+    {
+      "date": "2026-02-12",
+      "day_number": 2,
+      "notes": "Five red flags disrupted the day. Antonelli managed just 3 laps before a power unit issue. Red Bull and Mercedes both lost significant track time. Leclerc's soft-tyre lap early in the morning went unbeaten all day.",
+      "results": [
+        { "position": 1, "driver_ref": "leclerc", "constructor_ref": "ferrari", "fastest_lap_time": "1:34.273", "laps_completed": 139 },
+        { "position": 2, "driver_ref": "norris", "constructor_ref": "mclaren", "fastest_lap_time": "1:34.784", "laps_completed": 149 },
+        { "position": 3, "driver_ref": "bearman", "constructor_ref": "haas", "fastest_lap_time": "1:35.394", "laps_completed": 130 },
+        { "position": 4, "driver_ref": "russell", "constructor_ref": "mercedes", "fastest_lap_time": "1:35.466", "laps_completed": 54 },
+        { "position": 5, "driver_ref": "hadjar", "constructor_ref": "red_bull", "fastest_lap_time": "1:36.561", "laps_completed": 87 },
+        { "position": 6, "driver_ref": "bortoleto", "constructor_ref": "audi", "fastest_lap_time": "1:36.670", "laps_completed": 67 },
+        { "position": 7, "driver_ref": "gasly", "constructor_ref": "alpine", "fastest_lap_time": "1:36.723", "laps_completed": 97 },
+        { "position": 8, "driver_ref": "bottas", "constructor_ref": "cadillac", "fastest_lap_time": "1:36.824", "laps_completed": 67 },
+        { "position": 9, "driver_ref": "albon", "constructor_ref": "williams", "fastest_lap_time": "1:37.229", "laps_completed": 62 },
+        { "position": 10, "driver_ref": "hulkenberg", "constructor_ref": "audi", "fastest_lap_time": "1:37.266", "laps_completed": 47 },
+        { "position": 11, "driver_ref": "lindblad", "constructor_ref": "rb", "fastest_lap_time": "1:37.470", "laps_completed": 83 },
+        { "position": 12, "driver_ref": "sainz", "constructor_ref": "williams", "fastest_lap_time": "1:37.592", "laps_completed": 69 },
+        { "position": 13, "driver_ref": "lawson", "constructor_ref": "rb", "fastest_lap_time": "1:38.017", "laps_completed": 50 },
+        { "position": 14, "driver_ref": "alonso", "constructor_ref": "aston_martin", "fastest_lap_time": "1:38.248", "laps_completed": 98 },
+        { "position": 15, "driver_ref": "perez", "constructor_ref": "cadillac", "fastest_lap_time": "1:38.653", "laps_completed": 42 },
+        { "position": 16, "driver_ref": "antonelli", "constructor_ref": "mercedes", "fastest_lap_time": null, "laps_completed": 3 }
+      ]
+    },
+    {
+      "date": "2026-02-13",
+      "day_number": 3,
+      "notes": "Hamilton stopped on circuit with 10 minutes remaining causing a red flag. Mercedes bounced back strongly from Day 2 troubles with Antonelli setting the fastest lap of the entire test. Piastri completed 161 laps — the highest individual count on any single day.",
+      "results": [
+        { "position": 1, "driver_ref": "antonelli", "constructor_ref": "mercedes", "fastest_lap_time": "1:33.669", "laps_completed": 61 },
+        { "position": 2, "driver_ref": "russell", "constructor_ref": "mercedes", "fastest_lap_time": "1:33.918", "laps_completed": 78 },
+        { "position": 3, "driver_ref": "hamilton", "constructor_ref": "ferrari", "fastest_lap_time": "1:34.209", "laps_completed": 150 },
+        { "position": 4, "driver_ref": "piastri", "constructor_ref": "mclaren", "fastest_lap_time": "1:34.549", "laps_completed": 161 },
+        { "position": 5, "driver_ref": "max_verstappen", "constructor_ref": "red_bull", "fastest_lap_time": "1:35.341", "laps_completed": 61 },
+        { "position": 6, "driver_ref": "hadjar", "constructor_ref": "red_bull", "fastest_lap_time": "1:35.610", "laps_completed": 59 },
+        { "position": 7, "driver_ref": "ocon", "constructor_ref": "haas", "fastest_lap_time": "1:35.753", "laps_completed": 75 },
+        { "position": 8, "driver_ref": "colapinto", "constructor_ref": "alpine", "fastest_lap_time": "1:35.806", "laps_completed": 144 },
+        { "position": 9, "driver_ref": "bearman", "constructor_ref": "haas", "fastest_lap_time": "1:35.972", "laps_completed": 70 },
+        { "position": 10, "driver_ref": "hulkenberg", "constructor_ref": "audi", "fastest_lap_time": "1:36.291", "laps_completed": 58 },
+        { "position": 11, "driver_ref": "albon", "constructor_ref": "williams", "fastest_lap_time": "1:36.793", "laps_completed": 78 },
+        { "position": 12, "driver_ref": "lawson", "constructor_ref": "rb", "fastest_lap_time": "1:36.808", "laps_completed": 119 },
+        { "position": 13, "driver_ref": "sainz", "constructor_ref": "williams", "fastest_lap_time": "1:37.186", "laps_completed": 68 },
+        { "position": 14, "driver_ref": "perez", "constructor_ref": "cadillac", "fastest_lap_time": "1:37.365", "laps_completed": 67 },
+        { "position": 15, "driver_ref": "bortoleto", "constructor_ref": "audi", "fastest_lap_time": "1:37.536", "laps_completed": 60 },
+        { "position": 16, "driver_ref": "stroll", "constructor_ref": "aston_martin", "fastest_lap_time": "1:38.165", "laps_completed": 72 },
+        { "position": 17, "driver_ref": "bottas", "constructor_ref": "cadillac", "fastest_lap_time": "1:38.772", "laps_completed": 37 }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { apiGet } from '../api/client';
-import { getSeasonEvents, SeasonEvent } from '../api/events';
+import { getSeasonEvents } from '../api/events';
 import { getRaces } from '../api/races';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import RegulationsList from '../components/home/RegulationsList';
@@ -176,6 +176,37 @@ const SeasonPreviewPage = () => {
           </div>
         ))}
       </div>
+
+      {/* Pre-Season Testing */}
+      <Link to={`/season/${seasonYear}/testing`} style={{ textDecoration: 'none' }}>
+        <div style={{
+          backgroundColor: '#1A1A2E',
+          border: '1px solid #E10600',
+          borderRadius: '8px',
+          padding: '24px 32px',
+          marginBottom: '32px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          transition: 'background-color 0.2s',
+          cursor: 'pointer',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#252540'; }}
+        onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#1A1A2E'; }}
+        >
+          <div>
+            <div style={{ color: '#E10600', fontSize: '18px', fontWeight: 700, marginBottom: '4px' }}>
+              Pre-Season Testing
+            </div>
+            <div style={{ color: '#B0B0B0', fontSize: '14px' }}>
+              Bahrain International Circuit — Feb 11-13, 2026
+            </div>
+          </div>
+          <div style={{ color: '#E10600', fontSize: '14px', fontWeight: 600 }}>
+            View Results →
+          </div>
+        </div>
+      </Link>
 
       {/* Regulations */}
       {regulations && regulations.length > 0 && (
@@ -389,6 +420,7 @@ const SeasonPreviewPage = () => {
         gap: '16px',
       }}>
         {[
+          { to: `/season/${seasonYear}/testing`, label: 'Pre-Season Testing' },
           { to: `/season/${seasonYear}/calendar`, label: 'Calendar' },
           { to: `/season/${seasonYear}/drivers`, label: 'Drivers' },
           { to: `/season/${seasonYear}/constructors`, label: 'Constructors' },

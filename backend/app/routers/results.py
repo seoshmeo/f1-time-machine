@@ -307,3 +307,55 @@ def get_lap_positions(year: int, round: int, db: Session = Depends(get_db)):
         lap_rows.append(row)
 
     return {"drivers": list(driver_map.values()), "laps": lap_rows}
+
+
+@router.get("/seasons/{year}/testing")
+def get_testing_sessions(year: int, db: Session = Depends(get_db)):
+    """Get all pre-season testing sessions with results for a season."""
+    season = db.query(Season).filter(Season.year == year).first()
+    if not season:
+        raise HTTPException(status_code=404, detail=f"Season {year} not found")
+
+    sessions = (
+        db.query(SessionModel)
+        .filter(SessionModel.season_id == season.id, SessionModel.type == "TEST")
+        .order_by(SessionModel.date)
+        .all()
+    )
+
+    if not sessions:
+        return []
+
+    testing_days = []
+    for s in sessions:
+        results = (
+            db.query(Result)
+            .options(
+                joinedload(Result.driver),
+                joinedload(Result.constructor),
+            )
+            .filter(Result.session_id == s.id)
+            .order_by(Result.position_order)
+            .all()
+        )
+
+        testing_days.append({
+            "session_id": s.id,
+            "name": s.name,
+            "date": s.date.isoformat() if s.date else None,
+            "results": [
+                {
+                    "position": r.position,
+                    "driver_name": f"{r.driver.first_name} {r.driver.last_name}",
+                    "driver_ref": r.driver.driver_ref,
+                    "constructor_name": r.constructor.name,
+                    "constructor_ref": r.constructor.constructor_ref,
+                    "color_primary": r.constructor.color_primary,
+                    "time": r.fastest_lap_time,
+                    "laps": r.laps_completed,
+                }
+                for r in results
+            ],
+        })
+
+    return testing_days

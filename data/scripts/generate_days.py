@@ -45,7 +45,7 @@ def generate_days(year: int) -> None:
 
         # Get all sessions with their dates and types
         cursor.execute("""
-            SELECT s.date, s.type, s.race_id, r.name
+            SELECT s.date, s.type, s.race_id, r.name, s.name as session_name
             FROM sessions s
             LEFT JOIN races r ON s.race_id = r.id
             WHERE s.season_id = ?
@@ -55,11 +55,12 @@ def generate_days(year: int) -> None:
 
         # Build a map of date -> (day_type, race_id, race_name, session_types)
         date_info = {}
-        for session_date, session_type, race_id, race_name in sessions:
+        for session_date, session_type, race_id, race_name, session_name in sessions:
             if session_date not in date_info:
                 date_info[session_date] = {
                     'race_id': race_id,
                     'race_name': race_name,
+                    'session_name': session_name,
                     'session_types': []
                 }
             date_info[session_date]['session_types'].append(session_type)
@@ -87,7 +88,7 @@ def generate_days(year: int) -> None:
                     description = f"{info['race_name']} - Practice Day"
                 elif 'TEST' in session_types:
                     day_type = 'test_day'
-                    description = f"{info['race_name']} - Test Day"
+                    description = f"{info['session_name'] or 'Pre-Season Test'}"
                 else:
                     day_type = 'off'
                     description = None

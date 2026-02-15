@@ -13,6 +13,7 @@ import ConstructorsPage from './pages/ConstructorsPage';
 import ConstructorDetailPage from './pages/ConstructorDetailPage';
 import HeadToHeadPage from './pages/HeadToHeadPage';
 import SeasonPreviewPage from './pages/SeasonPreviewPage';
+import TestingPage from './pages/TestingPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import CookiePolicyPage from './pages/CookiePolicyPage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -45,6 +46,7 @@ function App() {
           <Route path="/season/:year/drivers/:driverRef" element={<DriverDetailPage />} />
           <Route path="/season/:year/constructors" element={<ConstructorsPage />} />
           <Route path="/season/:year/constructors/:constructorRef" element={<ConstructorDetailPage />} />
+          <Route path="/season/:year/testing" element={<TestingPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         </ErrorBoundary>
