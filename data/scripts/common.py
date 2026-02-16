@@ -65,6 +65,23 @@ def fetch_with_cache(url: str, cache_name: str) -> Dict[str, Any]:
     return data
 
 
+def fetch_fresh(url: str, cache_name: str) -> Dict[str, Any]:
+    """
+    Fetch from URL, deleting any existing cache first.
+
+    Args:
+        url: Full URL to fetch
+        cache_name: Name for cache file
+
+    Returns:
+        Parsed JSON response
+    """
+    cache_path = RAW_DIR / cache_name
+    if cache_path.exists():
+        cache_path.unlink()
+    return fetch_with_cache(url, cache_name)
+
+
 def get_db_connection() -> sqlite3.Connection:
     """
     Get database connection with foreign keys enabled.

@@ -145,6 +145,116 @@ def generate_session_events(year: int) -> None:
                 (day_id,)
             )
 
+        # Generate Sprint winner events (importance=2)
+        cursor.execute("""
+            SELECT
+                s.id as session_id,
+                s.date,
+                r.name as race_name,
+                d.first_name,
+                d.last_name,
+                res.position
+            FROM sessions s
+            JOIN races r ON s.race_id = r.id
+            JOIN results res ON res.session_id = s.id
+            JOIN drivers d ON res.driver_id = d.id
+            WHERE s.season_id = ?
+                AND s.type = 'SPRINT'
+                AND res.position = 1
+            ORDER BY s.date
+        """, (season_id,))
+
+        sprint_winners = cursor.fetchall()
+
+        for session_id, session_date, race_name, first_name, last_name, position in sprint_winners:
+            cursor.execute(
+                "SELECT id FROM calendar_days WHERE season_id = ? AND date = ?",
+                (season_id, session_date)
+            )
+            day_row = cursor.fetchone()
+            if not day_row:
+                continue
+            day_id = day_row[0]
+
+            title = f"{first_name} {last_name} wins Sprint at {race_name}"
+            cursor.execute("""
+                INSERT OR IGNORE INTO events (
+                    day_id, season_id, session_id, type, title,
+                    importance, sort_order
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (
+                day_id,
+                season_id,
+                session_id,
+                'sprint_result',
+                title,
+                2,
+                2
+            ))
+
+            if cursor.rowcount > 0:
+                events_count += 1
+
+            cursor.execute(
+                "UPDATE calendar_days SET has_content = 1 WHERE id = ?",
+                (day_id,)
+            )
+
+        # Generate Sprint Qualifying pole events (importance=3)
+        cursor.execute("""
+            SELECT
+                s.id as session_id,
+                s.date,
+                r.name as race_name,
+                d.first_name,
+                d.last_name,
+                res.position
+            FROM sessions s
+            JOIN races r ON s.race_id = r.id
+            JOIN results res ON res.session_id = s.id
+            JOIN drivers d ON res.driver_id = d.id
+            WHERE s.season_id = ?
+                AND s.type = 'SQ'
+                AND res.position = 1
+            ORDER BY s.date
+        """, (season_id,))
+
+        sq_poles = cursor.fetchall()
+
+        for session_id, session_date, race_name, first_name, last_name, position in sq_poles:
+            cursor.execute(
+                "SELECT id FROM calendar_days WHERE season_id = ? AND date = ?",
+                (season_id, session_date)
+            )
+            day_row = cursor.fetchone()
+            if not day_row:
+                continue
+            day_id = day_row[0]
+
+            title = f"{first_name} {last_name} takes Sprint pole at {race_name}"
+            cursor.execute("""
+                INSERT OR IGNORE INTO events (
+                    day_id, season_id, session_id, type, title,
+                    importance, sort_order
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (
+                day_id,
+                season_id,
+                session_id,
+                'sprint_qualifying_result',
+                title,
+                3,
+                3
+            ))
+
+            if cursor.rowcount > 0:
+                events_count += 1
+
+            cursor.execute(
+                "UPDATE calendar_days SET has_content = 1 WHERE id = ?",
+                (day_id,)
+            )
+
         # Generate Practice session events (importance=3)
         cursor.execute("""
             SELECT

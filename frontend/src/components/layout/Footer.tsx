@@ -21,6 +21,15 @@ const Footer = () => {
         }}>
           F1 Time Machine — Historical F1 Seasons © {new Date().getFullYear()}
         </p>
+        <p style={{
+          color: '#555',
+          fontSize: '12px',
+          margin: '0 0 8px 0',
+        }}>
+          This is an unofficial fan project and is not associated in any way with the Formula 1 companies.
+          F1, Formula One, Formula 1, FIA Formula One World Championship, Grand Prix and related marks
+          are trademarks of Formula One Licensing B.V.
+        </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
           <Link to="/privacy-policy" style={{ color: '#555', fontSize: '13px', textDecoration: 'none' }}>
             Privacy Policy
