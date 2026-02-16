@@ -154,7 +154,7 @@ const Header = () => {
             alt="DonationAlerts"
             style={{ width: '20px', height: '20px' }}
           />
-          Поддержите проект
+          Support the project
         </a>
       </div>
     </header>
