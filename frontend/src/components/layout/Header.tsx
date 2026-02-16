@@ -1,3 +1,4 @@
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { apiGet } from '../../api/client';
@@ -9,9 +10,34 @@ interface SeasonBrief {
   end_date: string | null;
 }
 
+const MOBILE_BREAKPOINT = 768;
+
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  // Close menu on route change
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
 
   const pathMatch = location.pathname.match(/\/season\/(\d{4})/);
   const seasonYear = pathMatch ? parseInt(pathMatch[1]) : 2026;
@@ -22,26 +48,30 @@ const Header = () => {
     staleTime: Infinity,
   });
 
-  const isActive = (path: string) => {
-    return location.pathname.includes(path);
-  };
+  const isActive = (path: string) => location.pathname.includes(path);
 
-  const navLinkStyle = (path: string) => ({
-    color: '#FFFFFF',
-    textDecoration: 'none',
-    padding: '8px 16px',
-    borderBottom: isActive(path) ? '2px solid #E10600' : '2px solid transparent',
-    transition: 'border-color 0.2s',
-    fontSize: '14px',
-    fontWeight: 500,
-  });
+  const handleSeasonClick = useCallback((year: number) => {
+    if (pathMatch) {
+      navigate(location.pathname.replace(/\/season\/\d{4}/, `/season/${year}`));
+    } else {
+      navigate(`/season/${year}/calendar`);
+    }
+  }, [pathMatch, location.pathname, navigate]);
 
+  const navLinks = [
+    { path: '/calendar', label: 'Calendar' },
+    { path: '/races', label: 'Races' },
+    { path: '/standings', label: 'Standings' },
+    { path: '/head-to-head', label: 'H2H' },
+    { path: '/drivers', label: 'Drivers' },
+    { path: '/constructors', label: 'Teams' },
+  ];
 
   return (
     <header style={{
       backgroundColor: '#1A1A2E',
       borderBottom: '1px solid #2A2A3E',
-      padding: '16px 0',
+      padding: isMobile ? '10px 0' : '16px 0',
       position: 'sticky',
       top: 0,
       zIndex: 1000,
@@ -49,47 +79,42 @@ const Header = () => {
       <div style={{
         maxWidth: '1400px',
         margin: '0 auto',
-        padding: '0 24px',
+        padding: '0 16px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: '32px',
+        gap: isMobile ? '8px' : '32px',
       }}>
+        {/* Logo + Season buttons */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '12px',
+          gap: '8px',
+          minWidth: 0,
         }}>
-          <Link to="/" style={{
-            textDecoration: 'none',
-          }}>
+          <Link to="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
             <h1 style={{
               color: '#FFFFFF',
-              fontSize: '20px',
+              fontSize: isMobile ? '16px' : '20px',
               fontWeight: 700,
               margin: 0,
+              whiteSpace: 'nowrap',
             }}>
               F1 Time Machine
             </h1>
           </Link>
           {seasons && seasons.length > 0 && (
-            <div style={{ display: 'flex', gap: '4px' }}>
+            <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
               {seasons.map((s) => (
                 <button
                   key={s.year}
-                  onClick={() => {
-                    if (pathMatch) {
-                      navigate(location.pathname.replace(/\/season\/\d{4}/, `/season/${s.year}`));
-                    } else {
-                      navigate(`/season/${s.year}/calendar`);
-                    }
-                  }}
+                  onClick={() => handleSeasonClick(s.year)}
                   style={{
                     backgroundColor: s.year === seasonYear ? '#E10600' : 'transparent',
                     color: '#FFFFFF',
-                    padding: '6px 14px',
+                    padding: isMobile ? '4px 10px' : '6px 14px',
                     borderRadius: '4px',
-                    fontSize: '14px',
+                    fontSize: isMobile ? '12px' : '14px',
                     fontWeight: 600,
                     border: s.year === seasonYear ? 'none' : '1px solid #555',
                     cursor: 'pointer',
@@ -103,60 +128,219 @@ const Header = () => {
           )}
         </div>
 
-        <nav style={{
-          display: 'flex',
-          gap: '8px',
-        }}>
-          <Link to={`/season/${seasonYear}/calendar`} style={navLinkStyle('/calendar')}>
-            Calendar
-          </Link>
-          <Link to={`/season/${seasonYear}/races`} style={navLinkStyle('/races')}>
-            Races
-          </Link>
-          <Link to={`/season/${seasonYear}/standings`} style={navLinkStyle('/standings')}>
-            Standings
-          </Link>
-          <Link to={`/season/${seasonYear}/head-to-head`} style={navLinkStyle('/head-to-head')}>
-            Head-to-Head
-          </Link>
-          <Link to={`/season/${seasonYear}/drivers`} style={navLinkStyle('/drivers')}>
-            Drivers
-          </Link>
-          <Link to={`/season/${seasonYear}/constructors`} style={navLinkStyle('/constructors')}>
-            Constructors
-          </Link>
-        </nav>
+        {/* Desktop nav */}
+        {!isMobile && (
+          <nav style={{ display: 'flex', gap: '8px' }}>
+            {navLinks.map(({ path, label }) => (
+              <Link
+                key={path}
+                to={`/season/${seasonYear}${path}`}
+                style={{
+                  color: '#FFFFFF',
+                  textDecoration: 'none',
+                  padding: '8px 16px',
+                  borderBottom: isActive(path) ? '2px solid #E10600' : '2px solid transparent',
+                  transition: 'border-color 0.2s',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                }}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+        )}
 
-        <a
-          href="https://www.donationalerts.com/r/seoshmeo"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            backgroundColor: '#F57D07',
-            color: '#FFFFFF',
-            textDecoration: 'none',
-            padding: '6px 14px',
-            borderRadius: '6px',
-            fontSize: '13px',
-            fontWeight: 600,
-            whiteSpace: 'nowrap',
-            transition: 'opacity 0.2s',
-            flexShrink: 0,
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-        >
-          <img
-            src="https://www.donationalerts.com/img/brand/da.svg"
-            alt="DonationAlerts"
-            style={{ width: '20px', height: '20px' }}
-          />
-          Support the project
-        </a>
+        {/* Desktop donate button */}
+        {!isMobile && (
+          <a
+            href="https://www.donationalerts.com/r/seoshmeo"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              backgroundColor: '#F57D07',
+              color: '#FFFFFF',
+              textDecoration: 'none',
+              padding: '6px 14px',
+              borderRadius: '6px',
+              fontSize: '13px',
+              fontWeight: 600,
+              whiteSpace: 'nowrap',
+              transition: 'opacity 0.2s',
+              flexShrink: 0,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+          >
+            <img
+              src="https://www.donationalerts.com/img/brand/da.svg"
+              alt="DonationAlerts"
+              style={{ width: '20px', height: '20px' }}
+            />
+            Support the project
+          </a>
+        )}
+
+        {/* Hamburger button */}
+        {isMobile && (
+          <button
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label="Toggle menu"
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '6px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              gap: '5px',
+              flexShrink: 0,
+            }}
+          >
+            <span style={{
+              display: 'block',
+              width: '22px',
+              height: '2px',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '1px',
+              transition: 'transform 0.3s, opacity 0.3s',
+              transform: menuOpen ? 'translateY(7px) rotate(45deg)' : 'none',
+            }} />
+            <span style={{
+              display: 'block',
+              width: '22px',
+              height: '2px',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '1px',
+              transition: 'opacity 0.3s',
+              opacity: menuOpen ? 0 : 1,
+            }} />
+            <span style={{
+              display: 'block',
+              width: '22px',
+              height: '2px',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '1px',
+              transition: 'transform 0.3s, opacity 0.3s',
+              transform: menuOpen ? 'translateY(-7px) rotate(-45deg)' : 'none',
+            }} />
+          </button>
+        )}
       </div>
+
+      {/* Mobile menu overlay */}
+      {isMobile && menuOpen && (
+        <nav style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: '#1A1A2E',
+          zIndex: 999,
+          display: 'flex',
+          flexDirection: 'column',
+          paddingTop: '60px',
+          overflowY: 'auto',
+        }}>
+          {/* Close button at top-right */}
+          <button
+            onClick={() => setMenuOpen(false)}
+            aria-label="Close menu"
+            style={{
+              position: 'absolute',
+              top: '12px',
+              right: '16px',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '6px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              gap: '5px',
+            }}
+          >
+            <span style={{
+              display: 'block',
+              width: '22px',
+              height: '2px',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '1px',
+              transform: 'translateY(7px) rotate(45deg)',
+            }} />
+            <span style={{
+              display: 'block',
+              width: '22px',
+              height: '2px',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '1px',
+              opacity: 0,
+            }} />
+            <span style={{
+              display: 'block',
+              width: '22px',
+              height: '2px',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '1px',
+              transform: 'translateY(-7px) rotate(-45deg)',
+            }} />
+          </button>
+
+          {navLinks.map(({ path, label }) => (
+            <Link
+              key={path}
+              to={`/season/${seasonYear}${path}`}
+              onClick={() => setMenuOpen(false)}
+              style={{
+                color: '#FFFFFF',
+                textDecoration: 'none',
+                padding: '16px 24px',
+                fontSize: '18px',
+                fontWeight: 500,
+                borderLeft: isActive(path) ? '3px solid #E10600' : '3px solid transparent',
+                backgroundColor: isActive(path) ? 'rgba(225, 6, 0, 0.1)' : 'transparent',
+                transition: 'all 0.2s',
+              }}
+            >
+              {label}
+            </Link>
+          ))}
+
+          <div style={{ padding: '16px 24px', marginTop: '8px' }}>
+            <a
+              href="https://www.donationalerts.com/r/seoshmeo"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                backgroundColor: '#F57D07',
+                color: '#FFFFFF',
+                textDecoration: 'none',
+                padding: '12px 20px',
+                borderRadius: '8px',
+                fontSize: '15px',
+                fontWeight: 600,
+                width: '100%',
+              }}
+            >
+              <img
+                src="https://www.donationalerts.com/img/brand/da.svg"
+                alt="DonationAlerts"
+                style={{ width: '20px', height: '20px' }}
+              />
+              Support the project
+            </a>
+          </div>
+        </nav>
+      )}
     </header>
   );
 };
