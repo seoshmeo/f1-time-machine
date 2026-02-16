@@ -126,6 +126,36 @@ const Header = () => {
             Constructors
           </Link>
         </nav>
+
+        <a
+          href="https://www.donationalerts.com/r/seoshmeo"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            backgroundColor: '#F57D07',
+            color: '#FFFFFF',
+            textDecoration: 'none',
+            padding: '6px 14px',
+            borderRadius: '6px',
+            fontSize: '13px',
+            fontWeight: 600,
+            whiteSpace: 'nowrap',
+            transition: 'opacity 0.2s',
+            flexShrink: 0,
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+        >
+          <img
+            src="https://www.donationalerts.com/img/brand/da.svg"
+            alt="DonationAlerts"
+            style={{ width: '20px', height: '20px' }}
+          />
+          Поддержите проект
+        </a>
       </div>
     </header>
   );
