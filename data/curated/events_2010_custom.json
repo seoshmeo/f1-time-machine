@@ -293,5 +293,14 @@
     "source_url": "Nick Heidfeld joins Sauber replacing de la Rosa",
     "driver_refs": ["heidfeld"],
     "tags": ["transfer", "mid-season"]
+  },
+  {
+    "date": "2010-11-11",
+    "type": "championship_preview",
+    "title": "Four Drivers Can Still Win the Championship",
+    "summary": "With one race remaining, Alonso leads Webber by 8 points, Vettel by 15, and Hamilton by 24. The 2010 Abu Dhabi Grand Prix will decide the most dramatic title fight in years.",
+    "detail": "Heading into the season finale at Yas Marina, Fernando Alonso (246 pts) holds the advantage over Mark Webber (238), Sebastian Vettel (231), and Lewis Hamilton (222). Alonso needs only a P2 finish to guarantee the title regardless of other results. This is the first time since 2003 that four drivers enter the final race with a realistic chance of winning the championship.",
+    "importance": 1,
+    "tags": ["championship", "preview", "abu-dhabi"]
   }
 ]

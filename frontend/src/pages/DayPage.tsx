@@ -14,6 +14,7 @@ import ArticleCard from '../components/article/ArticleCard';
 import QuoteCard from '../components/article/QuoteCard';
 import Sidebar from '../components/layout/Sidebar';
 import DriverStandingsTable from '../components/standings/DriverStandingsTable';
+import ChampionshipFinalePreview from '../components/day/ChampionshipFinalePreview';
 
 const DayPage = () => {
   const { year, date } = useParams<{ year: string; date: string }>();
@@ -29,12 +30,28 @@ const DayPage = () => {
 
   const { data: dayData, isLoading, error } = useDay(seasonYear, currentDate);
   const { data: navData } = useDayNavigation(seasonYear, currentDate);
-  const { data: standingsData } = useStandings(seasonYear, seasonData?.total_races || 1);
+  const standingsRound = dayData?.season_progress?.races_completed || seasonData?.total_races || 1;
+  const { data: standingsData } = useStandings(seasonYear, standingsRound);
 
   useEffect(() => {
     if (currentDate) {
-      const formatted = new Date(currentDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-      document.title = `${formatted} - ${seasonYear} F1 Season Day by Day | F1 Time Machine`;
+      const meta = document.querySelector('meta[name="description"]');
+      if (seasonYear === 2010 && currentDate === '2010-11-11') {
+        document.title = 'F1 2010 Championship Standings Before Abu Dhabi Finale — Alonso vs Webber vs Vettel vs Hamilton | F1 Time Machine';
+        if (meta) {
+          meta.setAttribute('content',
+            '2010 F1 championship standings before the Abu Dhabi finale. Alonso 246 pts, Webber 238, Vettel 231, Hamilton 222. Four drivers can win the title — see what each needs to become World Champion.'
+          );
+        }
+      } else {
+        const formatted = new Date(currentDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        document.title = `${formatted} - ${seasonYear} F1 Season Day by Day | F1 Time Machine`;
+        if (meta) {
+          meta.setAttribute('content',
+            `F1 Time Machine — Explore Formula 1 seasons day by day. Race calendars, driver lineups, standings, regulations and more for 2026 and 2010 seasons.`
+          );
+        }
+      }
     }
   }, [currentDate, seasonYear]);
 
@@ -105,6 +122,10 @@ const DayPage = () => {
         canGoPrev={!!navData?.prev_date}
         canGoNext={!!navData?.next_date}
       />
+
+      {seasonYear === 2010 && currentDate === '2010-11-11' && (
+        <ChampionshipFinalePreview year={2010} preFinaleRound={18} />
+      )}
 
       <div style={{
         display: 'grid',
