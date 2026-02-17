@@ -302,5 +302,157 @@
     "detail": "Heading into the season finale at Yas Marina, Fernando Alonso (246 pts) holds the advantage over Mark Webber (238), Sebastian Vettel (231), and Lewis Hamilton (222). Alonso needs only a P2 finish to guarantee the title regardless of other results. This is the first time since 2003 that four drivers enter the final race with a realistic chance of winning the championship.",
     "importance": 1,
     "tags": ["championship", "preview", "abu-dhabi"]
+  },
+  {
+    "date": "2010-03-15",
+    "type": "post_race_standings",
+    "title": "Results After the Bahrain Grand Prix",
+    "summary": "Fernando Alonso wins the season opener from P3, leading a Ferrari 1-2 with Massa. Vettel retires from pole with spark plug failure. Alonso leads the championship with 25 points.",
+    "importance": 1,
+    "tags": ["results", "standings", "bahrain"]
+  },
+  {
+    "date": "2010-03-29",
+    "type": "post_race_standings",
+    "title": "Results After the Australian Grand Prix",
+    "summary": "Jenson Button takes a dominant victory at Albert Park. Kubica finishes P2, giving Renault a surprise podium. Button and Alonso tied on 31 points at the top of the championship.",
+    "importance": 1,
+    "tags": ["results", "standings", "australia"]
+  },
+  {
+    "date": "2010-04-05",
+    "type": "post_race_standings",
+    "title": "Results After the Malaysian Grand Prix",
+    "summary": "Sebastian Vettel takes his first win of 2010 at Sepang, beating Webber in a Red Bull 1-2. Vettel moves to second in the championship, 6 points behind leader Button.",
+    "importance": 1,
+    "tags": ["results", "standings", "malaysia"]
+  },
+  {
+    "date": "2010-04-19",
+    "type": "post_race_standings",
+    "title": "Results After the Chinese Grand Prix",
+    "summary": "Jenson Button wins again in Shanghai with a brilliant strategy call. Hamilton finishes P2, making it a McLaren 1-2. Button extends his championship lead to 11 points over Rosberg.",
+    "importance": 1,
+    "tags": ["results", "standings", "china"]
+  },
+  {
+    "date": "2010-05-10",
+    "type": "post_race_standings",
+    "title": "Results After the Spanish Grand Prix",
+    "summary": "Mark Webber takes his first win of 2010 at Barcelona from pole position. Alonso delights the home crowd with P2 for Ferrari. Webber moves into the championship lead.",
+    "importance": 1,
+    "tags": ["results", "standings", "spain"]
+  },
+  {
+    "date": "2010-05-17",
+    "type": "post_race_standings",
+    "title": "Results After the Monaco Grand Prix",
+    "summary": "Mark Webber wins back-to-back at the streets of Monte Carlo. Vettel finishes P2, Kubica completes the podium. Webber extends his championship lead to 12 points over Button.",
+    "importance": 1,
+    "tags": ["results", "standings", "monaco"]
+  },
+  {
+    "date": "2010-05-31",
+    "type": "post_race_standings",
+    "title": "Results After the Turkish Grand Prix",
+    "summary": "Lewis Hamilton capitalizes on a dramatic Vettel-Webber collision to win in Istanbul. The Red Bull teammates collide while running 1-2, gifting McLaren a shock victory. Hamilton surges to P2 in the standings.",
+    "importance": 1,
+    "tags": ["results", "standings", "turkey"]
+  },
+  {
+    "date": "2010-06-14",
+    "type": "post_race_standings",
+    "title": "Results After the Canadian Grand Prix",
+    "summary": "Lewis Hamilton wins his second consecutive race in Montreal. Button finishes P2, making it a McLaren 1-2. Hamilton closes within 4 points of championship leader Webber — five drivers separated by just 20 points.",
+    "importance": 1,
+    "tags": ["results", "standings", "canada"]
+  },
+  {
+    "date": "2010-06-28",
+    "type": "post_race_standings",
+    "title": "Results After the European Grand Prix",
+    "summary": "Sebastian Vettel leads from lights to flag in Valencia. Hamilton finishes P2, Button P3. The top five in the championship are covered by just 20 points after nine races.",
+    "importance": 1,
+    "tags": ["results", "standings", "europe"]
+  },
+  {
+    "date": "2010-07-12",
+    "type": "post_race_standings",
+    "title": "Results After the British Grand Prix",
+    "summary": "Mark Webber wins at Silverstone after a brilliant overtake on Hamilton into Copse. Webber regains the championship lead as six drivers are now within striking distance of the title.",
+    "importance": 1,
+    "tags": ["results", "standings", "britain"]
+  },
+  {
+    "date": "2010-07-26",
+    "type": "post_race_standings",
+    "title": "Results After the German Grand Prix",
+    "summary": "Fernando Alonso wins at Hockenheim in controversial fashion after Ferrari's infamous 'Fernando is faster than you' team order to Massa. Alonso cuts Webber's championship lead. Ferrari fined $100,000.",
+    "importance": 1,
+    "tags": ["results", "standings", "germany"]
+  },
+  {
+    "date": "2010-08-02",
+    "type": "post_race_standings",
+    "title": "Results After the Hungarian Grand Prix",
+    "summary": "Mark Webber dominates at the Hungaroring for his fourth win. The championship battle remains fierce — Webber leads Hamilton by 14 points going into the summer break.",
+    "importance": 1,
+    "tags": ["results", "standings", "hungary"]
+  },
+  {
+    "date": "2010-08-30",
+    "type": "post_race_standings",
+    "title": "Results After the Belgian Grand Prix",
+    "summary": "Lewis Hamilton wins a rain-hit race at Spa-Francorchamps. Webber and Kubica complete the podium. Hamilton closes the gap to leader Webber to just 3 points with six races remaining.",
+    "importance": 1,
+    "tags": ["results", "standings", "belgium"]
+  },
+  {
+    "date": "2010-09-13",
+    "type": "post_race_standings",
+    "title": "Results After the Italian Grand Prix",
+    "summary": "Fernando Alonso wins from pole at Monza, his first victory since the controversial German GP. Button and Massa complete the podium. Webber still leads but four drivers within 24 points.",
+    "importance": 1,
+    "tags": ["results", "standings", "italy"]
+  },
+  {
+    "date": "2010-09-27",
+    "type": "post_race_standings",
+    "title": "Results After the Singapore Grand Prix",
+    "summary": "Fernando Alonso wins back-to-back at Marina Bay under the lights. Vettel P2, Webber P3. Alonso's surge continues — he's now just 11 points behind championship leader Webber with four races left.",
+    "importance": 1,
+    "tags": ["results", "standings", "singapore"]
+  },
+  {
+    "date": "2010-10-11",
+    "type": "post_race_standings",
+    "title": "Results After the Japanese Grand Prix",
+    "summary": "Sebastian Vettel dominates at Suzuka from pole. Webber crashes out. The championship is blown wide open — Alonso leads Webber by 11 points, Vettel just 14 behind the Spaniard.",
+    "importance": 1,
+    "tags": ["results", "standings", "japan"]
+  },
+  {
+    "date": "2010-10-25",
+    "type": "post_race_standings",
+    "title": "Results After the Korean Grand Prix",
+    "summary": "Fernando Alonso wins in chaotic conditions at the brand-new Korean International Circuit. Vettel retires from the lead, Webber crashes in the wet. Alonso takes a commanding 11-point lead with two races to go.",
+    "importance": 1,
+    "tags": ["results", "standings", "korea"]
+  },
+  {
+    "date": "2010-11-08",
+    "type": "post_race_standings",
+    "title": "Results After the Brazilian Grand Prix",
+    "summary": "Sebastian Vettel wins at Interlagos. Rookie Hulkenberg takes a stunning pole in the wet. Alonso holds an 8-point lead over Webber, 15 over Vettel — four drivers can still win the title in Abu Dhabi.",
+    "importance": 1,
+    "tags": ["results", "standings", "brazil"]
+  },
+  {
+    "date": "2010-11-15",
+    "type": "post_race_standings",
+    "title": "Results After the Abu Dhabi Grand Prix — Season Finale",
+    "summary": "Sebastian Vettel wins the Abu Dhabi Grand Prix and sensationally clinches the World Championship! Alonso gets stuck behind Petrov and finishes P7. At 23, Vettel becomes the youngest World Champion in F1 history.",
+    "importance": 1,
+    "tags": ["results", "standings", "abu-dhabi", "championship"]
   }
 ]
