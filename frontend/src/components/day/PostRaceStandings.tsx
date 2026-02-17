@@ -47,7 +47,10 @@ const PostRaceStandings = ({ year, config, totalRaces }: PostRaceStandingsProps)
   if (resultsLoading || standingsLoading) return null;
 
   const top10Results = results?.filter(r => r.position && r.position <= 10) || [];
-  const top10Standings = standings?.slice(0, 10) || [];
+  const sortedStandings = standings
+    ? [...standings].sort((a, b) => b.points - a.points || a.position - b.position)
+    : [];
+  const top10Standings = sortedStandings.slice(0, 10);
 
   const prevPointsMap: Record<string, number> = {};
   if (prevStandings) {
@@ -250,21 +253,22 @@ const PostRaceStandings = ({ year, config, totalRaces }: PostRaceStandingsProps)
                 </tr>
               </thead>
               <tbody>
-                {top10Standings.map((standing) => {
+                {top10Standings.map((standing, idx) => {
+                  const pos = idx + 1;
                   const teamColor = getTeamPrimaryColor(standing.constructor_ref);
                   const prevPts = prevPointsMap[standing.driver.driver_ref] ?? 0;
                   const gained = config.round > 1 ? standing.points - prevPts : standing.points;
                   return (
-                    <tr key={standing.position} style={{ borderBottom: '1px solid #2A2A3E' }}>
+                    <tr key={standing.driver.driver_ref} style={{ borderBottom: '1px solid #2A2A3E' }}>
                       <td style={{ padding: '10px 6px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <div style={{
                             width: '3px', height: '22px',
-                            backgroundColor: standing.position <= 3 ? teamColor : 'transparent',
+                            backgroundColor: pos <= 3 ? teamColor : 'transparent',
                             borderRadius: '2px',
                           }} />
                           <span style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: 700 }}>
-                            {standing.position}
+                            {pos}
                           </span>
                         </div>
                       </td>
