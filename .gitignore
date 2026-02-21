@@ -54,3 +54,5 @@ coverage/
 
 # Docker
 .docker/
+AGENT.md
+PROJECT.md
