@@ -22,6 +22,9 @@ export interface ThemeLayout {
   maxWidth?: string;
   contentPadding?: string;
   cardColumns?: string;
+  cardMinWidth?: string;
+  cardPadding?: string;
+  cardScale?: string;
   gap?: string;
   headerPosition?: 'sticky' | 'static';
 }
@@ -179,6 +182,42 @@ footer { border-top-color: ${c.border} !important; }`);
 }`);
   }
 
+  // Card sizing: override minmax in auto-fill grids and card padding
+  if (l.cardMinWidth) {
+    rules.push(`
+[style*="grid-template-columns"],
+[style*="gridTemplateColumns"] {
+  grid-template-columns: repeat(auto-fill, minmax(${l.cardMinWidth}, 1fr)) !important;
+}`);
+  }
+
+  if (l.cardPadding) {
+    rules.push(`
+.card,
+[style*="padding: 24px"],
+[style*="padding: 32px"] {
+  padding: ${l.cardPadding} !important;
+}`);
+  }
+
+  if (l.cardScale) {
+    const scale = parseFloat(l.cardScale);
+    if (scale > 0 && scale <= 4) {
+      rules.push(`
+[style*="display: grid"] > *,
+[style*="display:grid"] > *,
+.grid > * {
+  transform: scale(1) !important;
+  font-size: ${scale}em !important;
+}
+[style*="display: grid"] > * h3,
+[style*="display:grid"] > * h3,
+.grid > * h3 {
+  font-size: ${scale * 1.25}em !important;
+}`);
+    }
+  }
+
   if (l.gap) {
     rules.push(`
 .gap-md { gap: ${l.gap} !important; }
@@ -259,15 +298,35 @@ function forceApplyToInlineElements(config: ThemeConfig) {
     }
   });
 
-  // Layout: force maxWidth on containers
-  if (config.layout?.maxWidth) {
-    document.querySelectorAll('[style]').forEach((el) => {
-      const h = el as HTMLElement;
-      if (h.style.maxWidth && h.style.maxWidth !== '0px') {
-        h.style.maxWidth = config.layout!.maxWidth!;
-      }
-    });
-  }
+  // Layout overrides on inline-styled elements
+  const layout = config.layout;
+  if (!layout) return;
+
+  document.querySelectorAll('[style]').forEach((el) => {
+    const h = el as HTMLElement;
+
+    // Force maxWidth on containers
+    if (layout.maxWidth && h.style.maxWidth && h.style.maxWidth !== '0px') {
+      h.style.maxWidth = layout.maxWidth;
+    }
+
+    // Force grid template columns (cardMinWidth)
+    if (layout.cardMinWidth && h.style.gridTemplateColumns &&
+        h.style.gridTemplateColumns.includes('auto-fill')) {
+      h.style.gridTemplateColumns = `repeat(auto-fill, minmax(${layout.cardMinWidth}, 1fr))`;
+    }
+
+    // Force card padding
+    if (layout.cardPadding && h.style.padding &&
+        (h.style.padding === '24px' || h.style.padding === '32px')) {
+      h.style.padding = layout.cardPadding;
+    }
+
+    // Force gap on grids
+    if (layout.gap && h.style.display === 'grid' && h.style.gap) {
+      h.style.gap = layout.gap;
+    }
+  });
 }
 
 // Schedule force-apply after React render completes

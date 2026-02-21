@@ -18,7 +18,7 @@ RATE_LIMIT_WINDOW = 60  # seconds
 
 SYSTEM_PROMPT = """You are a UI theme customizer for an F1 statistics website.
 You ONLY output valid JSON matching the ThemeConfig schema.
-You change visual appearance AND layout: colors, border radius, font sizes, content width, grid columns, spacing.
+You change visual appearance AND layout: colors, border radius, font sizes, card sizes, content width, grid columns, spacing.
 
 ThemeConfig schema (all fields optional — return only changed fields):
 {
@@ -43,7 +43,9 @@ ThemeConfig schema (all fields optional — return only changed fields):
     "maxWidth": "CSS max-width for content area (e.g., 1400px, 1600px, 100%)",
     "contentPadding": "CSS padding around main content (e.g., 16px, 2rem)",
     "cardColumns": "number of columns in card grids as string (e.g., 2, 3, 4)",
-    "gap": "CSS gap between grid items (e.g., 16px, 1.5rem)",
+    "cardMinWidth": "CSS min-width for cards in auto-fill grids (e.g., 280px, 400px, 560px). Default is 280px. To make cards bigger, increase this value (e.g., 500px for ~2x bigger). To make cards smaller, decrease it.",
+    "cardPadding": "CSS padding inside card components (e.g., 24px, 48px). Default is 24px.",
+    "gap": "CSS gap between grid items (e.g., 16px, 1.5rem, 32px)",
     "headerPosition": "sticky or static"
   }
 }
@@ -58,7 +60,9 @@ STRICT RULES:
 - Layout values must be valid CSS values.
 - cardColumns must be a number between 1 and 6.
 - headerPosition must be either "sticky" or "static".
-- If asked for something you cannot do, return: {"error": "I can only customize visual appearance and layout."}"""
+- You CANNOT reorder content, move specific items, or rearrange data. You can only change sizes, spacing, and visual properties.
+- If user asks to reorder items, move specific content, or change data order, return: {"error": "I can only change visual appearance and layout (sizes, spacing, colors). I cannot reorder content or move specific items — the order comes from the database."}
+- If asked for something else you cannot do, return: {"error": "I can only customize visual appearance and layout."}"""
 
 HEX_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
 CSS_UNIT_RE = re.compile(r"^[0-9]+(\.[0-9]+)?(rem|px|em|%|vw)$|^0$|^100%$")
@@ -125,19 +129,14 @@ def _validate_theme(theme: dict) -> dict:
         layout = {}
         raw = theme["layout"]
 
-        if isinstance(raw.get("maxWidth"), str) and CSS_UNIT_RE.match(raw["maxWidth"]):
-            layout["maxWidth"] = raw["maxWidth"]
-
-        if isinstance(raw.get("contentPadding"), str) and CSS_UNIT_RE.match(raw["contentPadding"]):
-            layout["contentPadding"] = raw["contentPadding"]
+        for key in ("maxWidth", "contentPadding", "cardMinWidth", "cardPadding", "gap"):
+            if isinstance(raw.get(key), str) and CSS_UNIT_RE.match(raw[key]):
+                layout[key] = raw[key]
 
         if isinstance(raw.get("cardColumns"), (str, int)):
             cols = str(raw["cardColumns"])
             if cols.isdigit() and 1 <= int(cols) <= 6:
                 layout["cardColumns"] = cols
-
-        if isinstance(raw.get("gap"), str) and CSS_UNIT_RE.match(raw["gap"]):
-            layout["gap"] = raw["gap"]
 
         if raw.get("headerPosition") in ("sticky", "static"):
             layout["headerPosition"] = raw["headerPosition"]
