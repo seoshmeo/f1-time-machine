@@ -340,6 +340,9 @@ function forceApplyToInlineElements(config: ThemeConfig) {
   }
 }
 
+// Semantic tags that belong to page layout, not content grids
+const LAYOUT_TAGS = new Set(['HEADER', 'FOOTER', 'MAIN', 'NAV', 'ASIDE']);
+
 // Apply CSS order to grid/flex children matching text
 function applyReorderRules(rules: ReorderRule[]) {
   if (!rules || rules.length === 0) return;
@@ -351,10 +354,21 @@ function applyReorderRules(rules: ReorderRule[]) {
     const display = h.style.display;
     if (display !== 'grid' && display !== 'flex') return;
 
-    // Check each child
+    // Skip page-level layout containers (ones that hold header/footer/main)
     const children = h.children;
+    let isLayoutContainer = false;
+    for (let i = 0; i < children.length; i++) {
+      if (LAYOUT_TAGS.has(children[i].tagName)) {
+        isLayoutContainer = true;
+        break;
+      }
+    }
+    if (isLayoutContainer) return;
+
+    // Check each child
     for (let i = 0; i < children.length; i++) {
       const child = children[i] as HTMLElement;
+      if (LAYOUT_TAGS.has(child.tagName)) continue;
       const text = child.textContent || '';
 
       for (const rule of rules) {
