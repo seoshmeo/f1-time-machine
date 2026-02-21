@@ -27,6 +27,8 @@ class Settings(BaseSettings):
 
     cors_origins: str = Field(default="http://localhost:3000,http://localhost:5173")
 
+    anthropic_api_key: str = Field(default="")
+
     @property
     def cors_origins_list(self) -> List[str]:
         return [origin.strip() for origin in self.cors_origins.split(",")]

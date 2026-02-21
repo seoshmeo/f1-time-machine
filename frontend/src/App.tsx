@@ -26,7 +26,7 @@ function App() {
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      backgroundColor: '#0F0F0F',
+      backgroundColor: 'var(--color-bg, #0F0F0F)',
     }}>
       <Header />
       <main style={{ flex: 1 }}>

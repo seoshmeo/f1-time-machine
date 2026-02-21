@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { apiGet } from '../../api/client';
+import CustomizeDialog from '../customize/CustomizeDialog';
 
 interface SeasonBrief {
   year: number;
@@ -16,6 +17,7 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [customizeOpen, setCustomizeOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
 
   useEffect(() => {
@@ -151,37 +153,64 @@ const Header = () => {
           </nav>
         )}
 
-        {/* Desktop donate button */}
+        {/* Desktop buttons */}
         {!isMobile && (
-          <a
-            href="https://www.donationalerts.com/r/seoshmeo"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              backgroundColor: '#F57D07',
-              color: '#FFFFFF',
-              textDecoration: 'none',
-              padding: '6px 14px',
-              borderRadius: '6px',
-              fontSize: '13px',
-              fontWeight: 600,
-              whiteSpace: 'nowrap',
-              transition: 'opacity 0.2s',
-              flexShrink: 0,
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-          >
-            <img
-              src="https://www.donationalerts.com/img/brand/da.svg"
-              alt="DonationAlerts"
-              style={{ width: '20px', height: '20px' }}
-            />
-            Support the project
-          </a>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
+            <button
+              onClick={() => setCustomizeOpen(true)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                backgroundColor: 'transparent',
+                color: '#B0B0B0',
+                border: '1px solid #2A2A3E',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                fontSize: '13px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#E10600'; e.currentTarget.style.color = '#FFFFFF'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#2A2A3E'; e.currentTarget.style.color = '#B0B0B0'; }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+              </svg>
+              Customize
+            </button>
+            <a
+              href="https://www.donationalerts.com/r/seoshmeo"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                backgroundColor: '#F57D07',
+                color: '#FFFFFF',
+                textDecoration: 'none',
+                padding: '6px 14px',
+                borderRadius: '6px',
+                fontSize: '13px',
+                fontWeight: 600,
+                whiteSpace: 'nowrap',
+                transition: 'opacity 0.2s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+            >
+              <img
+                src="https://www.donationalerts.com/img/brand/da.svg"
+                alt="DonationAlerts"
+                style={{ width: '20px', height: '20px' }}
+              />
+              Support the project
+            </a>
+          </div>
         )}
 
         {/* Hamburger button */}
@@ -311,7 +340,27 @@ const Header = () => {
             </Link>
           ))}
 
-          <div style={{ padding: '16px 24px', marginTop: '8px' }}>
+          <div style={{ padding: '16px 24px', marginTop: '8px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <button
+              onClick={() => { setMenuOpen(false); setCustomizeOpen(true); }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                backgroundColor: 'transparent',
+                color: '#B0B0B0',
+                border: '1px solid #2A2A3E',
+                padding: '12px 20px',
+                borderRadius: '8px',
+                fontSize: '15px',
+                fontWeight: 500,
+                width: '100%',
+                cursor: 'pointer',
+              }}
+            >
+              Customize Theme
+            </button>
             <a
               href="https://www.donationalerts.com/r/seoshmeo"
               target="_blank"
@@ -341,6 +390,7 @@ const Header = () => {
           </div>
         </nav>
       )}
+      <CustomizeDialog open={customizeOpen} onClose={() => setCustomizeOpen(false)} />
     </header>
   );
 };
