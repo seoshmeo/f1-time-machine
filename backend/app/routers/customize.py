@@ -208,17 +208,36 @@ async def customize_theme(body: CustomizeRequest, request: Request):
                     ],
                 },
             )
-        except httpx.RequestError as e:
-            raise HTTPException(status_code=502, detail=f"Failed to reach AI service: {e}")
+        except httpx.TimeoutException:
+            raise HTTPException(status_code=504, detail="AI service took too long to respond. Please try again.")
+        except httpx.RequestError:
+            raise HTTPException(status_code=502, detail="Could not reach AI service. Please try again later.")
 
     if response.status_code != 200:
-        raise HTTPException(
-            status_code=502,
-            detail=f"AI service returned status {response.status_code}",
-        )
+        # Extract meaningful error from Anthropic response
+        try:
+            err_data = response.json()
+            err_msg = err_data.get("error", {}).get("message", "")
+        except (ValueError, TypeError):
+            err_msg = ""
+        if response.status_code == 429:
+            detail = "AI service is busy. Please try again in a minute."
+        elif response.status_code in (401, 403):
+            detail = "AI service authentication error. Please contact the site administrator."
+        else:
+            detail = f"AI service error ({response.status_code}). Please try again."
+        raise HTTPException(status_code=502, detail=detail)
 
-    data = response.json()
-    text = data.get("content", [{}])[0].get("text", "").strip()
+    try:
+        data = response.json()
+    except (ValueError, TypeError):
+        raise HTTPException(status_code=502, detail="AI service returned an invalid response.")
+
+    content = data.get("content")
+    if not isinstance(content, list) or len(content) == 0:
+        raise HTTPException(status_code=502, detail="AI service returned an empty response.")
+
+    text = content[0].get("text", "").strip() if isinstance(content[0], dict) else ""
 
     # Strip markdown code fences if present
     if text.startswith("```"):

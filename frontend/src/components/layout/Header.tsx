@@ -273,7 +273,7 @@ const Header = () => {
           zIndex: 999,
           display: 'flex',
           flexDirection: 'column',
-          paddingTop: '60px',
+          paddingTop: 'calc(60px + env(safe-area-inset-top, 0px))',
           overflowY: 'auto',
         }}>
           {/* Close button at top-right */}

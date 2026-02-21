@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { getHeadToHead, H2HTeamData } from '../api/headToHead';
 import { getTeamPrimaryColor } from '../utils/f1Colors';
+import { useIsMobile } from '../hooks/useIsMobile';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
 interface ComparisonBarProps {
@@ -337,6 +338,7 @@ const TeamCard = ({ teamData }: TeamCardProps) => {
 };
 
 const HeadToHeadPage = () => {
+  const isMobile = useIsMobile();
   const { year } = useParams<{ year: string }>();
   const seasonYear = parseInt(year || '2026');
 
@@ -409,7 +411,7 @@ const HeadToHeadPage = () => {
       {/* Team Cards Grid */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))',
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(500px, 1fr))',
         gap: '24px',
       }}>
         {data.map((teamData) => (

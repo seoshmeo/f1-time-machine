@@ -5,6 +5,7 @@ import { apiGet } from '../api/client';
 import { getRaces } from '../api/races';
 import { daysApi } from '../api/days';
 import { getSeasonEvents } from '../api/events';
+import { useIsMobile } from '../hooks/useIsMobile';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import EventCard from '../components/day/EventCard';
 import QuoteCard from '../components/article/QuoteCard';
@@ -36,6 +37,7 @@ interface RaceFromApi {
 }
 
 const HomePage = () => {
+  const isMobile = useIsMobile();
   const today = new Date().toISOString().split('T')[0];
 
   const { data: seasons, isLoading: isLoadingSeasons } = useQuery({
@@ -278,7 +280,7 @@ const HomePage = () => {
           </h2>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(400px, 1fr))',
             gap: '24px',
           }}>
             {/* New Rules */}
@@ -351,7 +353,7 @@ const HomePage = () => {
       {/* Quick Links */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(300px, 1fr))',
         gap: '24px',
         marginBottom: '48px',
       }}>

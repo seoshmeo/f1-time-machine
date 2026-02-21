@@ -5,6 +5,7 @@ import { apiGet } from '../api/client';
 import { useDay, useDayNavigation } from '../hooks/useDay';
 import { useKeyboardNav } from '../hooks/useKeyboardNav';
 import { useStandings } from '../hooks/useStandings';
+import { useIsMobile } from '../hooks/useIsMobile';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import DayNavigation from '../components/day/DayNavigation';
 import EventList from '../components/day/EventList';
@@ -41,6 +42,7 @@ const POST_RACE_MONDAYS_2010: Record<string, PostRaceConfig> = {
 };
 
 const DayPage = () => {
+  const isMobile = useIsMobile();
   const { year, date } = useParams<{ year: string; date: string }>();
   const navigate = useNavigate();
   const seasonYear = parseInt(year || '2026');
@@ -173,7 +175,7 @@ const DayPage = () => {
 
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '1fr 350px',
+        gridTemplateColumns: isMobile ? '1fr' : '1fr 350px',
         gap: '24px',
       }}>
         <div>

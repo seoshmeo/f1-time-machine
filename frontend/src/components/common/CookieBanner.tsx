@@ -37,6 +37,7 @@ const CookieBanner = () => {
         backgroundColor: '#1A1A2E',
         borderTop: '1px solid #2A2A3E',
         padding: '20px 24px',
+        paddingBottom: 'calc(20px + env(safe-area-inset-bottom, 0px))',
         zIndex: 9999,
         transform: isDismissing ? 'translateY(100%)' : 'translateY(0)',
         transition: 'transform 0.3s ease-in-out',

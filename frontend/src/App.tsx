@@ -1,24 +1,27 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
-import HomePage from './pages/HomePage';
-import DayPage from './pages/DayPage';
-import CalendarPage from './pages/CalendarPage';
-import RacePage from './pages/RacePage';
-import RacesPage from './pages/RacesPage';
-import StandingsPage from './pages/StandingsPage';
-import DriversPage from './pages/DriversPage';
-import DriverDetailPage from './pages/DriverDetailPage';
-import ConstructorsPage from './pages/ConstructorsPage';
-import ConstructorDetailPage from './pages/ConstructorDetailPage';
-import HeadToHeadPage from './pages/HeadToHeadPage';
-import SeasonPreviewPage from './pages/SeasonPreviewPage';
-import TestingPage from './pages/TestingPage';
-import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
-import CookiePolicyPage from './pages/CookiePolicyPage';
-import NotFoundPage from './pages/NotFoundPage';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import CookieBanner from './components/common/CookieBanner';
+import LoadingSpinner from './components/common/LoadingSpinner';
+
+const HomePage = lazy(() => import('./pages/HomePage'));
+const DayPage = lazy(() => import('./pages/DayPage'));
+const CalendarPage = lazy(() => import('./pages/CalendarPage'));
+const RacePage = lazy(() => import('./pages/RacePage'));
+const RacesPage = lazy(() => import('./pages/RacesPage'));
+const StandingsPage = lazy(() => import('./pages/StandingsPage'));
+const DriversPage = lazy(() => import('./pages/DriversPage'));
+const DriverDetailPage = lazy(() => import('./pages/DriverDetailPage'));
+const ConstructorsPage = lazy(() => import('./pages/ConstructorsPage'));
+const ConstructorDetailPage = lazy(() => import('./pages/ConstructorDetailPage'));
+const HeadToHeadPage = lazy(() => import('./pages/HeadToHeadPage'));
+const SeasonPreviewPage = lazy(() => import('./pages/SeasonPreviewPage'));
+const TestingPage = lazy(() => import('./pages/TestingPage'));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
+const CookiePolicyPage = lazy(() => import('./pages/CookiePolicyPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function App() {
   return (
@@ -31,6 +34,7 @@ function App() {
       <Header />
       <main style={{ flex: 1 }}>
         <ErrorBoundary>
+        <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
@@ -49,6 +53,7 @@ function App() {
           <Route path="/season/:year/testing" element={<TestingPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        </Suspense>
         </ErrorBoundary>
       </main>
       <Footer />

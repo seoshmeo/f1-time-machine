@@ -5,6 +5,7 @@ import { customizeTheme } from '../../api/customize';
 interface Message {
   role: 'user' | 'ai';
   text: string;
+  isError?: boolean;
 }
 
 const PRESETS = [
@@ -27,6 +28,9 @@ export default function CustomizeDialog({ open, onClose }: Props) {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [activePreset, setActivePreset] = useState<string | null>(null);
+  const [rateLimitUntil, setRateLimitUntil] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -50,8 +54,19 @@ export default function CustomizeDialog({ open, onClose }: Props) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const sendPrompt = useCallback(async (prompt: string) => {
-    if (!prompt.trim() || loading) return;
+  // Rate limit countdown timer
+  useEffect(() => {
+    if (!rateLimitUntil) return;
+    const interval = setInterval(() => {
+      if (Date.now() >= rateLimitUntil) {
+        setRateLimitUntil(null);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [rateLimitUntil]);
+
+  const sendPrompt = useCallback(async (prompt: string, presetLabel?: string) => {
+    if (!prompt.trim() || loading || rateLimitUntil) return;
 
     setMessages(prev => [...prev, { role: 'user', text: prompt }]);
     setInput('');
@@ -61,15 +76,20 @@ export default function CustomizeDialog({ open, onClose }: Props) {
       const res = await customizeTheme(prompt, theme);
       if (res.theme && Object.keys(res.theme).length > 0) {
         applyTheme(res.theme);
+        setActivePreset(presetLabel || null);
       }
       setMessages(prev => [...prev, { role: 'ai', text: res.message }]);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Something went wrong';
-      setMessages(prev => [...prev, { role: 'ai', text: msg }]);
+      const msg = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      const isRateLimit = msg.toLowerCase().includes('too many') || msg.toLowerCase().includes('busy');
+      if (isRateLimit) {
+        setRateLimitUntil(Date.now() + 60_000);
+      }
+      setMessages(prev => [...prev, { role: 'ai', text: msg, isError: true }]);
     } finally {
       setLoading(false);
     }
-  }, [loading, theme, applyTheme]);
+  }, [loading, theme, applyTheme, rateLimitUntil]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,16 +97,24 @@ export default function CustomizeDialog({ open, onClose }: Props) {
   };
 
   const handleReset = () => {
+    if (!confirmReset) {
+      setConfirmReset(true);
+      return;
+    }
     resetTheme();
     setMessages(prev => [...prev, { role: 'ai', text: 'Theme reset to defaults.' }]);
+    setActivePreset(null);
+    setConfirmReset(false);
   };
+
+  const rateLimitSeconds = rateLimitUntil ? Math.max(0, Math.ceil((rateLimitUntil - Date.now()) / 1000)) : 0;
 
   if (!open) return null;
 
   const panelStyle: React.CSSProperties = isMobile
     ? {
         position: 'fixed',
-        bottom: 0,
+        bottom: 'env(safe-area-inset-bottom, 0px)',
         left: 0,
         right: 0,
         height: '85vh',
@@ -156,20 +184,54 @@ export default function CustomizeDialog({ open, onClose }: Props) {
           </span>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             {isCustomized && (
-              <button
-                onClick={handleReset}
-                style={{
-                  background: 'none',
-                  border: '1px solid #707070',
-                  color: '#B0B0B0',
-                  padding: '4px 10px',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  cursor: 'pointer',
-                }}
-              >
-                Reset
-              </button>
+              confirmReset ? (
+                <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                  <span style={{ color: '#B0B0B0', fontSize: '12px' }}>Sure?</span>
+                  <button
+                    onClick={handleReset}
+                    style={{
+                      background: 'none',
+                      border: '1px solid #E10600',
+                      color: '#E10600',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    onClick={() => setConfirmReset(false)}
+                    style={{
+                      background: 'none',
+                      border: '1px solid #707070',
+                      color: '#B0B0B0',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    No
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={handleReset}
+                  style={{
+                    background: 'none',
+                    border: '1px solid #707070',
+                    color: '#B0B0B0',
+                    padding: '4px 10px',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Reset
+                </button>
+              )
             )}
             <button
               onClick={onClose}
@@ -213,10 +275,16 @@ export default function CustomizeDialog({ open, onClose }: Props) {
                 borderRadius: '12px',
                 fontSize: '14px',
                 lineHeight: 1.5,
-                backgroundColor: msg.role === 'user' ? '#E10600' : '#2A2A3E',
-                color: '#FFFFFF',
+                backgroundColor: msg.role === 'user'
+                  ? '#E10600'
+                  : msg.isError
+                    ? 'rgba(225, 6, 0, 0.15)'
+                    : '#2A2A3E',
+                color: msg.isError ? '#FF6B6B' : '#FFFFFF',
+                border: msg.isError ? '1px solid rgba(225, 6, 0, 0.3)' : 'none',
               }}
             >
+              {msg.isError && <span style={{ marginRight: '6px' }}>⚠</span>}
               {msg.text}
             </div>
           ))}
@@ -247,18 +315,18 @@ export default function CustomizeDialog({ open, onClose }: Props) {
           {PRESETS.map(p => (
             <button
               key={p.label}
-              onClick={() => sendPrompt(p.prompt)}
-              disabled={loading}
+              onClick={() => sendPrompt(p.prompt, p.label)}
+              disabled={loading || !!rateLimitUntil}
               style={{
                 flexShrink: 0,
                 height: '36px',
                 padding: '0 14px',
                 borderRadius: '18px',
-                border: '1px solid #2A2A3E',
-                backgroundColor: 'transparent',
-                color: '#B0B0B0',
+                border: activePreset === p.label ? '1px solid #E10600' : '1px solid #2A2A3E',
+                backgroundColor: activePreset === p.label ? 'rgba(225, 6, 0, 0.15)' : 'transparent',
+                color: activePreset === p.label ? '#E10600' : '#B0B0B0',
                 fontSize: '13px',
-                cursor: loading ? 'not-allowed' : 'pointer',
+                cursor: loading || rateLimitUntil ? 'not-allowed' : 'pointer',
                 whiteSpace: 'nowrap',
                 transition: 'all 0.2s',
               }}
@@ -267,6 +335,19 @@ export default function CustomizeDialog({ open, onClose }: Props) {
             </button>
           ))}
         </div>
+
+        {/* Rate limit warning */}
+        {rateLimitUntil && rateLimitSeconds > 0 && (
+          <div style={{
+            padding: '6px 16px',
+            color: '#FF6B6B',
+            fontSize: '12px',
+            textAlign: 'center',
+            flexShrink: 0,
+          }}>
+            Rate limited. Try again in {rateLimitSeconds}s
+          </div>
+        )}
 
         {/* Input */}
         <form
@@ -285,7 +366,7 @@ export default function CustomizeDialog({ open, onClose }: Props) {
             value={input}
             onChange={e => setInput(e.target.value)}
             placeholder="e.g. make it blue and modern"
-            disabled={loading}
+            disabled={loading || !!rateLimitUntil}
             style={{
               flex: 1,
               minHeight: '44px',
@@ -300,17 +381,17 @@ export default function CustomizeDialog({ open, onClose }: Props) {
           />
           <button
             type="submit"
-            disabled={loading || !input.trim()}
+            disabled={loading || !input.trim() || !!rateLimitUntil}
             style={{
               minHeight: '44px',
               padding: '0 16px',
               borderRadius: '8px',
               border: 'none',
-              backgroundColor: loading || !input.trim() ? '#555' : '#E10600',
+              backgroundColor: loading || !input.trim() || rateLimitUntil ? '#555' : '#E10600',
               color: '#FFFFFF',
               fontSize: '14px',
               fontWeight: 600,
-              cursor: loading || !input.trim() ? 'not-allowed' : 'pointer',
+              cursor: loading || !input.trim() || rateLimitUntil ? 'not-allowed' : 'pointer',
               flexShrink: 0,
             }}
           >
