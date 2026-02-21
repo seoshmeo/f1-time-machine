@@ -30,7 +30,7 @@ const PrivacyPolicyPage = () => {
         Privacy Policy
       </h1>
       <p style={{ color: '#666', fontSize: '14px', marginBottom: '40px' }}>
-        Last updated: February 10, 2026
+        Last updated: February 21, 2026
       </p>
 
       <div style={{
@@ -59,7 +59,6 @@ const PrivacyPolicyPage = () => {
           <ul style={{ ...textStyle, paddingLeft: '24px' }}>
             <li>Google Analytics or any other analytics service</li>
             <li>Cookies of any kind (no tracking cookies, no session cookies, no functional cookies)</li>
-            <li>Local storage or session storage to store user data</li>
             <li>Facebook Pixel, advertising trackers, or any third-party tracking scripts</li>
             <li>User registration, login, or any form of account system</li>
             <li>Contact forms or any mechanism that collects personal information</li>
@@ -78,21 +77,54 @@ const PrivacyPolicyPage = () => {
         </div>
 
         <div style={sectionStyle}>
+          <h2 style={headingStyle}>Theme Customization & AI Processing</h2>
+          <p style={textStyle}>
+            The site offers an optional "Customize" feature that lets you change the visual appearance
+            (colors, fonts, layout). When you use this feature:
+          </p>
+          <ul style={{ ...textStyle, paddingLeft: '24px' }}>
+            <li>
+              Your text prompt (e.g., "make it blue") is sent to our server, which forwards it to
+              the Anthropic API (Claude) to generate a theme configuration. <strong style={{ color: '#FFFFFF' }}>Only
+              the prompt text is sent</strong> — no personal data, IP addresses, cookies, or browser
+              fingerprints are included in the request to Anthropic.
+            </li>
+            <li>
+              Anthropic may process and temporarily store the prompt in accordance with their own
+              privacy policy (anthropic.com/privacy). We use the API in zero-retention mode where
+              prompts are not used for model training.
+            </li>
+            <li>
+              The resulting theme configuration (hex colors, CSS values) is stored in your browser's
+              Local Storage under the key <strong style={{ color: '#FFFFFF' }}>f1tm_custom_theme</strong>.
+              This data stays on your device, is never sent back to our server, and can be cleared
+              at any time via the "Reset" button.
+            </li>
+          </ul>
+        </div>
+
+        <div style={sectionStyle}>
           <h2 style={headingStyle}>Third-Party Services</h2>
           <p style={textStyle}>
-            This website does not load any third-party scripts, fonts, or resources from external
-            domains. All assets (JavaScript, CSS, fonts) are served directly from our own server.
-            No data is transmitted to any third party when you visit this site.
+            The only third-party service used is the Anthropic API, which processes theme customization
+            prompts when you explicitly use the "Customize" feature. No third-party service is contacted
+            during normal browsing. All website assets (JavaScript, CSS, fonts) are served directly from
+            our own server.
           </p>
         </div>
 
         <div style={sectionStyle}>
           <h2 style={headingStyle}>Data Storage</h2>
           <p style={textStyle}>
-            The application uses an in-memory cache (React Query) on the client side to improve
-            performance. This cache exists only in your browser's memory during your visit and is
-            automatically cleared when you close the tab or navigate away. No data is persisted
-            to your device.
+            We use Local Storage to store two non-personal values in your browser:
+          </p>
+          <ul style={{ ...textStyle, paddingLeft: '24px' }}>
+            <li><strong style={{ color: '#FFFFFF' }}>cookie_consent_dismissed</strong> — whether you've dismissed the info banner</li>
+            <li><strong style={{ color: '#FFFFFF' }}>f1tm_custom_theme</strong> — your custom theme preferences (colors, fonts, layout)</li>
+          </ul>
+          <p style={textStyle}>
+            Additionally, the application uses an in-memory cache (React Query) to hold API responses
+            temporarily in your browser's RAM. This data disappears when you close the tab.
           </p>
         </div>
 

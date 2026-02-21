@@ -30,7 +30,7 @@ const CookiePolicyPage = () => {
         Cookie Policy
       </h1>
       <p style={{ color: '#666', fontSize: '14px', marginBottom: '40px' }}>
-        Last updated: February 10, 2026
+        Last updated: February 21, 2026
       </p>
 
       <div style={{
@@ -68,18 +68,30 @@ const CookiePolicyPage = () => {
             <li>There is no advertising on this site</li>
             <li>We do not use any analytics services (no Google Analytics, no Plausible, nothing)</li>
             <li>We do not track user behavior or browsing patterns</li>
-            <li>There are no personalization features that require remembering preferences</li>
+            <li>The optional theme customization feature stores preferences only in your browser's Local Storage</li>
             <li>We do not use any third-party services that set cookies</li>
           </ul>
         </div>
 
         <div style={sectionStyle}>
-          <h2 style={headingStyle}>Local Storage & Session Storage</h2>
+          <h2 style={headingStyle}>Local Storage</h2>
           <p style={textStyle}>
-            We use Local Storage only to remember that you dismissed the cookie consent banner.
-            This stores a single value (cookie_consent_dismissed) so we don't show you the banner
-            on every visit.
+            We use Local Storage to store a small amount of non-personal preference data directly
+            in your browser. This data never leaves your device and is not sent to any server.
           </p>
+          <ul style={{ ...textStyle, paddingLeft: '24px' }}>
+            <li>
+              <strong style={{ color: '#FFFFFF' }}>cookie_consent_dismissed</strong> — remembers
+              that you dismissed the cookie consent banner so it is not shown on every visit.
+            </li>
+            <li>
+              <strong style={{ color: '#FFFFFF' }}>f1tm_custom_theme</strong> — stores your custom
+              theme preferences (colors, fonts, layout settings) if you use the "Customize" feature.
+              This data contains only visual configuration values (hex colors, CSS sizes) and no
+              personal information. You can clear it at any time by clicking "Reset" in the
+              Customize dialog.
+            </li>
+          </ul>
           <p style={textStyle}>
             Beyond this, the only client-side data storage is React Query's in-memory cache,
             which holds API responses temporarily in your browser's RAM to avoid redundant

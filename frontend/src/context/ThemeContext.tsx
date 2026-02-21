@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
 
 export interface ThemeColors {
   background?: string;
@@ -18,10 +18,19 @@ export interface ThemeFontSize {
   lg?: string;
 }
 
+export interface ThemeLayout {
+  maxWidth?: string;
+  contentPadding?: string;
+  cardColumns?: string;
+  gap?: string;
+  headerPosition?: 'sticky' | 'static';
+}
+
 export interface ThemeConfig {
   colors?: ThemeColors;
   borderRadius?: string;
   fontSize?: ThemeFontSize;
+  layout?: ThemeLayout;
 }
 
 interface ThemeContextValue {
@@ -51,8 +60,9 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 function buildStyleSheet(config: ThemeConfig): string {
   const rules: string[] = [];
   const c = config.colors || {};
+  const l = config.layout || {};
 
-  // 1. Override CSS variables on :root (for anything using var())
+  // 1. Override CSS variables on :root
   const varOverrides: string[] = [];
   for (const [key, cssVar] of Object.entries(CSS_VAR_MAP)) {
     const val = c[key as keyof ThemeColors];
@@ -72,9 +82,7 @@ function buildStyleSheet(config: ThemeConfig): string {
     rules.push(`:root {\n${varOverrides.join('\n')}\n}`);
   }
 
-  // 2. Force-override inline styles via !important on semantic/structural selectors
-  // This beats React inline styles which use element.style.*
-
+  // 2. Color overrides via !important on semantic selectors
   if (c.background) {
     rules.push(`
 body,
@@ -96,31 +104,23 @@ nav[style] {
 
   if (c.card) {
     rules.push(`
-.card,
-.card:hover {
+.card, .card:hover {
   background-color: ${c.card} !important;
 }`);
   }
 
   if (c.accent) {
     rules.push(`
-.badge-accent,
-.btn-primary {
+.badge-accent, .btn-primary {
   background-color: ${c.accent} !important;
 }
-a {
-  color: ${c.accent};
-}
-::selection {
-  background-color: ${c.accent};
-}`);
+a { color: ${c.accent}; }
+::selection { background-color: ${c.accent}; }`);
   }
 
   if (c.accentHover) {
     rules.push(`
-a:hover {
-  color: ${c.accentHover};
-}
+a:hover { color: ${c.accentHover}; }
 .btn-primary:hover:not(:disabled) {
   background-color: ${c.accentHover} !important;
 }`);
@@ -128,35 +128,69 @@ a:hover {
 
   if (c.textPrimary) {
     rules.push(`
-body {
-  color: ${c.textPrimary} !important;
-}
-h1, h2, h3, h4, h5, h6 {
-  color: ${c.textPrimary} !important;
-}`);
+body { color: ${c.textPrimary} !important; }
+h1, h2, h3, h4, h5, h6 { color: ${c.textPrimary} !important; }`);
   }
 
   if (c.border) {
     rules.push(`
-.card {
-  border-color: ${c.border} !important;
-}
-thead {
-  border-bottom-color: ${c.border} !important;
-}
-td {
-  border-bottom-color: ${c.border} !important;
-}
-header {
-  border-bottom-color: ${c.border} !important;
-}
-footer {
-  border-top-color: ${c.border} !important;
-}`);
+.card { border-color: ${c.border} !important; }
+thead { border-bottom-color: ${c.border} !important; }
+td { border-bottom-color: ${c.border} !important; }
+header { border-bottom-color: ${c.border} !important; }
+footer { border-top-color: ${c.border} !important; }`);
   }
 
   if (config.fontSize?.base) {
     rules.push(`html { font-size: ${config.fontSize.base} !important; }`);
+  }
+
+  // 3. Layout overrides
+  if (l.maxWidth) {
+    rules.push(`
+[style*="max-width"] {
+  max-width: ${l.maxWidth} !important;
+}
+.container, .container-wide {
+  max-width: ${l.maxWidth} !important;
+}`);
+  }
+
+  if (l.contentPadding) {
+    rules.push(`
+#root > div > main {
+  padding: ${l.contentPadding} !important;
+}
+.container, .container-wide {
+  padding-left: ${l.contentPadding} !important;
+  padding-right: ${l.contentPadding} !important;
+}`);
+  }
+
+  if (l.cardColumns) {
+    rules.push(`
+.grid-cols-2, .grid-cols-3, .grid-cols-4 {
+  grid-template-columns: repeat(${l.cardColumns}, minmax(0, 1fr)) !important;
+}
+@media (max-width: 768px) {
+  .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+    grid-template-columns: 1fr !important;
+  }
+}`);
+  }
+
+  if (l.gap) {
+    rules.push(`
+.gap-md { gap: ${l.gap} !important; }
+.gap-lg { gap: ${l.gap} !important; }
+.grid { gap: ${l.gap} !important; }`);
+  }
+
+  if (l.headerPosition) {
+    rules.push(`
+header {
+  position: ${l.headerPosition} !important;
+}`);
   }
 
   return rules.join('\n');
@@ -177,17 +211,14 @@ function removeStyleSheet() {
   if (el) el.remove();
 }
 
-// Force-apply theme to elements with inline styles by directly mutating their style
+// Force-apply theme to elements with inline styles by directly mutating their DOM style
 function forceApplyToInlineElements(config: ThemeConfig) {
   const c = config.colors;
   if (!c) return;
 
-  // Map of rgb values to new colors
   const bgMap: [string, string][] = [];
   if (c.background) bgMap.push(['rgb(15, 15, 15)', c.background]);
-  if (c.backgroundSecondary) {
-    bgMap.push(['rgb(26, 26, 46)', c.backgroundSecondary]);
-  }
+  if (c.backgroundSecondary) bgMap.push(['rgb(26, 26, 46)', c.backgroundSecondary]);
   if (c.accent) bgMap.push(['rgb(225, 6, 0)', c.accent]);
 
   const colorMap: [string, string][] = [];
@@ -195,52 +226,56 @@ function forceApplyToInlineElements(config: ThemeConfig) {
   if (c.textSecondary) colorMap.push(['rgb(176, 176, 176)', c.textSecondary]);
   if (c.textMuted) {
     colorMap.push(['rgb(112, 112, 112)', c.textMuted]);
-    colorMap.push(['rgb(102, 102, 102)', c.textMuted]); // #666
-    colorMap.push(['rgb(85, 85, 85)', c.textMuted]);     // #555
+    colorMap.push(['rgb(102, 102, 102)', c.textMuted]);
+    colorMap.push(['rgb(85, 85, 85)', c.textMuted]);
   }
 
   const borderMap: [string, string][] = [];
   if (c.border) borderMap.push(['rgb(42, 42, 62)', c.border]);
 
-  // Walk all elements with inline styles
   const allStyled = document.querySelectorAll('[style]');
   allStyled.forEach((el) => {
-    const htmlEl = el as HTMLElement;
-    const computedBg = htmlEl.style.backgroundColor;
-    const computedColor = htmlEl.style.color;
-    const computedBorderColor = htmlEl.style.borderColor;
-    const computedBorderBottom = htmlEl.style.borderBottom;
-    const computedBorderTop = htmlEl.style.borderTop;
-    const computedBorderLeft = htmlEl.style.borderLeft;
+    const h = el as HTMLElement;
 
     for (const [oldRgb, newColor] of bgMap) {
-      if (computedBg === oldRgb) {
-        htmlEl.style.backgroundColor = newColor;
+      if (h.style.backgroundColor === oldRgb) {
+        h.style.backgroundColor = newColor;
         break;
       }
     }
 
     for (const [oldRgb, newColor] of colorMap) {
-      if (computedColor === oldRgb) {
-        htmlEl.style.color = newColor;
+      if (h.style.color === oldRgb) {
+        h.style.color = newColor;
         break;
       }
     }
 
     for (const [oldRgb, newColor] of borderMap) {
-      if (computedBorderColor === oldRgb) {
-        htmlEl.style.borderColor = newColor;
-      }
-      if (computedBorderBottom.includes(oldRgb)) {
-        htmlEl.style.borderBottomColor = newColor;
-      }
-      if (computedBorderTop.includes(oldRgb)) {
-        htmlEl.style.borderTopColor = newColor;
-      }
-      if (computedBorderLeft.includes(oldRgb)) {
-        htmlEl.style.borderLeftColor = newColor;
-      }
+      if (h.style.borderColor === oldRgb) h.style.borderColor = newColor;
+      if (h.style.borderBottom?.includes(oldRgb)) h.style.borderBottomColor = newColor;
+      if (h.style.borderTop?.includes(oldRgb)) h.style.borderTopColor = newColor;
+      if (h.style.borderLeft?.includes(oldRgb)) h.style.borderLeftColor = newColor;
     }
+  });
+
+  // Layout: force maxWidth on containers
+  if (config.layout?.maxWidth) {
+    document.querySelectorAll('[style]').forEach((el) => {
+      const h = el as HTMLElement;
+      if (h.style.maxWidth && h.style.maxWidth !== '0px') {
+        h.style.maxWidth = config.layout!.maxWidth!;
+      }
+    });
+  }
+}
+
+// Schedule force-apply after React render completes
+function scheduleForceApply(config: ThemeConfig) {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      forceApplyToInlineElements(config);
+    });
   });
 }
 
@@ -254,22 +289,28 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   });
 
+  const themeRef = useRef(theme);
+  themeRef.current = theme;
+
   // Apply on mount + observe DOM mutations to catch new elements
   useEffect(() => {
     if (!theme) return;
 
     injectStyleSheet(theme);
-    // Delay to let React render first
-    const timer = setTimeout(() => forceApplyToInlineElements(theme), 100);
+    scheduleForceApply(theme);
 
-    // Re-apply when DOM changes (new components mount)
+    // Debounced re-apply when DOM changes (new components mount)
+    let rafId: number | null = null;
     const observer = new MutationObserver(() => {
-      forceApplyToInlineElements(theme);
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        if (themeRef.current) forceApplyToInlineElements(themeRef.current);
+      });
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
-      clearTimeout(timer);
+      if (rafId) cancelAnimationFrame(rafId);
       observer.disconnect();
     };
   }, [theme]);
@@ -280,10 +321,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       ...config,
       colors: { ...theme?.colors, ...config.colors },
       fontSize: { ...theme?.fontSize, ...config.fontSize },
+      layout: { ...theme?.layout, ...config.layout },
     };
     setTheme(merged);
     injectStyleSheet(merged);
-    setTimeout(() => forceApplyToInlineElements(merged), 50);
+    scheduleForceApply(merged);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
   }, [theme]);
 
@@ -291,7 +333,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setTheme(null);
     removeStyleSheet();
     localStorage.removeItem(STORAGE_KEY);
-    // Force reload to restore original inline styles
     window.location.reload();
   }, []);
 
