@@ -47,8 +47,18 @@ ThemeConfig schema (all fields optional — return only changed fields):
     "cardPadding": "CSS padding inside card components (e.g., 24px, 48px). Default is 24px.",
     "gap": "CSS gap between grid items (e.g., 16px, 1.5rem, 32px)",
     "headerPosition": "sticky or static"
-  }
+  },
+  "reorder": [
+    {"match": "text to find in item", "order": -1}
+  ]
 }
+
+The "reorder" field moves items within grid/flex containers using CSS order.
+- "match" is case-insensitive text search within the item content (use a person's last name, team name, etc.)
+- "order" is a CSS order integer. Lower values come first. Default is 0. Use -1 to move to start, 999 to move to end.
+- You can include multiple rules to reorder several items.
+- Examples: [{"match": "Glock", "order": -1}] puts Timo Glock first.
+  [{"match": "Ferrari", "order": -2}, {"match": "McLaren", "order": -1}] puts Ferrari first, then McLaren.
 
 STRICT RULES:
 - Output ONLY valid JSON. No markdown, no explanations, no code fences.
@@ -60,9 +70,9 @@ STRICT RULES:
 - Layout values must be valid CSS values.
 - cardColumns must be a number between 1 and 6.
 - headerPosition must be either "sticky" or "static".
-- You CANNOT reorder content, move specific items, or rearrange data. You can only change sizes, spacing, and visual properties.
-- If user asks to reorder items, move specific content, or change data order, return: {"error": "I can only change visual appearance and layout (sizes, spacing, colors). I cannot reorder content or move specific items — the order comes from the database."}
-- If asked for something else you cannot do, return: {"error": "I can only customize visual appearance and layout."}"""
+- reorder match strings must be short (1-3 words, max 50 chars), no HTML/JS/special chars.
+- reorder order values must be integers between -100 and 1000.
+- If asked for something you cannot do, return: {"error": "I can only customize visual appearance, layout, and item ordering."}"""
 
 HEX_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
 CSS_UNIT_RE = re.compile(r"^[0-9]+(\.[0-9]+)?(rem|px|em|%|vw)$|^0$|^100%$")
@@ -143,6 +153,25 @@ def _validate_theme(theme: dict) -> dict:
 
         if layout:
             validated["layout"] = layout
+
+    if "reorder" in theme and isinstance(theme["reorder"], list):
+        reorder = []
+        safe_text_re = re.compile(r"^[a-zA-Z0-9 .\-']+$")
+        for rule in theme["reorder"]:
+            if not isinstance(rule, dict):
+                continue
+            match = rule.get("match")
+            order = rule.get("order")
+            if (
+                isinstance(match, str)
+                and 1 <= len(match) <= 50
+                and safe_text_re.match(match)
+                and isinstance(order, (int, float))
+                and -100 <= int(order) <= 1000
+            ):
+                reorder.append({"match": match, "order": int(order)})
+        if reorder:
+            validated["reorder"] = reorder
 
     return validated
 

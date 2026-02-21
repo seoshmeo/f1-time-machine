@@ -29,11 +29,17 @@ export interface ThemeLayout {
   headerPosition?: 'sticky' | 'static';
 }
 
+export interface ReorderRule {
+  match: string;
+  order: number;
+}
+
 export interface ThemeConfig {
   colors?: ThemeColors;
   borderRadius?: string;
   fontSize?: ThemeFontSize;
   layout?: ThemeLayout;
+  reorder?: ReorderRule[];
 }
 
 interface ThemeContextValue {
@@ -327,6 +333,38 @@ function forceApplyToInlineElements(config: ThemeConfig) {
       h.style.gap = layout.gap;
     }
   });
+
+  // Apply reorder rules
+  if (config.reorder && config.reorder.length > 0) {
+    applyReorderRules(config.reorder);
+  }
+}
+
+// Apply CSS order to grid/flex children matching text
+function applyReorderRules(rules: ReorderRule[]) {
+  if (!rules || rules.length === 0) return;
+
+  // Find all grid and flex containers
+  const containers = document.querySelectorAll('[style]');
+  containers.forEach((container) => {
+    const h = container as HTMLElement;
+    const display = h.style.display;
+    if (display !== 'grid' && display !== 'flex') return;
+
+    // Check each child
+    const children = h.children;
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i] as HTMLElement;
+      const text = child.textContent || '';
+
+      for (const rule of rules) {
+        if (text.toLowerCase().includes(rule.match.toLowerCase())) {
+          child.style.order = String(rule.order);
+          break;
+        }
+      }
+    }
+  });
 }
 
 // Schedule force-apply after React render completes
@@ -381,6 +419,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       colors: { ...theme?.colors, ...config.colors },
       fontSize: { ...theme?.fontSize, ...config.fontSize },
       layout: { ...theme?.layout, ...config.layout },
+      reorder: config.reorder ?? theme?.reorder,
     };
     setTheme(merged);
     injectStyleSheet(merged);
