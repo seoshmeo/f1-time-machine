@@ -102,11 +102,16 @@ def generate_days(year: int) -> None:
                 description = None
                 has_content = 0
 
-            # Insert calendar day
+            # Insert or update calendar day
             cursor.execute("""
-                INSERT OR IGNORE INTO calendar_days (
+                INSERT INTO calendar_days (
                     season_id, date, day_type, race_id, description, has_content
                 ) VALUES (?, ?, ?, ?, ?, ?)
+                ON CONFLICT(season_id, date) DO UPDATE SET
+                    day_type = excluded.day_type,
+                    race_id = excluded.race_id,
+                    description = excluded.description,
+                    has_content = excluded.has_content
             """, (
                 season_id,
                 date_str,

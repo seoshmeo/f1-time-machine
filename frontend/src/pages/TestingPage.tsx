@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getTestingSessions } from '@/api/testing';
@@ -27,6 +27,17 @@ const TestingPage = () => {
     queryFn: () => getTestingSessions(seasonYear),
     staleTime: Infinity,
   });
+
+  const activeSession = testingDays?.[activeDay];
+
+  useEffect(() => {
+    if (activeSession) {
+      const dateFormatted = new Date(activeSession.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      document.title = `${activeSession.name} — ${dateFormatted} | F1 Time Machine`;
+    } else {
+      document.title = `${seasonYear} Pre-Season Testing | F1 Time Machine`;
+    }
+  }, [seasonYear, activeSession]);
 
   if (isLoading) {
     return <LoadingSpinner />;
