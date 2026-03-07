@@ -85,11 +85,11 @@ const DayPage = () => {
         const formatted = new Date(currentDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
         const dayTypeLabels: Record<string, string> = {
           race_day: 'Race',
-          qualifying: 'Qualifying',
-          practice: 'Practice',
-          sprint: 'Sprint',
-          sprint_qualifying: 'Sprint Qualifying',
-          testing: 'Testing',
+          quali_day: 'Qualifying',
+          practice_day: 'Practice',
+          sprint_day: 'Sprint',
+          sprint_quali_day: 'Sprint Qualifying',
+          test_day: 'Testing',
         };
         const sessionLabel = dayData ? dayTypeLabels[dayData.day_type] : null;
         const raceName = dayData?.race_name;
