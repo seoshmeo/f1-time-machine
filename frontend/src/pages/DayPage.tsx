@@ -83,15 +83,42 @@ const DayPage = () => {
         }
       } else {
         const formatted = new Date(currentDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-        document.title = `${formatted} - ${seasonYear} F1 Season Day by Day | F1 Time Machine`;
-        if (meta) {
-          meta.setAttribute('content',
-            `F1 Time Machine — Explore Formula 1 seasons day by day. Race calendars, driver lineups, standings, regulations and more for 2026 and 2010 seasons.`
-          );
+        const dayTypeLabels: Record<string, string> = {
+          race_day: 'Race',
+          qualifying: 'Qualifying',
+          practice: 'Practice',
+          sprint: 'Sprint',
+          sprint_qualifying: 'Sprint Qualifying',
+          testing: 'Testing',
+        };
+        const sessionLabel = dayData ? dayTypeLabels[dayData.day_type] : null;
+        const raceName = dayData?.race_name;
+
+        if (sessionLabel && raceName) {
+          document.title = `${sessionLabel} — ${raceName} — ${formatted} | F1 Time Machine`;
+          if (meta) {
+            meta.setAttribute('content',
+              `F1 ${seasonYear} ${sessionLabel} at the ${raceName}, ${formatted}. Live results, standings, and day-by-day coverage.`
+            );
+          }
+        } else if (sessionLabel) {
+          document.title = `${sessionLabel} — ${formatted} | F1 Time Machine`;
+          if (meta) {
+            meta.setAttribute('content',
+              `F1 ${seasonYear} ${sessionLabel}, ${formatted}. Day-by-day Formula 1 coverage.`
+            );
+          }
+        } else {
+          document.title = `${formatted} — ${seasonYear} F1 Season | F1 Time Machine`;
+          if (meta) {
+            meta.setAttribute('content',
+              `F1 Time Machine — Explore the ${seasonYear} Formula 1 season day by day. Race calendars, driver lineups, standings, regulations and more.`
+            );
+          }
         }
       }
     }
-  }, [currentDate, seasonYear, postRaceConfig]);
+  }, [currentDate, seasonYear, postRaceConfig, dayData]);
 
   const handlePrevDay = () => {
     if (navData?.prev_date) {

@@ -37,14 +37,14 @@ export interface DayBrief {
   day_type: DayType;
   description?: string;
   has_content: boolean;
-  race_weekend?: string;
+  race_name?: string;
   race_round?: number;
 }
 
 export interface DayDetail {
   date: string;
   day_type: DayType;
-  race_weekend?: string;
+  race_name?: string;
   race_round?: number;
   events: EventOut[];
   session_results: SessionResultSummary[];
