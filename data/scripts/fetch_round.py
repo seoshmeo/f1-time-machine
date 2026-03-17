@@ -54,11 +54,14 @@ def _openf1_get_cached(path: str, params: Optional[Dict[str, Any]] = None,
 
     if cache_name:
         cache_path = RAW_DIR / cache_name
-        if cache_path.exists():
+        if cache_path.exists() and cache_path.stat().st_size > 0:
             import json
             print(f"  Using cached data: {cache_name}")
             with open(cache_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
+        elif cache_path.exists():
+            print(f"  Removing empty cache file: {cache_name}")
+            cache_path.unlink()
 
     elapsed = time.time() - _openf1_last_request_time
     if elapsed < OPENF1_RATE_LIMIT:

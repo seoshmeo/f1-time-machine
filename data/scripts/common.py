@@ -36,11 +36,14 @@ def fetch_with_cache(url: str, cache_name: str) -> Dict[str, Any]:
 
     cache_path = RAW_DIR / cache_name
 
-    # Return cached data if exists
-    if cache_path.exists():
+    # Return cached data if exists and is non-empty
+    if cache_path.exists() and cache_path.stat().st_size > 0:
         print(f"  Using cached data: {cache_name}")
         with open(cache_path, 'r', encoding='utf-8') as f:
             return json.load(f)
+    elif cache_path.exists():
+        print(f"  Removing empty cache file: {cache_name}")
+        cache_path.unlink()
 
     # Rate limiting
     time_since_last = time.time() - _last_request_time

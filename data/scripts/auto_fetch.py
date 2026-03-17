@@ -155,8 +155,9 @@ def _find_ready_sessions(year: int) -> List[Tuple[int, str, int, str]]:
 
             # Parse session start datetime (UTC assumed)
             try:
+                time_str = stime.rstrip('Z')  # handle "07:00:00Z" format
                 session_start = datetime.strptime(
-                    f"{sdate} {stime}", "%Y-%m-%d %H:%M:%S"
+                    f"{sdate} {time_str}", "%Y-%m-%d %H:%M:%S"
                 ).replace(tzinfo=timezone.utc)
             except ValueError:
                 continue
